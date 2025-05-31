@@ -1,0 +1,15 @@
+label {
+    font-weight: bold;
+}
+
+input{
+    border: 1px;
+    border-style: solid;
+    border-color: grey;
+}
+
+form {
+    border: 2px;
+    border-style: solid;
+    border-color: red;
+}
