@@ -1,6 +1,13 @@
 import type React from "react";
+import { useNavigate } from "react-router-dom";
 
 function ConfiguracionPartido(): React.JSX.Element{
+    
+    const navigate = useNavigate()
+
+    function handleRedirect(): void{
+        navigate("/futbol-express") 
+    }
     return (
         <>
         <div className="grid grid-cols-3 gap-4 p-4">
@@ -58,7 +65,9 @@ function ConfiguracionPartido(): React.JSX.Element{
         <div className="rounded shadow border flex flex-col justify-center space-y-4">
             <div className="flex gap-2">
             <button className="w-1/2 bg-blue-600 text-white py-2 rounded text-sm">Importar</button>
-            <button className="w-1/2 bg-green-600 text-white py-2 rounded text-sm">Empezar partido</button>
+            <button className="w-1/2 bg-green-600 text-white py-2 rounded text-sm"
+            onClick={handleRedirect}
+            >Empezar partido</button>
             </div>
         </div>
     </div>
