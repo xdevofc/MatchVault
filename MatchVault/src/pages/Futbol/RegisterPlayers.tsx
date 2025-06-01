@@ -1,42 +1,40 @@
 import type React from "react";
 import { useEffect, useState } from "react";
+import type { definirEquipos } from '../../types/types';
 
-function RegisterPlayers() : React.JSX.Element{
 
+
+function RegisterPlayers({nombreEquipo, onSubmit, jugadores }:definirEquipos) : React.JSX.Element {
  
-    const [nombreJugador, setNombreJugador] = useState("Nombre");
-    const [apellido, setApellido] = useState("Apellido");
-    const [cedula, setCedula] = useState("Cedula");
-    const [nroCamiseta, setNroCamiseta] = useState(0);
-    const [carrera, setCarrera] = useState("Nombre");
+    const [nombreJugador, setNombreJugador] = useState("");
+    const [apellido, setApellido] = useState("");
+    const [cedula, setCedula] = useState("");
+    const [nroCamiseta, setNroCamiseta] = useState<string | number>("");
+    const [carrera, setCarrera] = useState("");
 
+    // Agregando jugadores a sus listas
+    function handleAgregarJugador() :void {
 
-
-    const [jugadores, setJugadores] = useState<Array<{
-        nombreJugador: string,
-        apellido: string,
-        cedula: string,
-        nroCamiseta: number,
-        carrera: string
-    }>>([])
-
-
-    function handleAgregarJugador(): void{
-
-        const nuevoJugador = {
-            nombreJugador,
+        onSubmit({
+            nombre: nombreJugador,
             apellido,
             cedula,
             nroCamiseta,
             carrera
-        }
+        })
 
+        // Limpiando los campos
 
-        setJugadores(prev => [...prev, nuevoJugador])
-
+        setNombreJugador("")
+        setApellido("")
+        setNroCamiseta("")
+        setCarrera("")
+        setCedula("")
     }
 
-    useEffect( ()=> {
+    // Imprimiendo para pruebas
+    useEffect(()=>{
+        console.log("imprimiendo jugadores")
         console.log(jugadores)
     },[jugadores])
 
@@ -51,6 +49,7 @@ function RegisterPlayers() : React.JSX.Element{
                 {/* Aquí iría el listado de jugadores agregados */}
                 <h2 className="text-lg font-semibold mb-2">Jugadores Agregados</h2>
                 {/* ...Listado dinámico aquí... */}
+                { jugadores.map(player => <p key={player.cedula}>{player.nombre}</p>)}
             </div>
 
             <div className="bg-blue-100 p-4 rounded shadow border">
@@ -63,40 +62,41 @@ function RegisterPlayers() : React.JSX.Element{
 
         {/* Div del Form */}
         <div className="bg-white p-4 rounded shadow border">
-            <h2 className="text-lg font-semibold mb-2">Formulario de Jugador</h2>
+            <h2 className="text-lg font-semibold mb-2">{nombreEquipo}</h2>
             <form className="space-y-3">
-            <div>
-                <label htmlFor="nombreEquipo" className="underline block">Nombre del equipo</label>
-                <input name="nombreEquipo" type="text" className="border px-2 py-1 w-full"/>
-            </div>
             
             <div>
                 <label htmlFor="cedula" className="block">Cédula</label>
                 <input name="cedula" type="text" className="border px-2 py-1 w-full"
+                value={cedula}
                 onChange={e => setCedula(e.target.value)}/>
             </div>
 
             <div>
                 <label htmlFor="nombre" className="block">Nombre</label>
                 <input name="nombre" type="text" className="border px-2 py-1 w-full"
+                value={nombreJugador}
                 onChange={e => setNombreJugador(e.target.value)}/>
             </div>
 
             <div>
                 <label htmlFor="apellido" className="block">Apellido</label>
                 <input name="apellido" type="text" className="border px-2 py-1 w-full"
+                value={apellido}
                 onChange={e => setApellido(e.target.value)}/>
             </div>
 
             <div>
                 <label htmlFor="numero-camiseta" className="block">Número de camiseta</label>
                 <input name="numero-camiseta" type="text" className="border px-2 py-1 w-full"
+                value={nroCamiseta}
                 onChange={e => setNroCamiseta(parseInt(e.target.value))}/>
             </div>
 
             <div>
                 <label htmlFor="carrera" className="block">Carrera</label>
                 <input name="carrera" type="text" className="border px-2 py-1 w-full"
+                value={carrera}
                 onChange={e => setCarrera(e.target.value)}/>
             </div>
 
@@ -104,6 +104,7 @@ function RegisterPlayers() : React.JSX.Element{
             onClick={e => {
                 e.preventDefault()
                 handleAgregarJugador()
+                
             }}>Agregar Jugador</button>
             </form>
         </div>

@@ -1,9 +1,30 @@
 import type React from "react";
 import RegisterPlayers from "./RegisterPlayers";
 import ConfiguracionPartido from "./ConfiguracionPartido";
+import { useState } from "react";
+import type { jugador } from '../../types/types';
+
 
 
 function FutbolConfigExpress(): React.JSX.Element{
+
+    const [equipoA, setEquipoA] = useState<jugador[]>([]);
+    const [equipoB, setEquipoB] = useState<jugador[]>([]);
+
+
+    function AgregarEquipoA(jugadorNuevo: jugador) :void {
+
+        setEquipoA(prev => [...prev, jugadorNuevo])
+        console.log("Agregando al equipo A")
+    }
+
+    function AgregarEquipoB(jugadorNuevo: jugador): void{
+        setEquipoB(prev => [...prev, jugadorNuevo])
+        console.log("Agregando al Equipo B")
+    }
+
+
+
 
     return (
         <>
@@ -16,21 +37,25 @@ function FutbolConfigExpress(): React.JSX.Element{
 
             {/* elementos del team#1 */}
             <div className="bg-white px-4 py-2 rounded-lg shadow border">
-                <h2 className="text-base font-semibold mb-1">Formulario 1</h2>
-                <RegisterPlayers />
+                <RegisterPlayers
+                nombreEquipo="Equipo A" 
+                onSubmit={AgregarEquipoA}
+                jugadores={equipoA}
+                />
             </div>
 
             {/* elementos del team#2 */}
             <div className="bg-white px-4 py-2 rounded-lg shadow border">
-                <h2 className="text-base font-semibold mb-1">Formulario 2</h2>
-                <RegisterPlayers />
+                <RegisterPlayers
+                 nombreEquipo="EquipoB"
+                 onSubmit={AgregarEquipoB}
+                 jugadores={equipoB}
+                 />
             </div>
 
             {/* Footer */}
             <footer className="col-span-2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow">
                 <ConfiguracionPartido />
-                <button className="bg-green-600 px-3 py-1 rounded text-sm">Empezar partido</button>
-                <button className="bg-blue-600 px-3 py-1 rounded mr-2 text-sm">Importar</button>
             </footer>
             </div>
         
