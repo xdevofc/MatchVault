@@ -16,3 +16,10 @@ export type definirEquipos = {
 }
 
 
+// definimos el tipo de contexto para los equipos 
+
+export type EquiposContextType = {
+    equipoA: jugador[],
+    equipoB: jugador[]
+}
+
