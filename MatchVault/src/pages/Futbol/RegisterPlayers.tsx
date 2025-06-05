@@ -54,7 +54,7 @@ function RegisterPlayers({nombreEquipo, onSubmit, jugadores }:definirEquipos) : 
                     {/* Aquí iría el listado de jugadores agregados */}
                     <h2 className="text-lg font-semibold mb-2">Titulares</h2>
                     {/* ...Listado dinámico aquí... */}
-                    { jugadores.map(player => <p key={player.cedula}>{player.nombre}</p>)}
+                    { jugadores.map(player => <p key={player.cedula}>{player.nombre} {player.apellido} {player.nroCamiseta}</p>)}
                 </div>
 
                 <div className="bg-blue-100 p-4 rounded shadow border">
