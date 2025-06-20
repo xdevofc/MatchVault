@@ -36,11 +36,26 @@ function RegisterPlayers({ nombreEquipo, onSubmit, jugadores }: definirEquipos):
       <div className="bg-white p-4 rounded-lg shadow border border-purple-300">
         <h2 className="text-lg font-bold mb-2">Titulares</h2>
         {jugadores.length > 0 ? (
-          jugadores.map(player => (
-            <p key={player.cedula} className="text-sm">
-              {player.nombre} {player.apellido} - #{player.nroCamiseta}
-            </p>
-          ))
+          <div className="space-y-2">
+            {jugadores.map(player => (
+              <div
+                key={player.cedula}
+                className="flex justify-between items-center bg-purple-50 rounded p-2"
+              >
+                <span className="text-sm">
+                  #{player.nroCamiseta} - {player.nombre} {player.apellido}
+                </span>
+                <div className="flex gap-2">
+                  <button className="bg-yellow-400 hover:bg-yellow-500 text-black text-xs px-2 py-1 rounded">
+                    Editar
+                  </button>
+                  <button className="bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded">
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         ) : (
           <p className="text-gray-500 text-sm">Aún no hay jugadores.</p>
         )}
@@ -93,7 +108,10 @@ function RegisterPlayers({ nombreEquipo, onSubmit, jugadores }: definirEquipos):
               type="text"
               className="border border-gray-300 rounded px-2 py-1 w-full"
               value={nroCamiseta}
-              onChange={e => setNroCamiseta(parseInt(e.target.value))}
+              onChange={e => {
+                const val = parseInt(e.target.value);
+                setNroCamiseta(isNaN(val) ? "" : val);
+              }}
             />
           </div>
 
