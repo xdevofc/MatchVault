@@ -2,51 +2,61 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function SelectSportMenu(): React.JSX.Element {
+  const [modalidad, setModalidad] = useState("Express");
+  const [deporte, setDeporte] = useState("Futbol");
+  const navigate = useNavigate();
 
-    // creando un handler para pasar los datos necesarios
-    const [modalidad, setModalidad] = useState('Express')
-    const [deporte, setDeporte] = useState('Futbol')
-    const navigate = useNavigate()
-    // creando un handler para el navigate
+  function handleRedirect(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault(); // evitar recarga
+    navigate(`/${modalidad}-${deporte}-config`);
+  }
 
-    function handleRedirect(){
-        navigate(`/${modalidad}-${deporte}-config`)
-    }
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-purple-200">
+      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
+        <h1 className="text-3xl font-bold text-center mb-4">Bienvenidos a MatchVault</h1>
+        
+        <form className="flex flex-col gap-4">
+          <div>
+            <label htmlFor="select-deporte" className="block text-sm font-medium mb-1">Elige el deporte</label>
+            <select
+              name="Deportes"
+              id="select-deporte"
+              value={deporte}
+              onChange={e => setDeporte(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg p-2"
+            >
+              <option value="Futbol">Futbol</option>
+              <option value="Basketball">Basketball</option>
+              <option value="Ping-Pong">Ping Pong</option>
+              <option value="Volleyball">Volleyball</option>
+            </select>
+          </div>
 
-    return (
-        <>
-            <h1>Bienvenidos a MatchVault</h1>
-            <h2>Elige un deporte para comenzar</h2>
-            <form>
+          <div>
+            <label htmlFor="select-modalidad" className="block text-sm font-medium mb-1">Elige una modalidad</label>
+            <select
+              name="modalidad"
+              id="select-modalidad"
+              value={modalidad}
+              onChange={e => setModalidad(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg p-2"
+            >
+              <option value="Express">Express</option>
+              <option value="Torneo">Torneo</option>
+            </select>
+          </div>
 
-                {/* DropDown de la modalidad */}
-                <label htmlFor="modalidad">Eliga una modalidad</label>
-                <select name="modalidad" 
-                    id="select-modalidad"
-                    value={modalidad}
-                    onChange={e=> setModalidad(e.target.value)}
-                >
-                    <option value="Express">Express</option>
-                    <option value="Torneo">Torneo</option>
-                </select>
-                
-                {/* DropDown de deportes */}
-                <label htmlFor="Deportes">Eliga el deporte</label>
-                <select name="Deportes"
-                    id="select-deporte"
-                    value={deporte}
-                    onChange={e => setDeporte(e.target.value)}
-                >
-                    <option value="Futbol">Futbol</option>
-                    <option value="Basketball">Basketball</option>
-                    <option value="Ping-Pong">Ping Pong</option>
-                    <option value="Volleyball">Volleyball</option>
-                </select>
-
-                <button onClick={handleRedirect}>Enviar</button>
-            </form>
-        </>
-    )
+          <button
+            onClick={handleRedirect}
+            className="bg-purple-500 text-white font-semibold rounded-lg p-2 transition-colors duration-300 hover:bg-purple-700"
+          >
+            Enviar
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 }
 
 export default SelectSportMenu;
