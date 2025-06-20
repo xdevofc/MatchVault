@@ -13,6 +13,7 @@ export type definirEquipos = {
     nombreEquipo : string,
     onSubmit: (jugador:jugador) => void,
     jugadores: jugador[],
+    setJugadores: (lista: jugador[]) => void
 }
 
 

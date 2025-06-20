@@ -2,7 +2,7 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import type { definirEquipos } from '../../types/types';
 
-function RegisterPlayers({ nombreEquipo, onSubmit, jugadores }: definirEquipos): React.JSX.Element {
+function RegisterPlayers({ nombreEquipo, onSubmit, jugadores, setJugadores }: definirEquipos): React.JSX.Element {
   const [nombreJugador, setNombreJugador] = useState("");
   const [apellido, setApellido] = useState("");
   const [cedula, setCedula] = useState("");
@@ -23,6 +23,15 @@ function RegisterPlayers({ nombreEquipo, onSubmit, jugadores }: definirEquipos):
     setNroCamiseta("");
     setCarrera("");
     setCedula("");
+  }
+
+  function handleEliminarJugador(cedula : string) : void{
+
+    const nuevaLista = jugadores.filter( jugador => cedula != jugador.cedula)
+    console.log("nueva lista", nuevaLista)
+    localStorage.setItem("Lista-jugadores", JSON.stringify(nuevaLista))
+    setJugadores(nuevaLista)
+    console.log("jugador eliminado con exito")
   }
 
   useEffect(() => {
@@ -49,7 +58,8 @@ function RegisterPlayers({ nombreEquipo, onSubmit, jugadores }: definirEquipos):
                   <button className="bg-yellow-400 hover:bg-yellow-500 text-black text-xs px-2 py-1 rounded">
                     Editar
                   </button>
-                  <button className="bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded">
+                  <button className="bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded"
+                    onClick={() => handleEliminarJugador(player.cedula)}>
                     Eliminar
                   </button>
                 </div>

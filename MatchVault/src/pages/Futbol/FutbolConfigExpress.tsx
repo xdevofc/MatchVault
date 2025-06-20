@@ -44,6 +44,7 @@ function FutbolConfigExpress(): React.JSX.Element {
             nombreEquipo="Equipo A"
             onSubmit={AgregarEquipoA}
             jugadores={equipoA}
+            setJugadores={setEquipoA}
           />
         </div>
 
@@ -53,6 +54,7 @@ function FutbolConfigExpress(): React.JSX.Element {
             nombreEquipo="Equipo B"
             onSubmit={AgregarEquipoB}
             jugadores={equipoB}
+            setJugadores={setEquipoB}
           />
         </div>
 
