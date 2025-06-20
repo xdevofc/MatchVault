@@ -8,22 +8,51 @@ function RegisterPlayers({ nombreEquipo, onSubmit, jugadores, setJugadores }: de
   const [cedula, setCedula] = useState("");
   const [nroCamiseta, setNroCamiseta] = useState<string | number>("");
   const [carrera, setCarrera] = useState("");
+  const [isEditing, setIsEditing] = useState(false)
+  const [mensajeError, setMensajeError] = useState("");
 
-  function handleAgregarJugador(): void {
-    onSubmit({
-      nombre: nombreJugador,
-      apellido,
-      cedula,
-      nroCamiseta,
-      carrera
-    });
 
-    setNombreJugador("");
-    setApellido("");
-    setNroCamiseta("");
-    setCarrera("");
-    setCedula("");
+
+
+function handleAgregarJugador(): void {
+    // validando que los campos no esten vacios
+  if (
+    nombreJugador === "" ||
+    apellido === "" ||
+    cedula === "" ||
+    nroCamiseta === "" ||
+    carrera === ""
+  ){
+    setMensajeError("⚠️ No se pueden dejar campos vacíos.");
+
+     // Ocultar mensaje después de 3 segundos
+    setTimeout(() => {
+      setMensajeError("");
+    }, 1000);
+
+    return;
   }
+
+  // Limpiar error si estaba
+  setMensajeError("");
+
+  // Agregar jugador
+  onSubmit({
+    nombre: nombreJugador,
+    apellido,
+    cedula,
+    nroCamiseta,
+    carrera
+  });
+
+  // Limpiar campos
+  setNombreJugador("");
+  setApellido("");
+  setNroCamiseta("");
+  setCarrera("");
+  setCedula("");
+}
+
 
   function handleEliminarJugador(cedula : string) : void{
 
@@ -33,6 +62,52 @@ function RegisterPlayers({ nombreEquipo, onSubmit, jugadores, setJugadores }: de
     setJugadores(nuevaLista)
     console.log("jugador eliminado con exito")
   }
+
+  function handleEditarJugador(cedula:string): void {
+
+    setIsEditing(!isEditing)
+    console.log(isEditing)
+
+    // encontrando el jugador
+    const jugadorEditando = jugadores.filter(jugador => jugador.cedula == cedula)
+    // llenando los campos con los datos del jugador
+    setNombreJugador(jugadorEditando[0].nombre);
+    setApellido(jugadorEditando[0].apellido);
+    setNroCamiseta(jugadorEditando[0].nroCamiseta);
+    setCarrera(jugadorEditando[0].carrera);
+    setCedula(jugadorEditando[0].cedula);  
+}
+
+function handleGuardarEdicion(): void{
+    console.log("Guardando edicion")
+
+    const jugadoresActuales = [...jugadores]; // Estado actual
+    const index = jugadoresActuales.findIndex(j => j.cedula === cedula);
+
+    if (index !== -1) {
+        // Reemplaza el jugador con los nuevos datos
+        jugadoresActuales[index] = {
+        nombre: nombreJugador,
+        apellido,
+        nroCamiseta,
+        carrera,
+        cedula
+    };
+
+    setJugadores(jugadoresActuales); // Actualiza el estado
+        localStorage.setItem("jugadores", JSON.stringify(jugadoresActuales)); // Guarda en localStorage
+    } else {
+        console.warn("No se encontró el jugador a editar");
+    }
+    // salir del modo edicion
+    setIsEditing(!isEditing)
+    // limpiando los campos
+    setNombreJugador("");
+    setApellido("");
+    setNroCamiseta("");
+    setCarrera("");
+    setCedula(""); 
+}
 
   useEffect(() => {
     console.log("imprimiendo jugadores");
@@ -55,7 +130,8 @@ function RegisterPlayers({ nombreEquipo, onSubmit, jugadores, setJugadores }: de
                   #{player.nroCamiseta} - {player.nombre} {player.apellido}
                 </span>
                 <div className="flex gap-2">
-                  <button className="bg-yellow-400 hover:bg-yellow-500 text-black text-xs px-2 py-1 rounded">
+                  <button className="bg-yellow-400 hover:bg-yellow-500 text-black text-xs px-2 py-1 rounded"
+                  onClick={() => handleEditarJugador(player.cedula)}>
                     Editar
                   </button>
                   <button className="bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded"
@@ -83,8 +159,10 @@ function RegisterPlayers({ nombreEquipo, onSubmit, jugadores, setJugadores }: de
             <input
               name="cedula"
               type="text"
-              className="border border-gray-300 rounded px-2 py-1 w-full"
+              // Si estas en modo edicion, no se puede modificar la cedula
+              className={`border border-gray-300 rounded px-2 py-1 w-full ${isEditing ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : 'bg-white text-black'} ` }
               value={cedula}
+              disabled={isEditing}
               onChange={e => setCedula(e.target.value)}
             />
           </div>
@@ -136,15 +214,25 @@ function RegisterPlayers({ nombreEquipo, onSubmit, jugadores, setJugadores }: de
             />
           </div>
 
-          <button
-            className="bg-green-600 hover:bg-green-700 transition-colors text-white px-4 py-2 rounded text-sm"
-            onClick={e => {
-              e.preventDefault();
-              handleAgregarJugador();
-            }}
-          >
-            Agregar Jugador
-          </button>
+            <button
+                className={`w-full transition-colors text-white px-4 py-2 rounded text-sm 
+                    ${isEditing ? 'bg-blue-600 hover:bg-blue-700' : 'bg-green-600 hover:bg-green-700'}
+                `}
+               onClick={(e) => {
+                    e.preventDefault();
+                    if (isEditing) {
+                        handleGuardarEdicion();
+                    } else {
+                        handleAgregarJugador();
+                    }
+                }}>
+                {isEditing ? 'Guardar Cambios' : 'Agregar Jugador'}
+            </button>
+
+            {mensajeError && (
+                <p className="text-red-600 text-sm mb-2">{mensajeError}</p>
+            )}
+    
         </form>
       </div>
     </div>
