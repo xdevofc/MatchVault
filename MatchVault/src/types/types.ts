@@ -4,7 +4,8 @@ export type jugador = {
     apellido: string,
     cedula: string,
     nroCamiseta: number | string,
-    carrera: string
+    carrera: string,
+    titular: boolean
 }
 
 

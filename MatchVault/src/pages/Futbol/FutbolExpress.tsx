@@ -7,9 +7,8 @@ const FutbolExpress: React.FC = () => {
   const [seconds, setSeconds] = useState<number>(1800); // 30 minutos
   const [isPaused, setIsPaused] = useState<boolean>(true);
 
-  const ListaJugadoresA = JSON.parse(localStorage.getItem("Lista-jugadores")).equipoA
-  const ListaJugadoresB = JSON.parse(localStorage.getItem("Lista-jugadores")).equipoB
-  console.log(ListaJugadoresA)
+  const ListaJugadoresA = JSON.parse(localStorage.getItem("Lista-jugadores")).equipoA;
+  const ListaJugadoresB = JSON.parse(localStorage.getItem("Lista-jugadores")).equipoB;
 
   useEffect(() => {
     let interval: number;
@@ -24,12 +23,17 @@ const FutbolExpress: React.FC = () => {
   const formatTime = (totalSeconds: number): string => {
     const mins = Math.floor(totalSeconds / 60);
     const secs = totalSeconds % 60;
-    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
   };
 
+  // cambiando a suplente
+  function handleTitular( player :jugador): void{
+    console.log("VA A SER SUPLENTE ", player)
+    
+  }
+
   return (
-    <div className="w-full h-screen bg-purple-200 overflow-hidden grid grid-cols-3 grid-rows-3 gap-2 p-4">
-      
+    <div className="w-full h-screen bg-purple-200 overflow-hidden grid grid-cols-3 grid-rows-3 gap-6 px-6 py-4">
       {/* IZQUIERDA ARRIBA: Marcador equipo A */}
       <div className="flex flex-col items-center justify-center">
         <h2 className="text-xl font-bold mb-2">Equipo A</h2>
@@ -62,11 +66,39 @@ const FutbolExpress: React.FC = () => {
       {/* IZQUIERDA CENTRO: Jugadores equipo A */}
       <div className="flex flex-col items-center justify-center">
         <h3 className="text-lg font-semibold">Jugadores</h3>
-        <div className="flex gap-2 mt-2">
-          <div className="p-2 bg-purple-400 text-white rounded shadow">Titulares
-            {ListaJugadoresA.map((player: jugador) => <p key={player.cedula}> {player.nombre}</p> )}
+        <div className="flex gap-6 mt-4">
+          <div className="p-4 bg-purple-400 text-white rounded shadow w-[22rem]">
+            <h4 className="font-bold mb-3">Titulares</h4>
+            {ListaJugadoresA
+            .filter((player : jugador) => player.titular)
+            .map((player: jugador) => (
+              <div key={player.cedula} className="mb-4 border-b border-white pb-2">
+                <p className="font-medium">#{player.nroCamiseta} - {player.nombre} {player.apellido}</p>
+                <div className="flex flex-wrap gap-1 mt-2">
+                  <button onClick={() => console.log("Cambiar a suplente:", player)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
+                  <button onClick={() => console.log("Tarjeta amarilla a:", player)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
+                  <button onClick={() => console.log("Tarjeta roja a:", player)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
+                  <button onClick={() => console.log("Gol de:", player)} className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="p-2 bg-purple-100 rounded shadow">Suplentes</div>
+          <div className="p-4 bg-purple-100 rounded shadow w-[22rem]">
+            <h4 className="font-bold mb-3">Suplentes</h4>
+            {ListaJugadoresA
+            .filter((player : jugador) => !player.titular)
+            .map((player: jugador) => (
+              <div key={player.cedula} className="mb-4 border-b border-white pb-2">
+                <p className="font-medium">#{player.nroCamiseta} - {player.nombre} {player.apellido}</p>
+                <div className="flex flex-wrap gap-1 mt-2">
+                  <button onClick={() => console.log("Cambiar a suplente:", player)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
+                  <button onClick={() => console.log("Tarjeta amarilla a:", player)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
+                  <button onClick={() => console.log("Tarjeta roja a:", player)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
+                  <button onClick={() => console.log("Gol de:", player)} className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -84,11 +116,25 @@ const FutbolExpress: React.FC = () => {
       {/* DERECHA CENTRO: Jugadores equipo B */}
       <div className="flex flex-col items-center justify-center">
         <h3 className="text-lg font-semibold">Jugadores</h3>
-        <div className="flex gap-2 mt-2">
-          <div className="p-2 bg-purple-400 text-white rounded shadow">Titulares
-            {ListaJugadoresB.map((player: jugador) => <p key={player.cedula}> {player.nombre}</p> )}
+        <div className="flex gap-6 mt-4">
+          <div className="p-4 bg-purple-400 text-white rounded shadow w-[22rem]">
+            <h4 className="font-bold mb-3">Titulares</h4>
+            {ListaJugadoresB.map((player: jugador) => (
+              <div key={player.cedula} className="mb-4 border-b border-white pb-2">
+                <p className="font-medium">#{player.nroCamiseta} - {player.nombre} {player.apellido}</p>
+                <div className="flex flex-wrap gap-1 mt-2">
+                  <button onClick={() => handleTitular(player)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
+                  <button onClick={() => console.log("Tarjeta amarilla a:", player)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
+                  <button onClick={() => console.log("Tarjeta roja a:", player)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
+                  <button onClick={() => console.log("Gol de:", player)} className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="p-2 bg-purple-100 rounded shadow">Suplentes</div>
+          <div className="p-4 bg-purple-100 rounded shadow w-[22rem]">
+            <h4 className="font-bold mb-3">Suplentes</h4>
+            {/* Aquí puedes renderizar suplentes en el futuro */}
+          </div>
         </div>
       </div>
 

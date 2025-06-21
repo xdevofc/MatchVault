@@ -10,6 +10,7 @@ function RegisterPlayers({ nombreEquipo, onSubmit, jugadores, setJugadores }: de
   const [carrera, setCarrera] = useState("");
   const [isEditing, setIsEditing] = useState(false)
   const [mensajeError, setMensajeError] = useState("");
+  const [titular, setTitular] = useState(true)
 
 
 
@@ -42,7 +43,8 @@ function handleAgregarJugador(): void {
     apellido,
     cedula,
     nroCamiseta,
-    carrera
+    carrera,
+   titular 
   });
 
   // Limpiar campos
@@ -51,6 +53,7 @@ function handleAgregarJugador(): void {
   setNroCamiseta("");
   setCarrera("");
   setCedula("");
+  setTitular(true);
 }
 
 
@@ -76,6 +79,7 @@ function handleAgregarJugador(): void {
     setNroCamiseta(jugadorEditando[0].nroCamiseta);
     setCarrera(jugadorEditando[0].carrera);
     setCedula(jugadorEditando[0].cedula);  
+    setTitular(jugadorEditando[0].titular);
 }
 
 function handleGuardarEdicion(): void{
@@ -91,7 +95,8 @@ function handleGuardarEdicion(): void{
         apellido,
         nroCamiseta,
         carrera,
-        cedula
+        cedula,
+        titular
     };
 
     setJugadores(jugadoresActuales); // Actualiza el estado
@@ -107,6 +112,11 @@ function handleGuardarEdicion(): void{
     setNroCamiseta("");
     setCarrera("");
     setCedula(""); 
+    setTitular(true);
+}
+
+function handleSuplente() : void{
+    setTitular(!titular)
 }
 
   useEffect(() => {
@@ -120,35 +130,70 @@ function handleGuardarEdicion(): void{
       <div className="bg-white p-4 rounded-lg shadow border border-purple-300">
         <h2 className="text-lg font-bold mb-2">Titulares</h2>
         {jugadores.length > 0 ? (
-          <div className="space-y-2">
-            {jugadores.map(player => (
-              <div
-                key={player.cedula}
-                className="flex justify-between items-center bg-purple-50 rounded p-2"
-              >
-                <span className="text-sm">
-                  #{player.nroCamiseta} - {player.nombre} {player.apellido}
-                </span>
-                <div className="flex gap-2">
-                  <button className="bg-yellow-400 hover:bg-yellow-500 text-black text-xs px-2 py-1 rounded"
-                  onClick={() => handleEditarJugador(player.cedula)}>
-                    Editar
-                  </button>
-                  <button className="bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded"
-                    onClick={() => handleEliminarJugador(player.cedula)}>
-                    Eliminar
-                  </button>
+            <div className="space-y-2">
+            {jugadores
+                .filter(player => player.titular) // Solo titulares
+                .map(player => (
+                <div
+                    key={player.cedula}
+                    className="flex justify-between items-center bg-purple-50 rounded p-2"
+                >
+                    <span className="text-sm">
+                    #{player.nroCamiseta} - {player.nombre} {player.apellido}
+                    </span>
+                    <div className="flex gap-2">
+                    <button
+                        className="bg-yellow-400 hover:bg-yellow-500 text-black text-xs px-2 py-1 rounded"
+                        onClick={() => handleEditarJugador(player.cedula)}
+                    >
+                        Editar
+                    </button>
+                    <button
+                        className="bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded"
+                        onClick={() => handleEliminarJugador(player.cedula)}
+                    >
+                        Eliminar
+                    </button>
+                    </div>
                 </div>
-              </div>
-            ))}
-          </div>
+                ))}
+            </div>
         ) : (
-          <p className="text-gray-500 text-sm">Aún no hay jugadores.</p>
+            <p className="text-gray-500 text-sm">Aún no hay jugadores.</p>
         )}
         <div className="mt-4 bg-purple-100 p-2 rounded text-center text-sm text-purple-700">
-          Suplentes (pendiente)
+            Suplentes (pendiente)
+            <div className="space-y-2 mt-2">
+            {jugadores
+                .filter(player => !player.titular) // Solo suplentes
+                .map(player => (
+                <div
+                    key={player.cedula}
+                    className="flex justify-between items-center bg-purple-50 rounded p-2"
+                >
+                    <span className="text-sm">
+                    #{player.nroCamiseta} - {player.nombre} {player.apellido}
+                    </span>
+                    <div className="flex gap-2">
+                    <button
+                        className="bg-yellow-400 hover:bg-yellow-500 text-black text-xs px-2 py-1 rounded"
+                        onClick={() => handleEditarJugador(player.cedula)}
+                    >
+                        Editar
+                    </button>
+                    <button
+                        className="bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded"
+                        onClick={() => handleEliminarJugador(player.cedula)}
+                    >
+                        Eliminar
+                    </button>
+                    </div>
+                </div>
+                ))}
+            </div>
         </div>
-      </div>
+        </div>
+ 
 
       {/* Formulario */}
       <div className="bg-white p-4 rounded-lg shadow border border-purple-300">
@@ -213,6 +258,19 @@ function handleGuardarEdicion(): void{
               onChange={e => setCarrera(e.target.value)}
             />
           </div>
+
+            <div className="flex justify-between items-center">
+            <span className="text-sm">Titular</span>
+            <label className="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" className="sr-only peer"
+                checked={titular}
+                onChange={handleSuplente}
+                />
+                <div className="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-blue-600"></div>
+                <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-full"></div>
+            </label>
+            </div>
+
 
             <button
                 className={`w-full transition-colors text-white px-4 py-2 rounded text-sm 
