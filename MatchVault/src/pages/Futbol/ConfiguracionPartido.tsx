@@ -1,11 +1,46 @@
 import type React from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function ConfiguracionPartido(): React.JSX.Element {
   const navigate = useNavigate();
 
   function handleRedirect(): void {
+    const datosPartido = {
+        duracion,
+        amonestaciones,
+        montoAmarilla,
+        montoRoja,
+        penalties,
+        prorroga
+    }
+
+    localStorage.setItem("Datos-partido", JSON.stringify(datosPartido));
+
     navigate("/futbol-express");
+
+    console.log(JSON.parse(localStorage.getItem("Datos-partido")))
+  }
+
+  const [duracion, setDuracion] = useState<string|number>(30)
+  const [amonestaciones, setAmonestaciones] = useState(false);
+  const [montoAmarilla, setMontoAmarilla] = useState<string|number>(0)
+  const [montoRoja, setMontoRoja] = useState<string|number>(0)
+  const [penalties, setPenalties] = useState(false)
+  const [prorroga, setProrroga] = useState(false)
+
+
+  
+  function handleAmonestaciones() : void{
+    setAmonestaciones(!amonestaciones)
+  }
+
+  function handlePenalties() : void {
+    setPenalties(!penalties)
+  }
+
+  function handleProrroga() : void{
+    setProrroga(!prorroga)
   }
 
   return (
@@ -13,10 +48,13 @@ function ConfiguracionPartido(): React.JSX.Element {
       {/* Columna 1 */}
       <div className="p-3 bg-purple-100 text-black rounded-lg shadow border border-purple-300 flex flex-col space-y-3">
         <div>
-          <label className="flex items-center space-x-2">
+          <label className="flex items-center space-x-2 w-fit">
             <span className="font-semibold text-sm">Amonestaciones</span>
             <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" className="sr-only peer" />
+              <input type="checkbox" className="sr-only peer"
+                checked={amonestaciones} 
+                onChange={handleAmonestaciones}
+              />
               <div className="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-blue-600"></div>
               <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-full"></div>
             </label>
@@ -25,12 +63,28 @@ function ConfiguracionPartido(): React.JSX.Element {
 
         <div>
           <label htmlFor="montoAmarilla" className="block text-sm">Monto por tarjeta Amarilla</label>
-          <input name="montoAmarilla" type="text" className="border border-gray-300 px-2 py-1 w-full rounded" />
+          <input name="montoAmarilla" type="text" 
+          className="border border-gray-300 px-2 py-1 w-full rounded" 
+          disabled={!amonestaciones}
+          value={montoAmarilla}
+          onChange={e => {
+                    const val = parseInt(e.target.value);
+                    setMontoAmarilla(isNaN(val) ? "" : val);
+                }}
+          />
         </div>
 
         <div>
           <label htmlFor="montoRoja" className="block text-sm">Monto por tarjeta Roja</label>
-          <input name="montoRoja" type="text" className="border border-gray-300 px-2 py-1 w-full rounded" />
+          <input name="montoRoja" type="text" 
+          className="border border-gray-300 px-2 py-1 w-full rounded" 
+          disabled={!amonestaciones}
+          value={montoRoja}
+          onChange={e => {
+                    const val = parseInt(e.target.value);
+                    setMontoRoja(isNaN(val) ? "" : val);
+                }}
+          />
         </div>
       </div>
 
@@ -38,13 +92,22 @@ function ConfiguracionPartido(): React.JSX.Element {
       <div className="p-3 bg-purple-100 text-black rounded-lg shadow border border-purple-300 flex flex-col space-y-3">
         <div>
           <label htmlFor="duration" className="block text-sm">Duración del Partido (en minutos)</label>
-          <input name="duration" type="text" className="border border-gray-300 px-2 py-1 w-full rounded" />
+          <input name="duration" type="text" className="border border-gray-300 px-2 py-1 w-full rounded" 
+            value={duracion}
+            onChange={e => {
+                    const val = parseInt(e.target.value);
+                    setDuracion(isNaN(val) ? "" : val);
+                }}
+          />
         </div>
 
         <div className="flex justify-between items-center">
           <span className="text-sm">Penalties</span>
           <label className="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" className="sr-only peer" />
+            <input type="checkbox" className="sr-only peer"
+            checked={penalties}
+            onChange={handlePenalties}
+            />
             <div className="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-blue-600"></div>
             <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-full"></div>
           </label>
@@ -53,7 +116,10 @@ function ConfiguracionPartido(): React.JSX.Element {
         <div className="flex justify-between items-center">
           <span className="text-sm">Prorroga</span>
           <label className="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" className="sr-only peer" />
+            <input type="checkbox" className="sr-only peer" 
+            checked={prorroga}
+            onChange={handleProrroga}
+            />
             <div className="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-blue-600"></div>
             <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-full"></div>
           </label>

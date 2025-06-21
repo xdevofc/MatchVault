@@ -95,7 +95,7 @@ function handleGuardarEdicion(): void{
     };
 
     setJugadores(jugadoresActuales); // Actualiza el estado
-        localStorage.setItem("jugadores", JSON.stringify(jugadoresActuales)); // Guarda en localStorage
+        localStorage.setItem("Lista-jugadores", JSON.stringify(jugadoresActuales)); // Guarda en localStorage
     } else {
         console.warn("No se encontró el jugador a editar");
     }
