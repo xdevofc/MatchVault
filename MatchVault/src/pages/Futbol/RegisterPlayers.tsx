@@ -1,6 +1,9 @@
 import type React from "react";
 import { useEffect, useState } from "react";
-import type { definirEquipos } from '../../types/types';
+import type { definirEquipos} from '../../types/types';
+import { handleEditarJugador, handleEliminarJugador, handleGuardarEdicion, handleAgregarJugador, handleSuplente} from "./handlers/RegisterPlayers/RegisterPlayers";
+
+
 
 function RegisterPlayers({ nombreEquipo, onSubmit, jugadores, setJugadores }: definirEquipos): React.JSX.Element {
   const [nombreJugador, setNombreJugador] = useState("");
@@ -13,111 +16,6 @@ function RegisterPlayers({ nombreEquipo, onSubmit, jugadores, setJugadores }: de
   const [titular, setTitular] = useState(true)
 
 
-
-
-function handleAgregarJugador(): void {
-    // validando que los campos no esten vacios
-  if (
-    nombreJugador === "" ||
-    apellido === "" ||
-    cedula === "" ||
-    nroCamiseta === "" ||
-    carrera === ""
-  ){
-    setMensajeError("⚠️ No se pueden dejar campos vacíos.");
-
-     // Ocultar mensaje después de 3 segundos
-    setTimeout(() => {
-      setMensajeError("");
-    }, 1000);
-
-    return;
-  }
-
-  // Limpiar error si estaba
-  setMensajeError("");
-
-  // Agregar jugador
-  onSubmit({
-    nombre: nombreJugador,
-    apellido,
-    cedula,
-    nroCamiseta,
-    carrera,
-   titular 
-  });
-
-  // Limpiar campos
-  setNombreJugador("");
-  setApellido("");
-  setNroCamiseta("");
-  setCarrera("");
-  setCedula("");
-  setTitular(true);
-}
-
-
-  function handleEliminarJugador(cedula : string) : void{
-
-    const nuevaLista = jugadores.filter( jugador => cedula != jugador.cedula)
-    console.log("nueva lista", nuevaLista)
-    localStorage.setItem("Lista-jugadores", JSON.stringify(nuevaLista))
-    setJugadores(nuevaLista)
-    console.log("jugador eliminado con exito")
-  }
-
-  function handleEditarJugador(cedula:string): void {
-
-    setIsEditing(!isEditing)
-    console.log(isEditing)
-
-    // encontrando el jugador
-    const jugadorEditando = jugadores.filter(jugador => jugador.cedula == cedula)
-    // llenando los campos con los datos del jugador
-    setNombreJugador(jugadorEditando[0].nombre);
-    setApellido(jugadorEditando[0].apellido);
-    setNroCamiseta(jugadorEditando[0].nroCamiseta);
-    setCarrera(jugadorEditando[0].carrera);
-    setCedula(jugadorEditando[0].cedula);  
-    setTitular(jugadorEditando[0].titular);
-}
-
-function handleGuardarEdicion(): void{
-    console.log("Guardando edicion")
-
-    const jugadoresActuales = [...jugadores]; // Estado actual
-    const index = jugadoresActuales.findIndex(j => j.cedula === cedula);
-
-    if (index !== -1) {
-        // Reemplaza el jugador con los nuevos datos
-        jugadoresActuales[index] = {
-        nombre: nombreJugador,
-        apellido,
-        nroCamiseta,
-        carrera,
-        cedula,
-        titular
-    };
-
-    setJugadores(jugadoresActuales); // Actualiza el estado
-        localStorage.setItem("Lista-jugadores", JSON.stringify(jugadoresActuales)); // Guarda en localStorage
-    } else {
-        console.warn("No se encontró el jugador a editar");
-    }
-    // salir del modo edicion
-    setIsEditing(!isEditing)
-    // limpiando los campos
-    setNombreJugador("");
-    setApellido("");
-    setNroCamiseta("");
-    setCarrera("");
-    setCedula(""); 
-    setTitular(true);
-}
-
-function handleSuplente() : void{
-    setTitular(!titular)
-}
 
   useEffect(() => {
     console.log("imprimiendo jugadores");
@@ -144,13 +42,28 @@ function handleSuplente() : void{
                     <div className="flex gap-2">
                     <button
                         className="bg-yellow-400 hover:bg-yellow-500 text-black text-xs px-2 py-1 rounded"
-                        onClick={() => handleEditarJugador(player.cedula)}
+                        onClick={() => handleEditarJugador(
+                            player.cedula,
+                            isEditing,
+                            jugadores,
+                            setIsEditing,
+                            setNombreJugador,
+                            setApellido,
+                            setNroCamiseta,
+                            setCarrera,
+                            setCedula,
+                            setTitular,
+                        )}
                     >
                         Editar
                     </button>
                     <button
                         className="bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded"
-                        onClick={() => handleEliminarJugador(player.cedula)}
+                        onClick={() => handleEliminarJugador(
+                            player.cedula,
+                            jugadores,
+                            setJugadores
+                        )}
                     >
                         Eliminar
                     </button>
@@ -177,13 +90,24 @@ function handleSuplente() : void{
                     <div className="flex gap-2">
                     <button
                         className="bg-yellow-400 hover:bg-yellow-500 text-black text-xs px-2 py-1 rounded"
-                        onClick={() => handleEditarJugador(player.cedula)}
+                        onClick={() => handleEditarJugador(
+                            player.cedula,
+                            isEditing,
+                            jugadores,
+                            setIsEditing,
+                            setNombreJugador,
+                            setApellido,
+                            setNroCamiseta,
+                            setCarrera,
+                            setCedula,
+                            setTitular,
+                        )}
                     >
                         Editar
                     </button>
                     <button
                         className="bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded"
-                        onClick={() => handleEliminarJugador(player.cedula)}
+                        onClick={() => handleEliminarJugador(player.cedula, jugadores, setJugadores)}
                     >
                         Eliminar
                     </button>
@@ -264,7 +188,7 @@ function handleSuplente() : void{
             <label className="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" className="sr-only peer"
                 checked={titular}
-                onChange={handleSuplente}
+                onChange={()=> handleSuplente(titular,setTitular)}
                 />
                 <div className="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-blue-600"></div>
                 <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-full"></div>
@@ -279,9 +203,41 @@ function handleSuplente() : void{
                onClick={(e) => {
                     e.preventDefault();
                     if (isEditing) {
-                        handleGuardarEdicion();
+                        handleGuardarEdicion(
+                            jugadores,
+                            nombreJugador,
+                            apellido,
+                            nroCamiseta,
+                            carrera,
+                            cedula,
+                            titular,
+                            isEditing,
+                            setJugadores,
+                            setNombreJugador,
+                            setApellido,
+                            setNroCamiseta,
+                            setCarrera,
+                            setCedula,
+                            setTitular,
+                            setIsEditing,
+                        );
                     } else {
-                        handleAgregarJugador();
+                        handleAgregarJugador(
+                            nombreJugador,
+                            apellido,
+                            cedula,
+                            nroCamiseta,
+                            carrera,
+                            titular,
+                            setMensajeError,
+                            setNombreJugador,
+                            setApellido,
+                            setNroCamiseta,
+                            setCarrera,
+                            setCedula,
+                            setTitular,
+                            onSubmit,
+                        );
                     }
                 }}>
                 {isEditing ? 'Guardar Cambios' : 'Agregar Jugador'}
