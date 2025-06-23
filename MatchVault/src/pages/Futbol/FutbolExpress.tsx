@@ -3,6 +3,9 @@ import type { jugador } from "../../types/types";
 import { useJugadoresContext } from "./context/JugadoresContext";
 import { guardarLS, handleAmarilla, handleGol, handleRoja, handleTitular } from "./handlers/FutbolExpress/FutbolExpress";
 import { useDatosDelPartidoContext } from "./context/DatosDelPartidoContext";
+import ShowPlayers from "./Components/ShowPlayersTitulares";
+import ShowPlayersTitulares from "./Components/ShowPlayersTitulares";
+import ShowPlayersSuplentes from "./Components/ShowPlayersSuplentes";
 
 const FutbolExpress: React.FC = () => {
     // consumiendo el context con los datos del partido
@@ -85,99 +88,46 @@ const FutbolExpress: React.FC = () => {
       <div className="flex flex-col items-center justify-center">
         <h3 className="text-lg font-semibold">Jugadores</h3>
         <div className="flex gap-6 mt-4">
-          <div className="p-4 bg-purple-400 text-white rounded shadow w-[22rem]">
-            <h4 className="font-bold mb-3">Titulares</h4>
-            {ListaJugadoresA
-            .filter((player : jugador) => player.titular)
-            .map((player: jugador) => (
-              <div key={player.cedula} className="mb-4 border-b border-white pb-2">
-                <p className="font-medium">#{player.nroCamiseta} - {player.nombre} {player.apellido}</p>
-                <div className="flex flex-wrap gap-1 mt-2">
-                  <button onClick={() => handleTitular(
-                    player,
-                    equipoA,
-                    equipoB,
-                    setEquipoA,
-                    setEquipoB)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
-                  <button onClick={() => handleAmarilla(
-                    player,
-                    equipoA,
-                    equipoB,
-                    setEquipoA,
-                    setEquipoB,
-                    montoAmarilla,
-                    )} 
-                    // si es que tiene dos amarillas o una roja se desactiva
-                    disabled = {(player.amarilla !== undefined && player.amarilla >2)  || ((player.roja !== undefined ) && player.roja == 1)}
-                    // que sea mas opaco cuando este disabled
-                    className={`px-2 py-1 rounded text-xs text-black
-                    ${player.isEjected? "bg-yellow-200 opacity-60 cursor-not-allowed":"bg-yellow-300 hover:bg-yellow-400"}`}>Amarilla</button>
-                  <button onClick={() => handleRoja(
-                    player,
-                    equipoA,
-                    equipoB,
-                    setEquipoA,
-                    setEquipoB,montoRoja)} 
-                    disabled={(player.amarilla !== undefined && player.amarilla >2)  || ((player.roja !== undefined ) && player.roja == 1)}
-                    className={`bg-red-500 text-white px-2 py-1 rounded text-xs ${player.isEjected ? "bg-red-300 opacity-60 cursor-not-allowed" : "bg-red-500 hover:bg-red-600"}`}>Roja</button>
-                  <button onClick={() => handleGol(
-                    player,
-                    equipoA,
-                    equipoB,
-                    setEquipoA,
-                    setEquipoB,
-                    setScoreA,
-                    setScoreB,
-                    scoreA,
-                    scoreB)} 
-                    disabled={(player.amarilla !== undefined && player.amarilla >2)  || ((player.roja !== undefined ) && player.roja == 1)}
-                    className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="p-4 bg-purple-100 rounded shadow w-[22rem]">
-            <h4 className="font-bold mb-3">Suplentes</h4>
-            {ListaJugadoresA
-            .filter((player : jugador) => !player.titular)
-            .map((player: jugador) => (
-              <div key={player.cedula} className="mb-4 border-b border-white pb-2">
-                <p className="font-medium">#{player.nroCamiseta} - {player.nombre} {player.apellido}</p>
-                <div className="flex flex-wrap gap-1 mt-2">
-                  <button onClick={() => handleTitular(
-                    player,
-                    equipoA,
-                    equipoB,
-                    setEquipoA,
-                    setEquipoB)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
-                  <button onClick={() => handleAmarilla(
-                    player,
-                    equipoA,
-                    equipoB,
-                    setEquipoA,
-                    setEquipoB, montoAmarilla)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
-                  <button onClick={() => handleRoja(
-                    player,
-                    equipoA,
-                    equipoB,
-                    setEquipoA,
-                    setEquipoB,montoRoja)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
-                  <button onClick={() => handleGol(
-                    player,
-                    equipoA,
-                    equipoB,
-                    setEquipoA,
-                    setEquipoB,
-                    setScoreA,
-                    setScoreB,
-                    scoreA,
-                    scoreB)} 
-                    disabled={(player.amarilla !== undefined && player.amarilla >2)  || ((player.roja !== undefined ) && player.roja == 1) || player.titular == false}
-                    className={`bg-green-500 text-white px-2 py-1 rounded text-xs ${(player.isEjected|| player.titular == false)? "bg-green-300 opacity-60 cursor-not-allowed" : "bg-green-500 hover:bg-green-600"}`}>Gol</button>
-                </div>
-              </div>
-            ))}
-          </div>
+          
+            {
+            <ShowPlayersTitulares
+                titulo={"titulares"}
+                jugadores={ListaJugadoresA}
+                equipoA={equipoA}
+                equipoB={equipoB}
+                scoreA={scoreA}
+                scoreB={scoreB}
+                setEquipoA={setEquipoA}
+                setEquipoB={setEquipoB}
+                setScoreA={setScoreA}
+                setScoreB={setScoreB}
+                handleTitular={handleTitular}
+                handleAmarilla={handleAmarilla}
+                handleRoja={handleRoja}
+                handleGol={handleGol}
+                montoAmarilla={montoAmarilla}
+                montoRoja={montoRoja}
+            />}
+          
+          <ShowPlayersSuplentes
+            titulo={"Suplentes"}
+            jugadores={ListaJugadoresA}
+            equipoA={equipoA}
+            equipoB={equipoB}
+            scoreA={scoreA}
+            scoreB={scoreB}
+            setEquipoA={setEquipoA}
+            setEquipoB={setEquipoB}
+            setScoreA={setScoreA}
+            setScoreB={setScoreB}
+            handleTitular={handleTitular}
+            handleAmarilla={handleAmarilla}
+            handleRoja={handleRoja}
+            handleGol={handleGol}
+            montoAmarilla={montoAmarilla}
+            montoRoja={montoRoja}
+          />
+          
         </div>
       </div>
 
@@ -196,91 +146,44 @@ const FutbolExpress: React.FC = () => {
       <div className="flex flex-col items-center justify-center">
         <h3 className="text-lg font-semibold">Jugadores</h3>
         <div className="flex gap-6 mt-4">
-          <div className="p-4 bg-purple-400 text-white rounded shadow w-[22rem]">
-            <h4 className="font-bold mb-3">Titulares</h4>
-            {ListaJugadoresB
-            .filter((player : jugador) => player.titular)
-            .map((player: jugador) => (
-              <div key={player.cedula} className="mb-4 border-b border-white pb-2">
-                <p className="font-medium">#{player.nroCamiseta} - {player.nombre} {player.apellido}</p>
-                <div className="flex flex-wrap gap-1 mt-2">
-                  <button onClick={() => handleTitular(
-                    player,
-                    equipoA,
-                    equipoB,
-                    setEquipoA,
-                    setEquipoB)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
-                  <button onClick={() => handleAmarilla(
-                    player,
-                    equipoA,
-                    equipoB,
-                    setEquipoA,
-                    setEquipoB, montoAmarilla)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
-                  <button onClick={() => handleRoja(
-                    player,
-                    equipoA,
-                    equipoB,
-                    setEquipoA,
-                    setEquipoB, montoRoja)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
-                  <button onClick={() => handleGol(
-                    player,
-                    equipoA,
-                    equipoB,
-                    setEquipoA,
-                    setEquipoB,
-                    setScoreA,
-                    setScoreB,
-                    scoreA,
-                    scoreB)} 
-                    disabled={(player.amarilla !== undefined && player.amarilla >2)  || ((player.roja !== undefined ) && player.roja == 1) || player.titular == false}
-                    className={`bg-green-500 text-white px-2 py-1 rounded text-xs ${(player.isEjected|| player.titular == false)? "bg-green-300 opacity-60 cursor-not-allowed" : "bg-green-500 hover:bg-green-600"}`}>Gol</button>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="p-4 bg-purple-100 rounded shadow w-[22rem]">
-            <h4 className="font-bold mb-3">Suplentes</h4>
-            {ListaJugadoresB
-            .filter((player : jugador) => !player.titular)
-            .map((player: jugador) => (
-              <div key={player.cedula} className="mb-4 border-b border-white pb-2">
-                <p className="font-medium">#{player.nroCamiseta} - {player.nombre} {player.apellido}</p>
-                <div className="flex flex-wrap gap-1 mt-2">
-                  <button onClick={() => handleTitular(
-                    player,
-                    equipoA,
-                    equipoB,
-                    setEquipoA,
-                    setEquipoB)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
-                  <button onClick={() => handleAmarilla(
-                    player,
-                    equipoA,
-                    equipoB,
-                    setEquipoA,
-                    setEquipoB,montoAmarilla)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
-                  <button onClick={() => handleRoja(
-                    player,
-                    equipoA,
-                    equipoB,
-                    setEquipoA,
-                    setEquipoB, montoRoja)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
-                  <button onClick={() => handleGol(
-                    player,
-                    equipoA,
-                    equipoB,
-                    setEquipoA,
-                    setEquipoB,
-                    setScoreA,
-                    setScoreB,
-                    scoreA,
-                    scoreB)} 
-                    disabled={(player.amarilla !== undefined && player.amarilla >2)  || ((player.roja !== undefined ) && player.roja == 1) || player.titular == false}
-                    className={`bg-green-500 text-white px-2 py-1 rounded text-xs ${(player.isEjected|| player.titular == false)? "bg-green-300 opacity-60 cursor-not-allowed" : "bg-green-500 hover:bg-green-600"}`}>Gol
-                    </button>
-                </div>
-              </div>
-            ))}
-          </div>
+            <ShowPlayersTitulares 
+            titulo={"titulares"}
+                jugadores={ListaJugadoresB}
+                equipoA={equipoA}
+                equipoB={equipoB}
+                scoreA={scoreA}
+                scoreB={scoreB}
+                setEquipoA={setEquipoA}
+                setEquipoB={setEquipoB}
+                setScoreA={setScoreA}
+                setScoreB={setScoreB}
+                handleTitular={handleTitular}
+                handleAmarilla={handleAmarilla}
+                handleRoja={handleRoja}
+                handleGol={handleGol}
+                montoAmarilla={montoAmarilla}
+                montoRoja={montoRoja}
+            />
+          
+          <ShowPlayersSuplentes
+          titulo={"Suplentes"}
+            jugadores={ListaJugadoresB}
+            equipoA={equipoA}
+            equipoB={equipoB}
+            scoreA={scoreA}
+            scoreB={scoreB}
+            setEquipoA={setEquipoA}
+            setEquipoB={setEquipoB}
+            setScoreA={setScoreA}
+            setScoreB={setScoreB}
+            handleTitular={handleTitular}
+            handleAmarilla={handleAmarilla}
+            handleRoja={handleRoja}
+            handleGol={handleGol}
+            montoAmarilla={montoAmarilla}
+            montoRoja={montoRoja}
+          />
+          
         </div>
       </div>
 
