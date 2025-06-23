@@ -5,7 +5,10 @@ export type jugador = {
     cedula: string,
     nroCamiseta: number | string,
     carrera: string,
-    titular: boolean
+    titular: boolean,
+    goles?: number,
+    amarilla?:number,
+    roja?:number,
 }
 
 

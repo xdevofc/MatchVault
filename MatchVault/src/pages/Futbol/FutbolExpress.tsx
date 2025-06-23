@@ -1,6 +1,7 @@
 import React, { useState, useEffect, } from "react";
 import type { jugador } from "../../types/types";
 import { useJugadoresContext } from "./context/JugadoresContext";
+import { guardarLS, handleAmarilla, handleGol, handleRoja, handleTitular } from "./handlers/FutbolExpress/FutbolExpress";
 
 const FutbolExpress: React.FC = () => {
   const [scoreA, setScoreA] = useState<number>(0);
@@ -25,12 +26,8 @@ const FutbolExpress: React.FC = () => {
   }, [isPaused, seconds]);
 
   // guardando los cambios de equipos al cambiar de titular a suplente
-  useEffect(()=>{
-    // guardamos en el local storage los equipos 
-    localStorage.setItem("Lista-jugadores", JSON.stringify({
-        equipoA,
-        equipoB
-    }))
+  useEffect(() => {
+    guardarLS(equipoA, equipoB)
   }, [equipoA, equipoB])
 
 
@@ -42,48 +39,6 @@ const FutbolExpress: React.FC = () => {
   };
 
   // cambiando a suplente
-  function handleTitular( player :jugador): void{
-    
-    // identificar de que equipo es 
-    const indexA = equipoA.findIndex(j => j.cedula === player.cedula);
-    const indexB = equipoB.findIndex(j => j.cedula === player.cedula);
-
-    // creando una copia para no modificar directamente el estado
-    const jugadoresActualesA = [...equipoA]
-    const jugadoresActualesB = [...equipoB]
-    if (indexA !== -1){
-        console.log("Estan en el equipoA")
-        jugadoresActualesA[indexA] = {
-        // cambiar sus propiedades
-            nombre: player.nombre,
-            apellido: player.apellido,
-            cedula: player.cedula,
-            carrera: player.carrera,
-            nroCamiseta: player.nroCamiseta,
-            titular: !player.titular,
-            
-        }
-    }else if(indexB !== -1){
-        console.log("Esta en el quipob")
-        // cambiar sus propiedades
-        jugadoresActualesB[indexB] = {
-            nombre: player.nombre,
-            apellido: player.apellido,
-            cedula: player.cedula,
-            carrera: player.carrera,
-            nroCamiseta: player.nroCamiseta,
-            titular: !player.titular, 
-        }
-
-      }
-
-      // guardando los nuevos jugadores
-    setEquipoA(jugadoresActualesA)      
-    setEquipoB(jugadoresActualesB)      
-
-
-    
-}
 
   return (
     <div className="w-full h-screen bg-purple-200 overflow-hidden grid grid-cols-3 grid-rows-3 gap-6 px-6 py-4">
@@ -128,10 +83,34 @@ const FutbolExpress: React.FC = () => {
               <div key={player.cedula} className="mb-4 border-b border-white pb-2">
                 <p className="font-medium">#{player.nroCamiseta} - {player.nombre} {player.apellido}</p>
                 <div className="flex flex-wrap gap-1 mt-2">
-                  <button onClick={() => handleTitular(player)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
-                  <button onClick={() => console.log("Tarjeta amarilla a:", player)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
-                  <button onClick={() => console.log("Tarjeta roja a:", player)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
-                  <button onClick={() => console.log("Gol de:", player)} className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
+                  <button onClick={() => handleTitular(
+                    player,
+                    equipoA,
+                    equipoB,
+                    setEquipoA,
+                    setEquipoB)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
+                  <button onClick={() => handleAmarilla(
+                    player,
+                    equipoA,
+                    equipoB,
+                    setEquipoA,
+                    setEquipoB)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
+                  <button onClick={() => handleRoja(
+                    player,
+                    equipoA,
+                    equipoB,
+                    setEquipoA,
+                    setEquipoB)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
+                  <button onClick={() => handleGol(
+                    player,
+                    equipoA,
+                    equipoB,
+                    setEquipoA,
+                    setEquipoB,
+                    setScoreA,
+                    setScoreB,
+                    scoreA,
+                    scoreB)} className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
                 </div>
               </div>
             ))}
@@ -144,10 +123,34 @@ const FutbolExpress: React.FC = () => {
               <div key={player.cedula} className="mb-4 border-b border-white pb-2">
                 <p className="font-medium">#{player.nroCamiseta} - {player.nombre} {player.apellido}</p>
                 <div className="flex flex-wrap gap-1 mt-2">
-                  <button onClick={() => handleTitular(player)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
-                  <button onClick={() => console.log("Tarjeta amarilla a:", player)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
-                  <button onClick={() => console.log("Tarjeta roja a:", player)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
-                  <button onClick={() => console.log("Gol de:", player)} className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
+                  <button onClick={() => handleTitular(
+                    player,
+                    equipoA,
+                    equipoB,
+                    setEquipoA,
+                    setEquipoB)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
+                  <button onClick={() => handleAmarilla(
+                    player,
+                    equipoA,
+                    equipoB,
+                    setEquipoA,
+                    setEquipoB)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
+                  <button onClick={() => handleRoja(
+                    player,
+                    equipoA,
+                    equipoB,
+                    setEquipoA,
+                    setEquipoB)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
+                  <button onClick={() => handleGol(
+                    player,
+                    equipoA,
+                    equipoB,
+                    setEquipoA,
+                    setEquipoB,
+                    setScoreA,
+                    setScoreB,
+                    scoreA,
+                    scoreB)} className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
                 </div>
               </div>
             ))}
@@ -178,10 +181,34 @@ const FutbolExpress: React.FC = () => {
               <div key={player.cedula} className="mb-4 border-b border-white pb-2">
                 <p className="font-medium">#{player.nroCamiseta} - {player.nombre} {player.apellido}</p>
                 <div className="flex flex-wrap gap-1 mt-2">
-                  <button onClick={() => handleTitular(player)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
-                  <button onClick={() => console.log("Tarjeta amarilla a:", player)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
-                  <button onClick={() => console.log("Tarjeta roja a:", player)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
-                  <button onClick={() => console.log("Gol de:", player)} className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
+                  <button onClick={() => handleTitular(
+                    player,
+                    equipoA,
+                    equipoB,
+                    setEquipoA,
+                    setEquipoB)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
+                  <button onClick={() => handleAmarilla(
+                    player,
+                    equipoA,
+                    equipoB,
+                    setEquipoA,
+                    setEquipoB)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
+                  <button onClick={() => handleRoja(
+                    player,
+                    equipoA,
+                    equipoB,
+                    setEquipoA,
+                    setEquipoB)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
+                  <button onClick={() => handleGol(
+                    player,
+                    equipoA,
+                    equipoB,
+                    setEquipoA,
+                    setEquipoB,
+                    setScoreA,
+                    setScoreB,
+                    scoreA,
+                    scoreB)} className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
                 </div>
               </div>
             ))}
@@ -194,10 +221,34 @@ const FutbolExpress: React.FC = () => {
               <div key={player.cedula} className="mb-4 border-b border-white pb-2">
                 <p className="font-medium">#{player.nroCamiseta} - {player.nombre} {player.apellido}</p>
                 <div className="flex flex-wrap gap-1 mt-2">
-                  <button onClick={() => handleTitular(player)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
-                  <button onClick={() => console.log("Tarjeta amarilla a:", player)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
-                  <button onClick={() => console.log("Tarjeta roja a:", player)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
-                  <button onClick={() => console.log("Gol de:", player)} className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
+                  <button onClick={() => handleTitular(
+                    player,
+                    equipoA,
+                    equipoB,
+                    setEquipoA,
+                    setEquipoB)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
+                  <button onClick={() => handleAmarilla(
+                    player,
+                    equipoA,
+                    equipoB,
+                    setEquipoA,
+                    setEquipoB)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
+                  <button onClick={() => handleRoja(
+                    player,
+                    equipoA,
+                    equipoB,
+                    setEquipoA,
+                    setEquipoB)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
+                  <button onClick={() => handleGol(
+                    player,
+                    equipoA,
+                    equipoB,
+                    setEquipoA,
+                    setEquipoB,
+                    setScoreA,
+                    setScoreB,
+                    scoreA,
+                    scoreB)} className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
                 </div>
               </div>
             ))}
