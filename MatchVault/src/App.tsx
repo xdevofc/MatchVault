@@ -5,6 +5,7 @@ import FutbolConfigExpress from "./pages/Futbol/FutbolConfigExpress"
 import { JugadoresContext } from "./pages/Futbol/context/JugadoresContext"
 import { useState } from "react"
 import type { jugador } from "./types/types"
+import { DatosPartidoContext} from './pages/Futbol/context/DatosDelPartidoContext';
 function App() {
 
 // definiendo los equipos
@@ -19,10 +20,34 @@ const [equipoA, setEquipoA] = useState<jugador[]>(() => {
   });
 
 
+  const [duracion, setDuracion] = useState<number>(1800)
+  const [amonestaciones, setAmonestaciones] = useState(false);
+  const [montoAmarilla, setMontoAmarilla] = useState<number>(0)
+  const [montoRoja, setMontoRoja] = useState<number>(0)
+  const [penalties, setPenalties] = useState(false)
+  const [prorroga, setProrroga] = useState(false)
+
+
+
 
   return (
     <>
     <JugadoresContext.Provider value={{setEquipoA,setEquipoB, equipoA, equipoB}}>
+    <DatosPartidoContext.Provider value={
+      {duracion,
+      amonestaciones,
+      montoAmarilla,
+      montoRoja,
+      penalties,
+      prorroga,
+      setDuracion,
+      setAmonestaciones,
+      setMontoAmarilla,
+      setMontoRoja,
+      setPenalties,
+      setProrroga,
+      }}>
+
     <Router>
       <Routes>
           <Route path="/" element={<SelectSportMenu/>}/>
@@ -31,6 +56,7 @@ const [equipoA, setEquipoA] = useState<jugador[]>(() => {
         
       </Routes>
     </Router>
+    </DatosPartidoContext.Provider>
     </JugadoresContext.Provider>
     </>
   )

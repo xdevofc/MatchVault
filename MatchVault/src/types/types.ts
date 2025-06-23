@@ -9,6 +9,8 @@ export type jugador = {
     goles?: number,
     amarilla?:number,
     roja?:number,
+    isEjected?:boolean,
+    deuda?:number
 }
 
 

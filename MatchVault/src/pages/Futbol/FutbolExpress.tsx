@@ -2,11 +2,21 @@ import React, { useState, useEffect, } from "react";
 import type { jugador } from "../../types/types";
 import { useJugadoresContext } from "./context/JugadoresContext";
 import { guardarLS, handleAmarilla, handleGol, handleRoja, handleTitular } from "./handlers/FutbolExpress/FutbolExpress";
+import { useDatosDelPartidoContext } from "./context/DatosDelPartidoContext";
 
 const FutbolExpress: React.FC = () => {
+    // consumiendo el context con los datos del partido
+  const { 
+    duracion,
+    montoAmarilla, 
+    montoRoja, 
+   } = useDatosDelPartidoContext()
+
+
+
   const [scoreA, setScoreA] = useState<number>(0);
   const [scoreB, setScoreB] = useState<number>(0);
-  const [seconds, setSeconds] = useState<number>(1800); // 30 minutos
+  const [seconds, setSeconds] = useState<number>(duracion); // 30 minutos
   const [isPaused, setIsPaused] = useState<boolean>(true);
 
   // consumiendo los setState para cambiar a suplente
@@ -94,13 +104,22 @@ const FutbolExpress: React.FC = () => {
                     equipoA,
                     equipoB,
                     setEquipoA,
-                    setEquipoB)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
+                    setEquipoB,
+                    montoAmarilla,
+                    )} 
+                    // si es que tiene dos amarillas o una roja se desactiva
+                    disabled = {(player.amarilla !== undefined && player.amarilla >2)  || ((player.roja !== undefined ) && player.roja == 1)}
+                    // que sea mas opaco cuando este disabled
+                    className={`px-2 py-1 rounded text-xs text-black
+                    ${player.isEjected? "bg-yellow-200 opacity-60 cursor-not-allowed":"bg-yellow-300 hover:bg-yellow-400"}`}>Amarilla</button>
                   <button onClick={() => handleRoja(
                     player,
                     equipoA,
                     equipoB,
                     setEquipoA,
-                    setEquipoB)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
+                    setEquipoB,montoRoja)} 
+                    disabled={(player.amarilla !== undefined && player.amarilla >2)  || ((player.roja !== undefined ) && player.roja == 1)}
+                    className={`bg-red-500 text-white px-2 py-1 rounded text-xs ${player.isEjected ? "bg-red-300 opacity-60 cursor-not-allowed" : "bg-red-500 hover:bg-red-600"}`}>Roja</button>
                   <button onClick={() => handleGol(
                     player,
                     equipoA,
@@ -110,7 +129,9 @@ const FutbolExpress: React.FC = () => {
                     setScoreA,
                     setScoreB,
                     scoreA,
-                    scoreB)} className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
+                    scoreB)} 
+                    disabled={(player.amarilla !== undefined && player.amarilla >2)  || ((player.roja !== undefined ) && player.roja == 1)}
+                    className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
                 </div>
               </div>
             ))}
@@ -134,13 +155,13 @@ const FutbolExpress: React.FC = () => {
                     equipoA,
                     equipoB,
                     setEquipoA,
-                    setEquipoB)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
+                    setEquipoB, montoAmarilla)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
                   <button onClick={() => handleRoja(
                     player,
                     equipoA,
                     equipoB,
                     setEquipoA,
-                    setEquipoB)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
+                    setEquipoB,montoRoja)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
                   <button onClick={() => handleGol(
                     player,
                     equipoA,
@@ -150,7 +171,9 @@ const FutbolExpress: React.FC = () => {
                     setScoreA,
                     setScoreB,
                     scoreA,
-                    scoreB)} className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
+                    scoreB)} 
+                    disabled={(player.amarilla !== undefined && player.amarilla >2)  || ((player.roja !== undefined ) && player.roja == 1) || player.titular == false}
+                    className={`bg-green-500 text-white px-2 py-1 rounded text-xs ${(player.isEjected|| player.titular == false)? "bg-green-300 opacity-60 cursor-not-allowed" : "bg-green-500 hover:bg-green-600"}`}>Gol</button>
                 </div>
               </div>
             ))}
@@ -192,13 +215,13 @@ const FutbolExpress: React.FC = () => {
                     equipoA,
                     equipoB,
                     setEquipoA,
-                    setEquipoB)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
+                    setEquipoB, montoAmarilla)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
                   <button onClick={() => handleRoja(
                     player,
                     equipoA,
                     equipoB,
                     setEquipoA,
-                    setEquipoB)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
+                    setEquipoB, montoRoja)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
                   <button onClick={() => handleGol(
                     player,
                     equipoA,
@@ -208,7 +231,9 @@ const FutbolExpress: React.FC = () => {
                     setScoreA,
                     setScoreB,
                     scoreA,
-                    scoreB)} className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
+                    scoreB)} 
+                    disabled={(player.amarilla !== undefined && player.amarilla >2)  || ((player.roja !== undefined ) && player.roja == 1) || player.titular == false}
+                    className={`bg-green-500 text-white px-2 py-1 rounded text-xs ${(player.isEjected|| player.titular == false)? "bg-green-300 opacity-60 cursor-not-allowed" : "bg-green-500 hover:bg-green-600"}`}>Gol</button>
                 </div>
               </div>
             ))}
@@ -232,13 +257,13 @@ const FutbolExpress: React.FC = () => {
                     equipoA,
                     equipoB,
                     setEquipoA,
-                    setEquipoB)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
+                    setEquipoB,montoAmarilla)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
                   <button onClick={() => handleRoja(
                     player,
                     equipoA,
                     equipoB,
                     setEquipoA,
-                    setEquipoB)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
+                    setEquipoB, montoRoja)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
                   <button onClick={() => handleGol(
                     player,
                     equipoA,
@@ -248,7 +273,10 @@ const FutbolExpress: React.FC = () => {
                     setScoreA,
                     setScoreB,
                     scoreA,
-                    scoreB)} className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
+                    scoreB)} 
+                    disabled={(player.amarilla !== undefined && player.amarilla >2)  || ((player.roja !== undefined ) && player.roja == 1) || player.titular == false}
+                    className={`bg-green-500 text-white px-2 py-1 rounded text-xs ${(player.isEjected|| player.titular == false)? "bg-green-300 opacity-60 cursor-not-allowed" : "bg-green-500 hover:bg-green-600"}`}>Gol
+                    </button>
                 </div>
               </div>
             ))}

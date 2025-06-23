@@ -1,32 +1,32 @@
 import type React from "react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDatosDelPartidoContext } from "./context/DatosDelPartidoContext";
 
 function ConfiguracionPartido(): React.JSX.Element {
+    
+    // consumiento el provider de Datos del partido
+    const {
+        duracion,
+        amonestaciones, 
+        montoAmarilla, 
+        montoRoja,
+        penalties,
+        prorroga,
+        setDuracion, 
+        setAmonestaciones,
+        setMontoAmarilla, 
+        setMontoRoja, 
+        setPenalties, 
+        setProrroga, 
+        
+    } = useDatosDelPartidoContext()
+
+
   const navigate = useNavigate();
 
   function handleRedirect(): void {
-    const datosPartido = {
-        duracion,
-        amonestaciones,
-        montoAmarilla,
-        montoRoja,
-        penalties,
-        prorroga
-    }
-
-    localStorage.setItem("Datos-partido", JSON.stringify(datosPartido));
-
-    navigate("/futbol-express");
-
+        navigate("/futbol-express");
   }
-
-  const [duracion, setDuracion] = useState<string|number>(30)
-  const [amonestaciones, setAmonestaciones] = useState(false);
-  const [montoAmarilla, setMontoAmarilla] = useState<string|number>(0)
-  const [montoRoja, setMontoRoja] = useState<string|number>(0)
-  const [penalties, setPenalties] = useState(false)
-  const [prorroga, setProrroga] = useState(false)
 
 
   
@@ -68,7 +68,7 @@ function ConfiguracionPartido(): React.JSX.Element {
           value={montoAmarilla}
           onChange={e => {
                     const val = parseInt(e.target.value);
-                    setMontoAmarilla(isNaN(val) ? "" : val);
+                    setMontoAmarilla(isNaN(val) ? 0 : val);
                 }}
           />
         </div>
@@ -81,7 +81,7 @@ function ConfiguracionPartido(): React.JSX.Element {
           value={montoRoja}
           onChange={e => {
                     const val = parseInt(e.target.value);
-                    setMontoRoja(isNaN(val) ? "" : val);
+                    setMontoRoja(isNaN(val) ? 0 : val);
                 }}
           />
         </div>
@@ -90,12 +90,12 @@ function ConfiguracionPartido(): React.JSX.Element {
       {/* Columna 2 */}
       <div className="p-3 bg-purple-100 text-black rounded-lg shadow border border-purple-300 flex flex-col space-y-3">
         <div>
-          <label htmlFor="duration" className="block text-sm">Duración del Partido (en minutos)</label>
+          <label htmlFor="duration" className="block text-sm">Duración del Partido (segundos)</label>
           <input name="duration" type="text" className="border border-gray-300 px-2 py-1 w-full rounded" 
             value={duracion}
             onChange={e => {
                     const val = parseInt(e.target.value);
-                    setDuracion(isNaN(val) ? "" : val);
+                    setDuracion(isNaN(val) ? 0 : val);
                 }}
           />
         </div>
