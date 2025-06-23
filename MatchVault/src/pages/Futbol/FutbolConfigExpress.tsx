@@ -1,21 +1,17 @@
 import type React from "react";
 import RegisterPlayers from "./RegisterPlayers";
 import ConfiguracionPartido from "./ConfiguracionPartido";
-import { useEffect, useState } from "react";
+import { useEffect,} from "react";
 import { type jugador } from '../../types/types';
+import { useJugadoresContext } from "./context/JugadoresContext";
+
 
 function FutbolConfigExpress(): React.JSX.Element {
-  const [equipoA, setEquipoA] = useState<jugador[]>(() => {
-    const data = localStorage.getItem("Lista-jugadores");
-    return data ? JSON.parse(data).equipoA || [] : [];
-  });
 
-  const [equipoB, setEquipoB] = useState<jugador[]>(() => {
-    const data = localStorage.getItem("Lista-jugadores");
-    return data ? JSON.parse(data).equipoB || [] : [];
-  });
+    // usando el provider 
+    const {setEquipoA, setEquipoB, equipoA, equipoB} = useJugadoresContext()
 
-  function AgregarEquipoA(jugadorNuevo: jugador): void {
+    function AgregarEquipoA(jugadorNuevo: jugador): void {
     setEquipoA(prev => [...prev, jugadorNuevo]);
     console.log("Agregando al equipo A");
   }
@@ -60,7 +56,8 @@ function FutbolConfigExpress(): React.JSX.Element {
 
         {/* Footer */}
         <footer className="col-span-2 bg-purple-700 text-white px-4 py-2 rounded-lg shadow">
-          <ConfiguracionPartido />
+                <ConfiguracionPartido />
+                
         </footer>
       </div>
     </div>

@@ -19,7 +19,6 @@ function ConfiguracionPartido(): React.JSX.Element {
 
     navigate("/futbol-express");
 
-    console.log(JSON.parse(localStorage.getItem("Datos-partido")))
   }
 
   const [duracion, setDuracion] = useState<string|number>(30)

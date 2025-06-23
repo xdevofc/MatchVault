@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, } from "react";
 import type { jugador } from "../../types/types";
+import { useJugadoresContext } from "./context/JugadoresContext";
 
 const FutbolExpress: React.FC = () => {
   const [scoreA, setScoreA] = useState<number>(0);
@@ -7,9 +8,12 @@ const FutbolExpress: React.FC = () => {
   const [seconds, setSeconds] = useState<number>(1800); // 30 minutos
   const [isPaused, setIsPaused] = useState<boolean>(true);
 
-  const ListaJugadoresA = JSON.parse(localStorage.getItem("Lista-jugadores")).equipoA;
-  const ListaJugadoresB = JSON.parse(localStorage.getItem("Lista-jugadores")).equipoB;
+  // consumiendo los setState para cambiar a suplente
+  const { setEquipoA, setEquipoB, equipoA, equipoB} = useJugadoresContext() 
+  const ListaJugadoresA = equipoA;
+  const ListaJugadoresB = equipoB;
 
+// reflejando los cambios del minutero
   useEffect(() => {
     let interval: number;
     if (!isPaused && seconds > 0) {
@@ -20,6 +24,17 @@ const FutbolExpress: React.FC = () => {
     return () => clearInterval(interval);
   }, [isPaused, seconds]);
 
+  // guardando los cambios de equipos al cambiar de titular a suplente
+  useEffect(()=>{
+    // guardamos en el local storage los equipos 
+    localStorage.setItem("Lista-jugadores", JSON.stringify({
+        equipoA,
+        equipoB
+    }))
+  }, [equipoA, equipoB])
+
+
+  // extrayendo los segundos y minutos
   const formatTime = (totalSeconds: number): string => {
     const mins = Math.floor(totalSeconds / 60);
     const secs = totalSeconds % 60;
@@ -28,9 +43,47 @@ const FutbolExpress: React.FC = () => {
 
   // cambiando a suplente
   function handleTitular( player :jugador): void{
-    console.log("VA A SER SUPLENTE ", player)
     
-  }
+    // identificar de que equipo es 
+    const indexA = equipoA.findIndex(j => j.cedula === player.cedula);
+    const indexB = equipoB.findIndex(j => j.cedula === player.cedula);
+
+    // creando una copia para no modificar directamente el estado
+    const jugadoresActualesA = [...equipoA]
+    const jugadoresActualesB = [...equipoB]
+    if (indexA !== -1){
+        console.log("Estan en el equipoA")
+        jugadoresActualesA[indexA] = {
+        // cambiar sus propiedades
+            nombre: player.nombre,
+            apellido: player.apellido,
+            cedula: player.cedula,
+            carrera: player.carrera,
+            nroCamiseta: player.nroCamiseta,
+            titular: !player.titular,
+            
+        }
+    }else if(indexB !== -1){
+        console.log("Esta en el quipob")
+        // cambiar sus propiedades
+        jugadoresActualesB[indexB] = {
+            nombre: player.nombre,
+            apellido: player.apellido,
+            cedula: player.cedula,
+            carrera: player.carrera,
+            nroCamiseta: player.nroCamiseta,
+            titular: !player.titular, 
+        }
+
+      }
+
+      // guardando los nuevos jugadores
+    setEquipoA(jugadoresActualesA)      
+    setEquipoB(jugadoresActualesB)      
+
+
+    
+}
 
   return (
     <div className="w-full h-screen bg-purple-200 overflow-hidden grid grid-cols-3 grid-rows-3 gap-6 px-6 py-4">
@@ -75,7 +128,7 @@ const FutbolExpress: React.FC = () => {
               <div key={player.cedula} className="mb-4 border-b border-white pb-2">
                 <p className="font-medium">#{player.nroCamiseta} - {player.nombre} {player.apellido}</p>
                 <div className="flex flex-wrap gap-1 mt-2">
-                  <button onClick={() => console.log("Cambiar a suplente:", player)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
+                  <button onClick={() => handleTitular(player)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
                   <button onClick={() => console.log("Tarjeta amarilla a:", player)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
                   <button onClick={() => console.log("Tarjeta roja a:", player)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
                   <button onClick={() => console.log("Gol de:", player)} className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
@@ -91,7 +144,7 @@ const FutbolExpress: React.FC = () => {
               <div key={player.cedula} className="mb-4 border-b border-white pb-2">
                 <p className="font-medium">#{player.nroCamiseta} - {player.nombre} {player.apellido}</p>
                 <div className="flex flex-wrap gap-1 mt-2">
-                  <button onClick={() => console.log("Cambiar a suplente:", player)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
+                  <button onClick={() => handleTitular(player)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
                   <button onClick={() => console.log("Tarjeta amarilla a:", player)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
                   <button onClick={() => console.log("Tarjeta roja a:", player)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
                   <button onClick={() => console.log("Gol de:", player)} className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
@@ -119,7 +172,9 @@ const FutbolExpress: React.FC = () => {
         <div className="flex gap-6 mt-4">
           <div className="p-4 bg-purple-400 text-white rounded shadow w-[22rem]">
             <h4 className="font-bold mb-3">Titulares</h4>
-            {ListaJugadoresB.map((player: jugador) => (
+            {ListaJugadoresB
+            .filter((player : jugador) => player.titular)
+            .map((player: jugador) => (
               <div key={player.cedula} className="mb-4 border-b border-white pb-2">
                 <p className="font-medium">#{player.nroCamiseta} - {player.nombre} {player.apellido}</p>
                 <div className="flex flex-wrap gap-1 mt-2">
@@ -133,7 +188,19 @@ const FutbolExpress: React.FC = () => {
           </div>
           <div className="p-4 bg-purple-100 rounded shadow w-[22rem]">
             <h4 className="font-bold mb-3">Suplentes</h4>
-            {/* Aquí puedes renderizar suplentes en el futuro */}
+            {ListaJugadoresB
+            .filter((player : jugador) => !player.titular)
+            .map((player: jugador) => (
+              <div key={player.cedula} className="mb-4 border-b border-white pb-2">
+                <p className="font-medium">#{player.nroCamiseta} - {player.nombre} {player.apellido}</p>
+                <div className="flex flex-wrap gap-1 mt-2">
+                  <button onClick={() => handleTitular(player)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
+                  <button onClick={() => console.log("Tarjeta amarilla a:", player)} className="bg-yellow-300 text-black px-2 py-1 rounded text-xs">Amarilla</button>
+                  <button onClick={() => console.log("Tarjeta roja a:", player)} className="bg-red-500 text-white px-2 py-1 rounded text-xs">Roja</button>
+                  <button onClick={() => console.log("Gol de:", player)} className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
