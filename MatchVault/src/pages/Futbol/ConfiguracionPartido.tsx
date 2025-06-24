@@ -90,7 +90,7 @@ function ConfiguracionPartido(): React.JSX.Element {
       {/* Columna 2 */}
       <div className="p-3 bg-purple-100 text-black rounded-lg shadow border border-purple-300 flex flex-col space-y-3">
         <div>
-          <label htmlFor="duration" className="block text-sm">Duración del Partido (segundos)</label>
+          <label htmlFor="duration" className="block text-sm">Duración del Partido (minutos)</label>
           <input name="duration" type="text" className="border border-gray-300 px-2 py-1 w-full rounded" 
             value={duracion}
             onChange={e => {

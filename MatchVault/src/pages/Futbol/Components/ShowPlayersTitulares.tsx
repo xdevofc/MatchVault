@@ -1,5 +1,5 @@
 import type { Dispatch } from "react"
-import type { jugador } from "../../../types/types"
+import type { EventoFutbol, jugador } from "../../../types/types"
 
 interface PropsShowPlayers {
     titulo: string,
@@ -18,6 +18,8 @@ interface PropsShowPlayers {
     handleGol: Function,
     montoAmarilla:number,
     montoRoja:number,
+    setEventos:Dispatch<React.SetStateAction<EventoFutbol[]>>
+    minuto:number,
 
 }
 
@@ -41,7 +43,9 @@ const ShowPlayersTitulares : React.FC<PropsShowPlayers> = ({
     handleRoja,
     handleGol,
     montoAmarilla,
-    montoRoja
+    montoRoja,
+    setEventos,
+    minuto,
 }) => {
     return (
     <div className="p-4 bg-purple-400 text-white rounded shadow w-[22rem]">
@@ -52,43 +56,30 @@ const ShowPlayersTitulares : React.FC<PropsShowPlayers> = ({
               <div key={player.cedula} className="mb-4 border-b border-white pb-2">
                 <p className="font-medium">#{player.nroCamiseta} - {player.nombre} {player.apellido}</p>
                 <div className="flex flex-wrap gap-1 mt-2">
-                  <button onClick={() => handleTitular(
-                    player,
-                    equipoA,
-                    equipoB,
-                    setEquipoA,
-                    setEquipoB)} className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
-                  <button onClick={() => handleAmarilla(
-                    player,
-                    equipoA,
-                    equipoB,
-                    setEquipoA,
-                    setEquipoB,
-                    montoAmarilla,
-                    )} 
+                  <button onClick={() => handleTitular(player,equipoA,equipoB,setEquipoA,setEquipoB)} 
+                    className="bg-yellow-500 text-black px-2 py-1 rounded text-xs">{`<->`}</button>
+                  <button onClick={() => {
+                    handleAmarilla(player,equipoA,equipoB,setEquipoA,setEquipoB,montoAmarilla)
+                    setEventos( prev => [...prev, {minuto, tipo:"amarilla",jugador:`#${player.nroCamiseta}-${player.nombre}`}])
+                  }} 
                     // si es que tiene dos amarillas o una roja se desactiva
                     disabled = {(player.amarilla !== undefined && player.amarilla >2)  || ((player.roja !== undefined ) && player.roja == 1)}
                     // que sea mas opaco cuando este disabled
                     className={`px-2 py-1 rounded text-xs text-black
                     ${player.isEjected? "bg-yellow-200 opacity-60 cursor-not-allowed":"bg-yellow-300 hover:bg-yellow-400"}`}>Amarilla</button>
-                  <button onClick={() => handleRoja(
-                    player,
-                    equipoA,
-                    equipoB,
-                    setEquipoA,
-                    setEquipoB,montoRoja)} 
+                  <button onClick={() => {
+                    handleRoja(player,equipoA,equipoB,setEquipoA,setEquipoB,montoRoja)
+                    setEventos( prev => [...prev, {minuto, tipo:"roja",jugador:`#${player.nroCamiseta}-${player.nombre}`}])
+                  } 
+                  
+                  }
                     disabled={(player.amarilla !== undefined && player.amarilla >2)  || ((player.roja !== undefined ) && player.roja == 1)}
+                    
                     className={`bg-red-500 text-white px-2 py-1 rounded text-xs ${player.isEjected ? "bg-red-300 opacity-60 cursor-not-allowed" : "bg-red-500 hover:bg-red-600"}`}>Roja</button>
-                  <button onClick={() => handleGol(
-                    player,
-                    equipoA,
-                    equipoB,
-                    setEquipoA,
-                    setEquipoB,
-                    setScoreA,
-                    setScoreB,
-                    scoreA,
-                    scoreB)} 
+                  <button onClick={() => {
+                    handleGol(player,equipoA,equipoB,setEquipoA,setEquipoB,setScoreA,setScoreB,scoreA,scoreB) 
+                    setEventos( prev => [...prev, {minuto, tipo:"gol",jugador:`#${player.nroCamiseta}-${player.nombre}`}])
+                  }}
                     disabled={(player.amarilla !== undefined && player.amarilla >2)  || ((player.roja !== undefined ) && player.roja == 1)}
                     className="bg-green-500 text-white px-2 py-1 rounded text-xs">Gol</button>
                 </div>

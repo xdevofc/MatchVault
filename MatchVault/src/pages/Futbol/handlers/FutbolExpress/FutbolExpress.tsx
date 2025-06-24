@@ -1,4 +1,4 @@
-import type { jugador } from "../../../../types/types";
+import type { EventoFutbol, jugador } from "../../../../types/types";
 
 export function guardarLS(equipoA : jugador[], equipoB: jugador[]) : void{
 
@@ -236,5 +236,12 @@ export function handleGol(
     setEquipoA(jugadoresActualesA)      
     setEquipoB(jugadoresActualesB)      
 
+
+}
+
+
+export function guardarEventos(eventos:EventoFutbol[]){
+    localStorage.setItem('futbol-eventos', JSON.stringify(eventos))
+    console.log("Evento guardado")
 
 }

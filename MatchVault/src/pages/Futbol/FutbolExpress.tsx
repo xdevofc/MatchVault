@@ -1,11 +1,13 @@
 import React, { useState, useEffect, } from "react";
-import type { jugador } from "../../types/types";
 import { useJugadoresContext } from "./context/JugadoresContext";
-import { guardarLS, handleAmarilla, handleGol, handleRoja, handleTitular } from "./handlers/FutbolExpress/FutbolExpress";
+import { guardarEventos, guardarLS, handleAmarilla, handleGol, handleRoja, handleTitular } from "./handlers/FutbolExpress/FutbolExpress";
 import { useDatosDelPartidoContext } from "./context/DatosDelPartidoContext";
-import ShowPlayers from "./Components/ShowPlayersTitulares";
 import ShowPlayersTitulares from "./Components/ShowPlayersTitulares";
 import ShowPlayersSuplentes from "./Components/ShowPlayersSuplentes";
+import ScoreTracker from "./Components/ScoreTracker";
+import TimerButtons from "./Components/TimerButtons";
+import type { EventoFutbol } from "../../types/types";
+//import type { EventoFutbol } from "../../types/types";
 
 const FutbolExpress: React.FC = () => {
     // consumiendo el context con los datos del partido
@@ -17,17 +19,25 @@ const FutbolExpress: React.FC = () => {
 
 
 
+
   const [scoreA, setScoreA] = useState<number>(0);
   const [scoreB, setScoreB] = useState<number>(0);
-  const [seconds, setSeconds] = useState<number>(duracion); // 30 minutos
+  const [minutos, setMinutos] = useState<number>(duracion-1); 
+  const [seconds, setSeconds] = useState<number>(59); 
   const [isPaused, setIsPaused] = useState<boolean>(true);
+  const [eventos, setEventos] = useState<EventoFutbol[]>(() => {
+    const data = localStorage.getItem("futbol-eventos");
+    return data ? JSON.parse(data) || [] : [];
+  });
+  
 
   // consumiendo los setState para cambiar a suplente
   const { setEquipoA, setEquipoB, equipoA, equipoB} = useJugadoresContext() 
   const ListaJugadoresA = equipoA;
   const ListaJugadoresB = equipoB;
 
-// reflejando los cambios del minutero
+  
+// actualizar los segundos del minutero
   useEffect(() => {
     let interval: number;
     if (!isPaused && seconds > 0) {
@@ -35,61 +45,63 @@ const FutbolExpress: React.FC = () => {
         setSeconds((prev) => Math.max(prev - 1, 0));
       }, 1000);
     }
+
+    if (!isPaused && seconds == 0){
+        setMinutos((prev) => prev -1)
+        setSeconds(59)
+    }
+
     return () => clearInterval(interval);
   }, [isPaused, seconds]);
 
-  // guardando los cambios de equipos al cambiar de titular a suplente
+
+// extrayendo formateando el tablero
+const formatTime = `${minutos}:${String(seconds).padStart(2, "0")}`
+
+
+    // guardando los cambios de equipos al cambiar de titular a suplente
   useEffect(() => {
     guardarLS(equipoA, equipoB)
   }, [equipoA, equipoB])
 
+    // guardando los eventos
+    useEffect(()=>{
+        guardarEventos(eventos)
+    }, [eventos])
 
-  // extrayendo los segundos y minutos
-  const formatTime = (totalSeconds: number): string => {
-    const mins = Math.floor(totalSeconds / 60);
-    const secs = totalSeconds % 60;
-    return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
-  };
+ 
 
   // cambiando a suplente
 
   return (
     <div className="w-full h-screen bg-purple-200 overflow-hidden grid grid-cols-3 grid-rows-3 gap-6 px-6 py-4">
       {/* IZQUIERDA ARRIBA: Marcador equipo A */}
-      <div className="flex flex-col items-center justify-center">
-        <h2 className="text-xl font-bold mb-2">Equipo A</h2>
-        <div className="flex flex-col items-center space-y-2">
-          <span className="text-6xl font-bold">{scoreA}</span>
-          <div className="grid grid-cols-2 gap-2">
-            <button className="px-4 py-2 bg-white rounded shadow" onClick={() => setScoreA(scoreA + 1)}>+</button>
-            <button className="px-4 py-2 bg-white rounded shadow" onClick={() => setScoreA(scoreA - 1)}>-</button>
-          </div>
-        </div>
-      </div>
+      <ScoreTracker
+        titulo={"Equipo A"}
+        score={scoreA}
+        setScore={setScoreA}
+      />
+      
 
       {/* CENTRO ARRIBA: Minutero */}
       <div className="flex items-center justify-center">
-        <h1 className="text-5xl font-bold">{formatTime(seconds)}</h1>
+        <h1 className="text-5xl font-bold">{formatTime}</h1>
       </div>
 
       {/* DERECHA ARRIBA: Marcador equipo B */}
-      <div className="flex flex-col items-center justify-center">
-        <h2 className="text-xl font-bold mb-2">Equipo B</h2>
-        <div className="flex flex-col items-center space-y-2">
-          <span className="text-6xl font-bold">{scoreB}</span>
-          <div className="grid grid-cols-2 gap-2">
-            <button className="px-4 py-2 bg-white rounded shadow" onClick={() => setScoreB(scoreB + 1)}>+</button>
-            <button className="px-4 py-2 bg-white rounded shadow" onClick={() => setScoreB(scoreB - 1)}>-</button>
-          </div>
-        </div>
-      </div>
+      <ScoreTracker
+        titulo={"EquipoB"}
+        score={scoreB}
+        setScore={setScoreB}
+      />
+      
 
       {/* IZQUIERDA CENTRO: Jugadores equipo A */}
       <div className="flex flex-col items-center justify-center">
         <h3 className="text-lg font-semibold">Jugadores</h3>
         <div className="flex gap-6 mt-4">
           
-            {
+            
             <ShowPlayersTitulares
                 titulo={"titulares"}
                 jugadores={ListaJugadoresA}
@@ -107,7 +119,9 @@ const FutbolExpress: React.FC = () => {
                 handleGol={handleGol}
                 montoAmarilla={montoAmarilla}
                 montoRoja={montoRoja}
-            />}
+                setEventos={setEventos}
+                minuto={minutos}
+            />
           
           <ShowPlayersSuplentes
             titulo={"Suplentes"}
@@ -132,15 +146,13 @@ const FutbolExpress: React.FC = () => {
       </div>
 
       {/* CENTRO CENTRO: Controles del reloj */}
-      <div className="flex flex-col items-center justify-center space-y-4">
-        <div className="flex items-center space-x-2">
-          <button className="px-3 py-1 bg-white rounded shadow" onClick={() => setIsPaused(!isPaused)}>
-            {isPaused ? "Continuar" : "Pausar"}
-          </button>
-          <button className="px-3 py-1 bg-white rounded shadow" onClick={() => setSeconds(seconds + 60)}>+1 min</button>
-          <button className="px-3 py-1 bg-white rounded shadow" onClick={() => setSeconds(Math.max(seconds - 60, 0))}>-1 min</button>
-        </div>
-      </div>
+      <TimerButtons
+        isPaused={isPaused} 
+        setMinutos={setMinutos}
+        setIsPaused={setIsPaused}
+        eventos={eventos}
+      />
+     
 
       {/* DERECHA CENTRO: Jugadores equipo B */}
       <div className="flex flex-col items-center justify-center">
@@ -163,6 +175,8 @@ const FutbolExpress: React.FC = () => {
                 handleGol={handleGol}
                 montoAmarilla={montoAmarilla}
                 montoRoja={montoRoja}
+                setEventos={setEventos}
+                minuto={minutos}
             />
           
           <ShowPlayersSuplentes

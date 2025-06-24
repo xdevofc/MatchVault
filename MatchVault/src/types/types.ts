@@ -30,3 +30,15 @@ export type EquiposContextType = {
     equipoB: jugador[]
 }
 
+
+export interface EventoFutbol {
+    minuto: number;
+    tipo: "gol" | "amarilla" |"roja",
+    jugador: string
+}
+
+export const iconoEvento = {
+  gol: "⚽",
+  amarilla: "🟨",
+  roja: "🟥"
+};
