@@ -130,6 +130,8 @@ const formatTime = `${minutos}:${String(seconds).padStart(2, "0")}`
             handleGol={handleGol}
             montoAmarilla={montoAmarilla}
             montoRoja={montoRoja}
+            setEventos={setEventos}
+            minuto={minutos}
           />
           
         </div>
@@ -176,6 +178,8 @@ const formatTime = `${minutos}:${String(seconds).padStart(2, "0")}`
             handleGol={handleGol}
             montoAmarilla={montoAmarilla}
             montoRoja={montoRoja}
+            setEventos={setEventos}
+            minuto={minutos}
           />
           
         </div>

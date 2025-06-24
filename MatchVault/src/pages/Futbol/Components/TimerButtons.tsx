@@ -26,7 +26,7 @@ const TimerButtons : React.FC<PropsTimerButtons> = ({
                 <button className="px-3 py-1 bg-white rounded shadow" onClick={() => setIsPaused(!isPaused)}>
                     {isPaused ? "Continuar" : "Pausar"}
                 </button>
-                <button className="px-3 py-1 bg-white rounded shadow" onClick={() => setMinutos(prev => prev -1)}>+1 min</button>
+                <button className="px-3 py-1 bg-white rounded shadow" onClick={() => setMinutos(prev => prev +1)}>+1 min</button>
                 <button className="px-3 py-1 bg-white rounded shadow" onClick={() => setMinutos(prev => prev-1)}>-1 min</button>
             </div>
         <div className="flex flex-col space-y-1 text-sm text-gray-700">
