@@ -50,5 +50,6 @@ export interface PropsTimerButtons {
     setMinutos: Dispatch<React.SetStateAction<number>>
     setIsPaused: Dispatch<React.SetStateAction<boolean>>
     eventos: EventoFutbol[]
+    setSeconds:Dispatch<React.SetStateAction<number>>
 
 }

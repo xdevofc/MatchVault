@@ -25,6 +25,9 @@ function ConfiguracionPartido(): React.JSX.Element {
   const navigate = useNavigate();
 
   function handleRedirect(): void {
+      // limpiando el local storage de la partida anterior 
+      localStorage.removeItem('futbol-datos-partido')
+      localStorage.removeItem('futbol-eventos')
         navigate("/futbol-express");
   }
 

@@ -20,10 +20,29 @@ const FutbolExpress: React.FC = () => {
 
 
 
-  const [scoreA, setScoreA] = useState<number>(0);
-  const [scoreB, setScoreB] = useState<number>(0);
-  const [minutos, setMinutos] = useState<number>(duracion-1); 
-  const [seconds, setSeconds] = useState<number>(59); 
+const [scoreA, setScoreA] = useState<number>(() => {
+  const data = localStorage.getItem("futbol-datos-partido");
+  const parsed = data ? JSON.parse(data) : null;
+  return parsed?.golesA ?? 0;
+});
+
+const [scoreB, setScoreB] = useState<number>(() => {
+  const data = localStorage.getItem("futbol-datos-partido");
+  const parsed = data ? JSON.parse(data) : null;
+  return parsed?.golesB ?? 0;
+});
+
+const [minutos, setMinutos] = useState<number>(() => {
+  const data = localStorage.getItem("futbol-datos-partido");
+  const parsed = data ? JSON.parse(data) : null;
+  return parsed?.minutosJugados ?? duracion - 1;
+});
+
+const [seconds, setSeconds] = useState<number>(() => {
+  const data = localStorage.getItem("futbol-datos-partido");
+  const parsed = data ? JSON.parse(data) : null;
+  return parsed?.segundosJugados ?? 59;
+});
   const [isPaused, setIsPaused] = useState<boolean>(true);
   const [eventos, setEventos] = useState<EventoFutbol[]>(() => {
     const data = localStorage.getItem("futbol-eventos");
@@ -36,9 +55,21 @@ const FutbolExpress: React.FC = () => {
   const ListaJugadoresA = equipoA;
   const ListaJugadoresB = equipoB;
 
-  
+
+  // guardar los datos del partido
+useEffect(()=>{
+    localStorage.setItem('futbol-datos-partido', JSON.stringify({
+            minutosJugados: minutos,
+            segundosJugados : seconds,
+            golesA:scoreA,
+            golesB:scoreB,
+        }))
+},[minutos, seconds,scoreA,scoreB])
+
+
 // actualizar los segundos del minutero
   useEffect(() => {
+    //restando los segundos 
     let interval: number;
     if (!isPaused && seconds > 0) {
       interval = setInterval(() => {
@@ -46,6 +77,8 @@ const FutbolExpress: React.FC = () => {
       }, 1000);
     }
 
+    
+    // reiniciando segundos y restando minutos
     if (!isPaused && seconds == 0){
         setMinutos((prev) => prev -1)
         setSeconds(59)
@@ -143,6 +176,7 @@ const formatTime = `${minutos}:${String(seconds).padStart(2, "0")}`
         setMinutos={setMinutos}
         setIsPaused={setIsPaused}
         eventos={eventos}
+        setSeconds={setSeconds}
       />
      
 
