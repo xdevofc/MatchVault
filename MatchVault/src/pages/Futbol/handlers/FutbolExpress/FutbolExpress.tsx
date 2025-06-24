@@ -14,228 +14,142 @@ export function guardarLS(equipoA : jugador[], equipoB: jugador[]) : void{
 
 export function handleTitular( 
     player :jugador, 
-    equipoA:jugador[], 
-    equipoB:jugador[], 
-    setEquipoA : React.Dispatch<React.SetStateAction<jugador[]>>,
-    setEquipoB: React.Dispatch<React.SetStateAction<jugador[]>>,
+    equipo:jugador[], 
+    setEquipo : React.Dispatch<React.SetStateAction<jugador[]>>,
     ): void{
    
-        // identificar de que equipo es 
-        const indexA = equipoA.findIndex(j => j.cedula === player.cedula);
-        const indexB = equipoB.findIndex(j => j.cedula === player.cedula);
-        
-        // creando una copia para no modificar directamente el estado
-        const jugadoresActualesA = [...equipoA]
-        const jugadoresActualesB = [...equipoB]
-        
-        
-    if (indexA !== -1){
-        console.log("Estan en el equipoA")
-            
-        // verificar que no haya sido expulsado
-        if (player.isEjected) {
-            jugadoresActualesA[indexA] = {
-                ...player,
-                titular: false
-            }
-        }else{
-            jugadoresActualesA[indexA] = {
-            // cambiar sus propiedades
-                ...player, 
-                titular: !player.titular,  
-            }
+      // encontramos en donde esta el jugador
+    const index = equipo.findIndex(j => j.cedula === player.cedula);
+    // creamos una copia para no modificar el estado
+    const nuevoEquipo = [...equipo]    
+
+    // modificamos agregamos la tarjeta amarilla
+
+    if (index !== -1){
+        nuevoEquipo[index] = {
+            ...player,
+            titular: !player.titular
         }
-        
-        
-    }else if(indexB !== -1){
-        console.log("Esta en el quipob")
-        // cambiar sus propiedades
 
-         // verificar que no haya sido expulsado
-        if (player.isEjected) {
-            jugadoresActualesB[indexB] = {
-                ...player,
-                titular: false
-            }
-        }else{
-             jugadoresActualesB[indexB] = {
-                ...player,
-                titular: !player.titular, 
-            }
-        }
-      }
-
-      // guardando los nuevos jugadores
-    setEquipoA(jugadoresActualesA)      
-    setEquipoB(jugadoresActualesB)      
-
+    }else{
+        throw new Error(`No se encontro dicho jugador y se podra hacer el cambio suplente: ${player}`)
+    } 
+     // guardamos el nuevo equipo
+    setEquipo(nuevoEquipo);
 
     
 }
 
 export function handleAmarilla(
     player :jugador, 
-    equipoA:jugador[], 
-    equipoB:jugador[], 
-    setEquipoA : React.Dispatch<React.SetStateAction<jugador[]>>,
-    setEquipoB: React.Dispatch<React.SetStateAction<jugador[]>>,
+    equipo:jugador[],  
+    setEquipo : React.Dispatch<React.SetStateAction<jugador[]>>,
     multaAmarilla: number,
  ): void {
 
-    const indexA = equipoA.findIndex(j => j.cedula === player.cedula);
-    const indexB = equipoB.findIndex(j => j.cedula === player.cedula);
+    // encontramos en donde esta el jugador
+    const index = equipo.findIndex(j => j.cedula === player.cedula);
+    // creamos una copia para no modificar el estado
+    const nuevoEquipo = [...equipo]    
 
-    // creando una copia para no modificar directamente el estado
-    const jugadoresActualesA = [...equipoA]
-    const jugadoresActualesB = [...equipoB]
-    // ===> ESTA EN EL EQUIPO A<===
-    if (indexA !== -1){
+    // modificamos agregamos la tarjeta amarilla
 
-        // si ya tiene una amarilla entonces se va expulsado y se agrega multa
-        if (player.amarilla == 1){
-            // se suma multa y se le expulsa 
-            jugadoresActualesA[indexA] = {
-                ...player,
-                amarilla: player.amarilla+1,
-                isEjected: true,
-                deuda: (player.deuda !== undefined) ? player.deuda + (player.amarilla*multaAmarilla) : multaAmarilla
-            }
-        }else{
-            // en el caso de que sea la primera amonestacion la tarjeta a marilla 
-            console.log("Estan en el equipoA")
-            jugadoresActualesA[indexA] = {
-            // cambiar sus propiedades
-                ...player,
-                amarilla: (player.amarilla !== undefined) ? multaAmarilla : 1,
-                deuda: multaAmarilla 
-            }
-        }
+    if (index !== -1){
 
-    // ====> ESTA EN EL EQUIPO B   <====
-    }else if(indexB !== -1){
-        console.log("Esta en el equipob")
-        // cambiar sus propiedades
-        if (player.amarilla == 1){
-            // se suma multa y se le expulsa 
-            jugadoresActualesB[indexB] = {
+        // en el caso de que sea la primera amarilla 
+        if(player.amarilla === undefined || player.amarilla === 0){
+            nuevoEquipo[index] = {
                 ...player,
-                amarilla: player.amarilla+1,
-                isEjected: true,
-                deuda: (player.deuda !== undefined) ? player.deuda + (player.amarilla*multaAmarilla): multaAmarilla
-            }
-        }else{
-            // en el caso de que sea la primera amonestacion la tarjeta a marilla 
-            console.log("Estan en el equipoA")
-            jugadoresActualesB[indexB] = {
-            // cambiar sus propiedades
-                ...player,
-                amarilla: (player.amarilla ?? 0) + 1,
+                amarilla: 1,
                 deuda: multaAmarilla
             }
+        }else if (player.amarilla === 1 && player.deuda !== undefined){
+            // en el caso de que sea la segunda amarilla
+            nuevoEquipo[index] = {
+                ...player,
+                isEjected: true,
+                titular: false,
+                amarilla: 2,
+                deuda:  player.deuda + multaAmarilla  
+            }
         }
 
-      }
-
-      // guardando los nuevos jugadores
-    setEquipoA(jugadoresActualesA)      
-    setEquipoB(jugadoresActualesB)      
-
+    }else{
+        throw new Error(`No se encontro dicho jugador: ${player}`)
+    }
+    
+     // guardamos el nuevo equipo
+    setEquipo(nuevoEquipo);
 
 }
 
 export function handleRoja(
     player :jugador, 
-    equipoA:jugador[], 
-    equipoB:jugador[], 
-    setEquipoA : React.Dispatch<React.SetStateAction<jugador[]>>,
-    setEquipoB: React.Dispatch<React.SetStateAction<jugador[]>>,
+    equipo:jugador[], 
+    setEquipo : React.Dispatch<React.SetStateAction<jugador[]>>,
     montoRoja: number,
 ) : void{
-    console.log("Roja a: ",player)
-    const indexA = equipoA.findIndex(j => j.cedula === player.cedula);
-    const indexB = equipoB.findIndex(j => j.cedula === player.cedula);
 
-    // creando una copia para no modificar directamente el estado
-    const jugadoresActualesA = [...equipoA]
-    const jugadoresActualesB = [...equipoB]
-    if (indexA !== -1){
-        console.log("Estan en el equipoA")
-        jugadoresActualesA[indexA] = {
-        // En el caso de que le saquen tarjeta roja, se le expulsta y se suma a la deuda
-            ...player,
-            roja: (player.roja ?? 0) + 1,
-            deuda:(player.deuda !== undefined) ? player.deuda + montoRoja : montoRoja,
-            isEjected: true
-            
-        }
-    }else if(indexB !== -1){
-        console.log("Esta en el quipob")
-        // cambiar sus propiedades
-        jugadoresActualesB[indexB] = {
-            ...player,
-            roja: (player.roja ?? 0 ) + 1,
-            deuda: (player.deuda !== undefined) ? player.deuda + montoRoja : montoRoja, 
-            isEjected: true
-        }
+     // encontramos en donde esta el jugador
+    const index = equipo.findIndex(j => j.cedula === player.cedula);
 
-      }
+    if (index === -1){
+        throw new Error(`No se encontro dicho jugador y se podra sacar roja: ${player}`)
+    }
 
-      // guardando los nuevos jugadores
-    setEquipoA(jugadoresActualesA)      
-    setEquipoB(jugadoresActualesB)      
+    // nos aseguramos de que la deuda exista o sea un numero
+    const jugadorActual = equipo[index]
+    const deudaActual = jugadorActual.deuda ?? 0;
+    // creamos una copia para no modificar el estado
+    const nuevoEquipo = [...equipo]    
+
+    // modificamos agregamos la tarjeta amarilla
+    
+
+    nuevoEquipo[index] = {
+        ...player,
+        isEjected: true,
+        deuda: deudaActual + montoRoja,
+        titular: false
+    }
+
+    
+    
+     // guardamos el nuevo equipo
+    setEquipo(nuevoEquipo); 
 
 
 }
 
 export function handleGol(
     player :jugador, 
-    equipoA:jugador[], 
-    equipoB:jugador[], 
-    setEquipoA : React.Dispatch<React.SetStateAction<jugador[]>>,
-    setEquipoB: React.Dispatch<React.SetStateAction<jugador[]>>,
-    setScoreA : React.Dispatch<React.SetStateAction<number>>,
-    setScoreB: React.Dispatch<React.SetStateAction<number>>,
-    scoreA:number,
-    scoreB:number
+    equipo:jugador[], 
+    setEquipo : React.Dispatch<React.SetStateAction<jugador[]>>,
+    setScore : React.Dispatch<React.SetStateAction<number>>,
 ) : void{
     console.log("gol de: ", player)
+  // encontramos en donde esta el jugador
 
-    // subir el contador de gol del jugador
-    const indexA = equipoA.findIndex(j => j.cedula === player.cedula);
-    const indexB = equipoB.findIndex(j => j.cedula === player.cedula);
+    const index = equipo.findIndex(j => j.cedula === player.cedula);
+    // creamos una copia para no modificar el estado
+    const nuevoEquipo = [...equipo]    
 
-    // creando una copia para no modificar directamente el estado
-    const jugadoresActualesA = [...equipoA]
-    const jugadoresActualesB = [...equipoB]
-    if (indexA !== -1){
-        console.log("Estan en el equipoA")
-        //subir el contador del gol del tablero
+    // modificamos agregamos la tarjeta amarilla
 
-        setScoreA(scoreA + 1);
+    if (index !== -1){
 
-        jugadoresActualesA[indexA] = {
-        // cambiar sus propiedades
+        nuevoEquipo[index] = {
             ...player,
-            goles: (player.goles ?? 0) + 1
-            
-        }
-    }else if(indexB !== -1){
-        console.log("Esta en el quipob")
-        // subir el contador del tablero 
-
-        setScoreB(scoreB + 1)
-        // cambiar sus propiedades
-        jugadoresActualesB[indexB] = {
-            ...player,
-            goles: (player.goles ?? 0 ) + 1, 
+            goles: (player.goles !== undefined) ? player.goles + 1 : 1 
         }
 
-      }
-
-      // guardando los nuevos jugadores
-    setEquipoA(jugadoresActualesA)      
-    setEquipoB(jugadoresActualesB)      
-
+    }else{
+        throw new Error(`No se encontro dicho jugador y se podra hacer el cambio suplente: ${player}`)
+    }
+    
+     // guardamos el nuevo equipo y actualizamos el marcador
+    setEquipo(nuevoEquipo);
+    setScore(prev => prev +1)
 
 }
 

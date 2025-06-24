@@ -62,9 +62,9 @@ const formatTime = `${minutos}:${String(seconds).padStart(2, "0")}`
     // guardando los cambios de equipos al cambiar de titular a suplente
   useEffect(() => {
     guardarLS(equipoA, equipoB)
-  }, [equipoA, equipoB])
+  }, [equipoA,equipoB])
 
-    // guardando los eventos
+//    guardando los eventos
     useEffect(()=>{
         guardarEventos(eventos)
     }, [eventos])
@@ -105,14 +105,9 @@ const formatTime = `${minutos}:${String(seconds).padStart(2, "0")}`
             <ShowPlayersTitulares
                 titulo={"titulares"}
                 jugadores={ListaJugadoresA}
-                equipoA={equipoA}
-                equipoB={equipoB}
-                scoreA={scoreA}
-                scoreB={scoreB}
-                setEquipoA={setEquipoA}
-                setEquipoB={setEquipoB}
-                setScoreA={setScoreA}
-                setScoreB={setScoreB}
+                equipo={equipoA}
+                setEquipo={setEquipoA}
+                setScore={setScoreA}
                 handleTitular={handleTitular}
                 handleAmarilla={handleAmarilla}
                 handleRoja={handleRoja}
@@ -126,14 +121,9 @@ const formatTime = `${minutos}:${String(seconds).padStart(2, "0")}`
           <ShowPlayersSuplentes
             titulo={"Suplentes"}
             jugadores={ListaJugadoresA}
-            equipoA={equipoA}
-            equipoB={equipoB}
-            scoreA={scoreA}
-            scoreB={scoreB}
-            setEquipoA={setEquipoA}
-            setEquipoB={setEquipoB}
-            setScoreA={setScoreA}
-            setScoreB={setScoreB}
+            equipo={equipoA}
+            setEquipo={setEquipoA}
+            setScore={setScoreA}
             handleTitular={handleTitular}
             handleAmarilla={handleAmarilla}
             handleRoja={handleRoja}
@@ -161,14 +151,9 @@ const formatTime = `${minutos}:${String(seconds).padStart(2, "0")}`
             <ShowPlayersTitulares 
             titulo={"titulares"}
                 jugadores={ListaJugadoresB}
-                equipoA={equipoA}
-                equipoB={equipoB}
-                scoreA={scoreA}
-                scoreB={scoreB}
-                setEquipoA={setEquipoA}
-                setEquipoB={setEquipoB}
-                setScoreA={setScoreA}
-                setScoreB={setScoreB}
+                equipo={equipoB}
+                setEquipo={setEquipoB}
+                setScore={setScoreB}
                 handleTitular={handleTitular}
                 handleAmarilla={handleAmarilla}
                 handleRoja={handleRoja}
@@ -182,14 +167,9 @@ const formatTime = `${minutos}:${String(seconds).padStart(2, "0")}`
           <ShowPlayersSuplentes
           titulo={"Suplentes"}
             jugadores={ListaJugadoresB}
-            equipoA={equipoA}
-            equipoB={equipoB}
-            scoreA={scoreA}
-            scoreB={scoreB}
-            setEquipoA={setEquipoA}
-            setEquipoB={setEquipoB}
-            setScoreA={setScoreA}
-            setScoreB={setScoreB}
+            equipo={equipoB}
+            setEquipo={setEquipoB}
+            setScore={setScoreB}
             handleTitular={handleTitular}
             handleAmarilla={handleAmarilla}
             handleRoja={handleRoja}

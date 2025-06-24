@@ -22,8 +22,8 @@ const [equipoA, setEquipoA] = useState<jugador[]>(() => {
 
   const [duracion, setDuracion] = useState<number>(30)
   const [amonestaciones, setAmonestaciones] = useState(false);
-  const [montoAmarilla, setMontoAmarilla] = useState<number>(0)
-  const [montoRoja, setMontoRoja] = useState<number>(0)
+  const [montoAmarilla, setMontoAmarilla] = useState<number>(10000)
+  const [montoRoja, setMontoRoja] = useState<number>(20000)
   const [penalties, setPenalties] = useState(false)
   const [prorroga, setProrroga] = useState(false)
 
