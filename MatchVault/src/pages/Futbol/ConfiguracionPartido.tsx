@@ -132,7 +132,12 @@ function ConfiguracionPartido(): React.JSX.Element {
         </button>
         <button
           className="w-full bg-green-600 hover:bg-green-700 transition text-white py-2 rounded text-sm"
-          onClick={handleRedirect}
+          onClick={ () => {
+            // limpiando la lista de eventos del partido anterior, por si los haya
+            localStorage.setItem('futbol-eventos', "[]");
+            handleRedirect()
+          }
+          }
         >
           Empezar partido
         </button>
