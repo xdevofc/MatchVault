@@ -42,3 +42,31 @@ export const iconoEvento = {
   amarilla: "🟨",
   roja: "🟥"
 };
+
+
+export type HandlerTitular = (
+  player: jugador,
+  equipo: jugador[],
+  setEquipo: React.Dispatch<React.SetStateAction<jugador[]>>
+) => void;
+
+export type HandlerAmarilla = (
+  player: jugador,
+  equipo: jugador[],
+  setEquipo: React.Dispatch<React.SetStateAction<jugador[]>>,
+  montoAmarilla: number
+) => void;
+
+export type HandlerRoja = (
+  player: jugador,
+  equipo: jugador[],
+  setEquipo: React.Dispatch<React.SetStateAction<jugador[]>>,
+  montoRoja: number
+) => void;
+
+export type HandlerGol = (
+  player: jugador,
+  equipo: jugador[],
+  setEquipo: React.Dispatch<React.SetStateAction<jugador[]>>,
+  setScore: React.Dispatch<React.SetStateAction<number>>
+) => void;
