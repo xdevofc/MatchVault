@@ -1,16 +1,8 @@
-import type { Dispatch } from "react";
-import { iconoEvento, type EventoFutbol } from "../../../types/types";
+import type { PropsTimerButtons } from "../../../interfaces/interfaces";
+import { iconoEvento } from "../../../types/types";
 
 
 
-
-interface PropsTimerButtons {
-    isPaused: boolean,
-    setMinutos: Dispatch<React.SetStateAction<number>>
-    setIsPaused: Dispatch<React.SetStateAction<boolean>>
-    eventos: EventoFutbol[]
-
-}
 
 
 const TimerButtons : React.FC<PropsTimerButtons> = ({

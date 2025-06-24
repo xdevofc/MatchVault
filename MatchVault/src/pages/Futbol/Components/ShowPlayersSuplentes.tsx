@@ -1,22 +1,6 @@
-import type { Dispatch } from "react"
-import type { EventoFutbol, HandlerAmarilla, HandlerGol, HandlerRoja, HandlerTitular, jugador } from "../../../types/types"
+import type { PropsShowPlayers } from "../../../interfaces/interfaces"
+import type { jugador } from "../../../types/types"
 
-interface PropsShowPlayers {
-    titulo: string,
-    jugadores: jugador[],
-    equipo:jugador[],
-    setEquipo: Dispatch<React.SetStateAction<jugador[]>>,
-    setScore: Dispatch<React.SetStateAction<number>>,
-    handleTitular: HandlerTitular,
-    handleAmarilla: HandlerAmarilla,
-    handleRoja: HandlerRoja,
-    handleGol: HandlerGol,
-    montoAmarilla:number,
-    montoRoja:number,
-    setEventos:Dispatch<React.SetStateAction<EventoFutbol[]>>
-    minuto: number
-
-}
 
 
 
