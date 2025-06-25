@@ -1,12 +1,13 @@
 import React, { useState, useEffect, } from "react";
 import { useJugadoresContext } from "./context/JugadoresContext";
-import { guardarEventos, guardarLS, handleAmarilla, handleGol, handleRoja, handleTitular } from "./handlers/FutbolExpress/FutbolExpress";
+import { FinalizarPartido, guardarEventos, guardarLS, handleAmarilla, handleGol, handleRoja, handleTitular } from "./handlers/FutbolExpress/FutbolExpress";
 import { useDatosDelPartidoContext } from "./context/DatosDelPartidoContext";
 import ShowPlayersTitulares from "./Components/ShowPlayersTitulares";
 import ShowPlayersSuplentes from "./Components/ShowPlayersSuplentes";
 import ScoreTracker from "./Components/ScoreTracker";
 import TimerButtons from "./Components/TimerButtons";
 import type { EventoFutbol } from "../../types/types";
+import { useNavigate } from "react-router-dom";
 //import type { EventoFutbol } from "../../types/types";
 
 const FutbolExpress: React.FC = () => {
@@ -17,7 +18,8 @@ const FutbolExpress: React.FC = () => {
     montoRoja, 
    } = useDatosDelPartidoContext()
 
-
+// usar navigate para volver al inicio despues de finalizar el partido
+   const navigate = useNavigate()
 
 
 const [scoreA, setScoreA] = useState<number>(() => {
@@ -224,7 +226,17 @@ const formatTime = `${minutos}:${String(seconds).padStart(2, "0")}`
 
       {/* CENTRO ABAJO: Botones adicionales */}
       <div className="flex flex-col items-center justify-center gap-4">
-        <button className="px-4 py-2 bg-red-500 text-white rounded shadow">Finalizar Partido</button>
+        <button className="px-4 py-2 bg-red-500 text-white rounded shadow"
+        onClick={()=> {
+            FinalizarPartido()
+
+            const warnRedirect = confirm("Estas seguro que deseas volver al Inicio? Tu progreso se perdera")
+            if (warnRedirect){
+                navigate('/')
+            }
+
+        }}
+        >Finalizar Partido</button>
         <button className="px-4 py-2 bg-green-500 text-white rounded shadow">Exportar Partido</button>
       </div>
 

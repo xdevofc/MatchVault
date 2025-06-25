@@ -1,6 +1,10 @@
 import type React from "react";
 import { useNavigate } from "react-router-dom";
 import { useDatosDelPartidoContext } from "./context/DatosDelPartidoContext";
+import { useJugadoresContext } from "./context/JugadoresContext";
+import { handleAmonestaciones, handlePenalties, handleProrroga } from "./handlers/ConfiguracioPartido/ConfiguracionPartido";
+import { useState } from "react";
+import PopUpImport from "./Components/PopUpImport";
 
 function ConfiguracionPartido(): React.JSX.Element {
     
@@ -21,32 +25,32 @@ function ConfiguracionPartido(): React.JSX.Element {
         
     } = useDatosDelPartidoContext()
 
+    // consumiendo datos de los equipos para resetear los campos
 
-  const navigate = useNavigate();
+    const {setEquipoA, setEquipoB} = useJugadoresContext();
+    const navigate = useNavigate();
 
-  function handleRedirect(): void {
-      // limpiando el local storage de la partida anterior 
-      localStorage.removeItem('futbol-datos-partido')
-      localStorage.removeItem('futbol-eventos')
-        navigate("/futbol-express");
-  }
+  //popup 
+  const [mostrarPopup, setMostrarPopup] = useState(false);
 
+    function handleRedirect(): void {
+          
+          // limpiando el local storage de la partida anterior 
+          localStorage.removeItem('futbol-datos-partido')
+          localStorage.removeItem('futbol-eventos')
+            navigate("/futbol-express");
+      }
 
-  
-  function handleAmonestaciones() : void{
-    setAmonestaciones(!amonestaciones)
-  }
-
-  function handlePenalties() : void {
-    setPenalties(!penalties)
-  }
-
-  function handleProrroga() : void{
-    setProrroga(!prorroga)
-  }
 
   return (
+
     <div className="grid grid-cols-3 gap-4 p-2">
+      {mostrarPopup && (
+        <PopUpImport
+        mostrarPopUp={mostrarPopup}
+        setMostrarPopUp={setMostrarPopup}
+        />
+      )}
       {/* Columna 1 */}
       <div className="p-3 bg-purple-100 text-black rounded-lg shadow border border-purple-300 flex flex-col space-y-3">
         <div>
@@ -55,7 +59,9 @@ function ConfiguracionPartido(): React.JSX.Element {
             <label className="relative inline-flex items-center cursor-pointer">
               <input type="checkbox" className="sr-only peer"
                 checked={amonestaciones} 
-                onChange={handleAmonestaciones}
+                onChange={() => {
+                  handleAmonestaciones(amonestaciones, setAmonestaciones)
+                }}
               />
               <div className="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-blue-600"></div>
               <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-full"></div>
@@ -108,7 +114,10 @@ function ConfiguracionPartido(): React.JSX.Element {
           <label className="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" className="sr-only peer"
             checked={penalties}
-            onChange={handlePenalties}
+            onChange={() => {
+              handlePenalties(penalties, setPenalties)
+            }
+            }
             />
             <div className="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-blue-600"></div>
             <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-full"></div>
@@ -120,7 +129,9 @@ function ConfiguracionPartido(): React.JSX.Element {
           <label className="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" className="sr-only peer" 
             checked={prorroga}
-            onChange={handleProrroga}
+            onChange={() => {
+              handleProrroga(prorroga, setProrroga)
+            }}
             />
             <div className="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-blue-600"></div>
             <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-full"></div>
@@ -129,10 +140,32 @@ function ConfiguracionPartido(): React.JSX.Element {
       </div>
 
       {/* Columna 3 */}
+      
       <div className="p-3 bg-purple-100 text-black rounded-lg shadow border border-purple-300 flex flex-col space-y-3 justify-center">
-        <button className="w-full bg-blue-600 hover:bg-blue-700 transition text-white py-2 rounded text-sm">
-          Importar
+       
+       {/* LIMPIANDO LOS CAMPOS */}
+       <button 
+          className="w-full bg-yellow-600 hover:bg-yellow-700 transition text-white py-2 rounded text-sm"
+
+          onClick={() => {
+          setEquipoA([])
+          setEquipoB([])
+          localStorage.removeItem('Lista-jugadores')
+        }}
+        >
+          Limpiar Equipos
         </button>
+
+        {/* IMPORTANDO LOS ARCHIVOS */}
+        <button
+        
+        className="w-full bg-blue-600 hover:bg-blue-700 transition text-white py-2 rounded text-sm"
+        onClick={() => {
+            setMostrarPopup(true)
+        }}    
+        >Importar</button>
+
+        {/* REDIRECCIONANDO AL PARTIDO */}
         <button
           className="w-full bg-green-600 hover:bg-green-700 transition text-white py-2 rounded text-sm"
           onClick={ () => {

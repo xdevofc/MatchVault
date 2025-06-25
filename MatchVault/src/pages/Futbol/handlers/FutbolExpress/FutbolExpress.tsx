@@ -159,3 +159,15 @@ export function guardarEventos(eventos:EventoFutbol[]){
     console.log("Evento guardado")
 
 }
+
+
+
+export function FinalizarPartido(){
+    console.log("Guardando partido")
+    // liberando lo que habia en el local storage 
+    localStorage.removeItem('Lista-jugadores')
+    localStorage.removeItem('futbol-datos-partido')
+    localStorage.removeItem('futbol-eventos')
+
+
+}
