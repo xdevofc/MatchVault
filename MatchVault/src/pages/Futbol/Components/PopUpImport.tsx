@@ -11,7 +11,8 @@ interface PopUpProps {
 export default function PopUpImport({ mostrarPopUp, setMostrarPopUp }: PopUpProps) {
 
     // consumiendo el context de jugadores 
-    const {setEquipoA, setEquipoB} = useJugadoresContext()
+    const {setEquipoA, setEquipoB,} = useJugadoresContext()
+
 
     // consumiendo context de datos del partido
     const {
@@ -47,7 +48,7 @@ export default function PopUpImport({ mostrarPopUp, setMostrarPopUp }: PopUpProp
                 setPenalties,
                 setProrroga,
                 setEquipoA,
-                setEquipoB
+                setEquipoB,
             );
           }}
         />

@@ -33,11 +33,7 @@ function ConfiguracionPartido(): React.JSX.Element {
   //popup 
   const [mostrarPopup, setMostrarPopup] = useState(false);
 
-    function handleRedirect(): void {
-          
-          // limpiando el local storage de la partida anterior 
-          localStorage.removeItem('futbol-datos-partido')
-          localStorage.removeItem('futbol-eventos')
+    function handleRedirect(): void { 
             navigate("/futbol-express");
       }
 
@@ -169,8 +165,19 @@ function ConfiguracionPartido(): React.JSX.Element {
         <button
           className="w-full bg-green-600 hover:bg-green-700 transition text-white py-2 rounded text-sm"
           onClick={ () => {
-            // limpiando la lista de eventos del partido anterior, por si los haya
-            localStorage.setItem('futbol-eventos', "[]");
+
+           
+
+            // guardando la configuracion del partido
+            localStorage.setItem('futbol-configuracion-partido', JSON.stringify({
+              penalties,
+              prorroga,
+              amonestaciones,
+              montoAmarilla,
+              montoRoja,
+              duracion,
+            }))
+
             handleRedirect()
           }
           }

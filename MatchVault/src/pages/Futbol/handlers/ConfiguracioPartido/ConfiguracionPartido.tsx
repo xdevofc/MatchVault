@@ -1,5 +1,6 @@
 import type { Dispatch, ChangeEvent } from "react";
 import type { jugador } from "../../../../types/types";
+import { guardarEventos } from "../FutbolExpress/FutbolExpress";
 
 
 
@@ -103,7 +104,7 @@ import type { jugador } from "../../../../types/types";
     const jsonText = JSON.parse(text)
 
     // extraemos data del json
-    const {equipoA, equipoB, duracion, penalties, prorroga, montoAmarilla, montoRoja, amonestaciones} = jsonText
+    const {equipoA, equipoB, duracion, penalties, prorroga, montoAmarilla, montoRoja, amonestaciones,eventos} = jsonText
 
     if ( equipoA === undefined ||
         equipoB === undefined ||
@@ -112,7 +113,8 @@ import type { jugador } from "../../../../types/types";
         prorroga === undefined || 
         montoAmarilla === undefined || 
         montoRoja === undefined || 
-        amonestaciones === undefined
+        amonestaciones === undefined||
+        eventos === undefined
     ){
         throw new Error("Formato no adecuado")
     }
@@ -124,7 +126,8 @@ import type { jugador } from "../../../../types/types";
     setPenalties(penalties)
     setProrroga(prorroga)
     setEquipoA(equipoA)
-    setEquipoB(equipoB)
+    setEquipoB(equipoB)    
     
-
+    guardarEventos(eventos)
+    
   }

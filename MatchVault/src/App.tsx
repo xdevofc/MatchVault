@@ -4,12 +4,12 @@ import FutbolExpress from "./pages/Futbol/FutbolExpress"
 import FutbolConfigExpress from "./pages/Futbol/FutbolConfigExpress"
 import { JugadoresContext } from "./pages/Futbol/context/JugadoresContext"
 import { useState } from "react"
-import type { jugador } from "./types/types"
-import { DatosPartidoContext} from './pages/Futbol/context/DatosDelPartidoContext';
+import type { EventoFutbol, jugador } from "./types/types"
+import { DatosPartidoContext } from './pages/Futbol/context/DatosDelPartidoContext';
 function App() {
 
-// definiendo los equipos
-const [equipoA, setEquipoA] = useState<jugador[]>(() => {
+  // definiendo los equipos
+  const [equipoA, setEquipoA] = useState<jugador[]>(() => {
     const data = localStorage.getItem("Lista-jugadores");
     return data ? JSON.parse(data).equipoA || [] : [];
   });
@@ -18,6 +18,12 @@ const [equipoA, setEquipoA] = useState<jugador[]>(() => {
     const data = localStorage.getItem("Lista-jugadores");
     return data ? JSON.parse(data).equipoB || [] : [];
   });
+
+  const [eventos, setEventos] = useState<EventoFutbol[]>(() => {
+    const data = localStorage.getItem("futbol-eventos");
+    return data ? JSON.parse(data) : [];
+  });
+
 
 
   const [duracion, setDuracion] = useState<number>(30)
@@ -32,32 +38,35 @@ const [equipoA, setEquipoA] = useState<jugador[]>(() => {
 
   return (
     <>
-    <JugadoresContext.Provider value={{setEquipoA,setEquipoB, equipoA, equipoB}}>
-    <DatosPartidoContext.Provider value={
-      {duracion,
-      amonestaciones,
-      montoAmarilla,
-      montoRoja,
-      penalties,
-      prorroga,
-      setDuracion,
-      setAmonestaciones,
-      setMontoAmarilla,
-      setMontoRoja,
-      setPenalties,
-      setProrroga,
-      }}>
+      <JugadoresContext.Provider value={{ setEquipoA, setEquipoB, equipoA, equipoB}}>
+        <DatosPartidoContext.Provider value={
+          {
+            duracion,
+            amonestaciones,
+            montoAmarilla,
+            montoRoja,
+            penalties,
+            prorroga,
+            setDuracion,
+            setAmonestaciones,
+            setMontoAmarilla,
+            setMontoRoja,
+            setPenalties,
+            setProrroga,
+            setEventos,
+            eventos
+          }}>
 
-    <Router>
-      <Routes>
-          <Route path="/" element={<SelectSportMenu/>}/>
-          <Route path="/express-futbol-config" element={<FutbolConfigExpress/>}/>
-          <Route path="/futbol-express" element={<FutbolExpress/>}/>
-        
-      </Routes>
-    </Router>
-    </DatosPartidoContext.Provider>
-    </JugadoresContext.Provider>
+          <Router>
+            <Routes>
+              <Route path="/" element={<SelectSportMenu />} />
+              <Route path="/express-futbol-config" element={<FutbolConfigExpress />} />
+              <Route path="/futbol-express" element={<FutbolExpress />} />
+
+            </Routes>
+          </Router>
+        </DatosPartidoContext.Provider>
+      </JugadoresContext.Provider>
     </>
   )
 }

@@ -3,13 +3,14 @@
 // creamos la interface para declarar los tipos luego 
 
 import { createContext, useContext, type Dispatch, type SetStateAction } from 'react';
+import type { EventoFutbol } from '../../../types/types';
 
 interface DatosDelPartido {
     duracion: number,
     amonestaciones: boolean,
     montoAmarilla: number,
     montoRoja: number,
-    penalties:boolean,
+    penalties: boolean,
     prorroga: boolean,
     setDuracion: Dispatch<SetStateAction<number>>,
     setAmonestaciones: Dispatch<SetStateAction<boolean>>,
@@ -17,17 +18,19 @@ interface DatosDelPartido {
     setMontoRoja: Dispatch<SetStateAction<number>>,
     setPenalties: Dispatch<SetStateAction<boolean>>,
     setProrroga: Dispatch<SetStateAction<boolean>>,
+    setEventos: Dispatch<SetStateAction<EventoFutbol[]>>,
+    eventos: EventoFutbol[],
 }
 
 
-export const DatosPartidoContext = createContext<undefined| DatosDelPartido>(undefined)
+export const DatosPartidoContext = createContext<undefined | DatosDelPartido>(undefined)
 
 
-export function useDatosDelPartidoContext(){
+export function useDatosDelPartidoContext() {
 
     const datosPartido = useContext(DatosPartidoContext)
 
-    if (datosPartido === undefined){
+    if (datosPartido === undefined) {
         throw new Error("Error en el provider de Datos del partido")
     }
 

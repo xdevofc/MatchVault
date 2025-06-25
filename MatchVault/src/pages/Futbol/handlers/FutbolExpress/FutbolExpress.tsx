@@ -156,18 +156,24 @@ export function handleGol(
 
 export function guardarEventos(eventos:EventoFutbol[]){
     localStorage.setItem('futbol-eventos', JSON.stringify(eventos))
-    console.log("Evento guardado")
+    console.log("Evento guardado GE LS")
 
 }
 
 
 
-export function FinalizarPartido(){
-    console.log("Guardando partido")
+export function finalizarPartido(confirmacion : boolean){
+
+    if (confirmacion){
+        localStorage.removeItem('Lista-jugadores')
+        localStorage.removeItem('futbol-datos-partido')
+        localStorage.removeItem('futbol-eventos')
+        localStorage.removeItem('futbol-configuracion-partido')
+
+    }
+    
     // liberando lo que habia en el local storage 
-    localStorage.removeItem('Lista-jugadores')
-    localStorage.removeItem('futbol-datos-partido')
-    localStorage.removeItem('futbol-eventos')
-
+    
 
 }
+
