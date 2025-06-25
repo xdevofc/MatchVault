@@ -1,0 +1,24 @@
+{
+    "equipoA":[
+        {"nombre":"Wald","apellido":"McLevie","cedula":"30577892772873","nroCamiseta":63,"carrera":"Analyst Programmer","titular":true},
+        {"nombre":"Wright","apellido":"Kilfoyle","cedula":"3534685535330424","nroCamiseta":23,"carrera":"Biostatistician IV","titular":false},
+        {"nombre":"Claybourne","apellido":"Wigzell","cedula":"6709454755099843","nroCamiseta":40,"carrera":"Food Chemist","titular":true},
+        {"nombre":"Tedman","apellido":"Kynnd","cedula":"3581573194325160","nroCamiseta":18,"carrera":"Professor","titular":true},
+        {"nombre":"Kile","apellido":"Laxton","cedula":"6304298236081915","nroCamiseta":68,"carrera":"Desktop Support Technician","titular":false}
+    ],
+    "equipoB":[
+        {"nombre":"Jud","apellido":"Kyston","cedula":"3559520477786962","nroCamiseta":33,"carrera":"Electrical Engineer","titular":true},
+        {"nombre":"Pacorro","apellido":"Eilhersen","cedula":"3582606326635392","nroCamiseta":43,"carrera":"Mechanical Systems Engineer","titular":false},
+        {"nombre":"Earle","apellido":"Bendik","cedula":"5610803735262972","nroCamiseta":23,"carrera":"Marketing Assistant","titular":false},
+        {"nombre":"Desmund","apellido":"Tadman","cedula":"341180917277012","nroCamiseta":52,"carrera":"Staff Accountant III","titular":true},
+        {"nombre":"Findley","apellido":"Earey","cedula":"676225079934086307","nroCamiseta":72,"carrera":"Assistant Professor","titular":true}
+    ],
+    "montoAmarilla":10000,
+    "montoRoja":20000,
+    "duracion":30,
+    "penalties":true,
+    "prorroga":false,
+    "amonestaciones":true,
+    "eventos":[]
+
+}
