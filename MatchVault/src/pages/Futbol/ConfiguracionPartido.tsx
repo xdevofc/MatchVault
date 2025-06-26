@@ -43,156 +43,161 @@ function ConfiguracionPartido(): React.JSX.Element {
 
 
   return (
+<div className="grid grid-cols-3 gap-4 p-2 bg-[#121212]">
+  {mostrarPopup && (
+    <PopUpImport
+      mostrarPopUp={mostrarPopup}
+      setMostrarPopUp={setMostrarPopup}
+    />
+  )}
 
-    <div className="grid grid-cols-3 gap-4 p-2">
-      {mostrarPopup && (
-        <PopUpImport
-          mostrarPopUp={mostrarPopup}
-          setMostrarPopUp={setMostrarPopup}
-        />
-      )}
-      {/* Columna 1 */}
-      <div className="p-3 bg-purple-100 text-black rounded-lg shadow border border-purple-300 flex flex-col space-y-3">
-        <div>
-          <label className="flex items-center space-x-2 w-fit">
-            <span className="font-semibold text-sm">Amonestaciones</span>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" className="sr-only peer"
-                checked={amonestaciones}
-                onChange={() => {
-                  handleAmonestaciones(amonestaciones, setAmonestaciones)
-                }}
-              />
-              <div className="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-blue-600"></div>
-              <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-full"></div>
-            </label>
-          </label>
-        </div>
-
-        <div>
-          <label htmlFor="montoAmarilla" className="block text-sm">Monto por tarjeta Amarilla</label>
-          <input name="montoAmarilla" type="text"
-            className="border border-gray-300 px-2 py-1 w-full rounded"
-            disabled={!amonestaciones}
-            value={montoAmarilla}
-            onChange={e => {
-              const val = parseInt(e.target.value);
-              setMontoAmarilla(isNaN(val) ? 0 : val);
+  {/* Columna 1 */}
+  <div className="p-3 bg-[#1F1F1F] text-[#EAEAEA] rounded-lg shadow border border-[#333] flex flex-col space-y-3">
+    <div>
+      <label className="flex items-center space-x-2 w-fit">
+        <span className="font-semibold text-sm">Amonestaciones</span>
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            className="sr-only peer"
+            checked={amonestaciones}
+            onChange={() => {
+              handleAmonestaciones(amonestaciones, setAmonestaciones);
             }}
           />
-        </div>
-
-        <div>
-          <label htmlFor="montoRoja" className="block text-sm">Monto por tarjeta Roja</label>
-          <input name="montoRoja" type="text"
-            className="border border-gray-300 px-2 py-1 w-full rounded"
-            disabled={!amonestaciones}
-            value={montoRoja}
-            onChange={e => {
-              const val = parseInt(e.target.value);
-              setMontoRoja(isNaN(val) ? 0 : val);
-            }}
-          />
-        </div>
-      </div>
-
-      {/* Columna 2 */}
-      <div className="p-3 bg-purple-100 text-black rounded-lg shadow border border-purple-300 flex flex-col space-y-3">
-        <div>
-          <label htmlFor="duration" className="block text-sm">Duración del Partido (minutos)</label>
-          <input name="duration" type="text" className="border border-gray-300 px-2 py-1 w-full rounded"
-            value={duracion}
-            onChange={e => {
-              const val = parseInt(e.target.value);
-              setDuracion(isNaN(val) ? 0 : val);
-            }}
-          />
-        </div>
-
-        <div className="flex justify-between items-center">
-          <span className="text-sm">Penalties</span>
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" className="sr-only peer"
-              checked={penalties}
-              onChange={() => {
-                handlePenalties(penalties, setPenalties)
-              }
-              }
-            />
-            <div className="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-blue-600"></div>
-            <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-full"></div>
-          </label>
-        </div>
-
-        <div className="flex justify-between items-center">
-          <span className="text-sm">Prorroga</span>
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" className="sr-only peer"
-              checked={prorroga}
-              onChange={() => {
-                handleProrroga(prorroga, setProrroga)
-              }}
-            />
-            <div className="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-blue-600"></div>
-            <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-full"></div>
-          </label>
-        </div>
-      </div>
-
-      {/* Columna 3 */}
-
-      <div className="p-3 bg-purple-100 text-black rounded-lg shadow border border-purple-300 flex flex-col space-y-3 justify-center">
-
-        {/* LIMPIANDO LOS CAMPOS */}
-        <button
-          className="w-full bg-yellow-600 hover:bg-yellow-700 transition text-white py-2 rounded text-sm"
-
-          onClick={() => {
-            setEquipoA([])
-            setEquipoB([])
-            localStorage.removeItem('Lista-jugadores')
-          }}
-        >
-          Limpiar Equipos
-        </button>
-
-        {/* IMPORTANDO LOS ARCHIVOS */}
-        <button
-
-          className="w-full bg-blue-600 hover:bg-blue-700 transition text-white py-2 rounded text-sm"
-          onClick={(e) => {
-            e.preventDefault()
-            setMostrarPopup(true)
-          }}
-        >Importar</button>
-
-        {/* REDIRECCIONANDO AL PARTIDO */}
-        <button
-          className="w-full bg-green-600 hover:bg-green-700 transition text-white py-2 rounded text-sm"
-          onClick={(e) => {
-            e.preventDefault()
-
-
-            // guardando la configuracion del partido
-            localStorage.setItem('futbol-configuracion-partido', JSON.stringify({
-              duracion,
-              penalties,
-              prorroga,
-              montoAmarilla,
-              montoRoja,
-              amonestaciones,
-              nombreA,
-              nombreB
-            }))
-
-            handleRedirect()
-          }
-          }
-        >
-          Empezar partido
-        </button>
-      </div>
+          <div className="w-11 h-6 bg-[#333] rounded-full peer-checked:bg-[#D4AF37]"></div>
+          <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-full"></div>
+        </label>
+      </label>
     </div>
+
+    <div>
+      <label htmlFor="montoAmarilla" className="block text-sm">Monto por tarjeta Amarilla</label>
+      <input
+        name="montoAmarilla"
+        type="text"
+        className="border border-[#444] bg-[#121212] text-[#EAEAEA] px-2 py-1 w-full rounded focus:outline-none"
+        disabled={!amonestaciones}
+        value={montoAmarilla}
+        onChange={e => {
+          const val = parseInt(e.target.value);
+          setMontoAmarilla(isNaN(val) ? 0 : val);
+        }}
+      />
+    </div>
+
+    <div>
+      <label htmlFor="montoRoja" className="block text-sm">Monto por tarjeta Roja</label>
+      <input
+        name="montoRoja"
+        type="text"
+        className="border border-[#444] bg-[#121212] text-[#EAEAEA] px-2 py-1 w-full rounded focus:outline-none"
+        disabled={!amonestaciones}
+        value={montoRoja}
+        onChange={e => {
+          const val = parseInt(e.target.value);
+          setMontoRoja(isNaN(val) ? 0 : val);
+        }}
+      />
+    </div>
+  </div>
+
+  {/* Columna 2 */}
+  <div className="p-3 bg-[#1F1F1F] text-[#EAEAEA] rounded-lg shadow border border-[#333] flex flex-col space-y-3">
+    <div>
+      <label htmlFor="duration" className="block text-sm">Duración del Partido (minutos)</label>
+      <input
+        name="duration"
+        type="text"
+        className="border border-[#444] bg-[#121212] text-[#EAEAEA] px-2 py-1 w-full rounded focus:outline-none"
+        value={duracion}
+        onChange={e => {
+          const val = parseInt(e.target.value);
+          setDuracion(isNaN(val) ? 0 : val);
+        }}
+      />
+    </div>
+
+    <div className="flex justify-between items-center">
+      <span className="text-sm">Penalties</span>
+      <label className="relative inline-flex items-center cursor-pointer">
+        <input
+          type="checkbox"
+          className="sr-only peer"
+          checked={penalties}
+          onChange={() => {
+            handlePenalties(penalties, setPenalties);
+          }}
+        />
+        <div className="w-11 h-6 bg-[#333] rounded-full peer-checked:bg-[#D4AF37]"></div>
+        <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-full"></div>
+      </label>
+    </div>
+
+    <div className="flex justify-between items-center">
+      <span className="text-sm">Prorroga</span>
+      <label className="relative inline-flex items-center cursor-pointer">
+        <input
+          type="checkbox"
+          className="sr-only peer"
+          checked={prorroga}
+          onChange={() => {
+            handleProrroga(prorroga, setProrroga);
+          }}
+        />
+        <div className="w-11 h-6 bg-[#333] rounded-full peer-checked:bg-[#D4AF37]"></div>
+        <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-full"></div>
+      </label>
+    </div>
+  </div>
+
+  {/* Columna 3 */}
+  <div className="p-3 bg-[#1F1F1F] text-[#EAEAEA] rounded-lg shadow border border-[#333] flex flex-col space-y-3 justify-center">
+    <button
+      className="w-full bg-[#D4AF37] hover:bg-[#BFA434] transition text-[#121212] py-2 rounded text-sm font-semibold"
+      onClick={() => {
+        setEquipoA([]);
+        setEquipoB([]);
+        localStorage.removeItem('Lista-jugadores');
+      }}
+    >
+      Limpiar Equipos
+    </button>
+
+    <button
+      className="w-full bg-[#8AB4F8] hover:bg-[#6C9DEB] transition text-[#121212] py-2 rounded text-sm font-semibold"
+      onClick={(e) => {
+        e.preventDefault();
+        setMostrarPopup(true);
+      }}
+    >
+      Importar
+    </button>
+
+    <button
+      className="w-full bg-green-600 hover:bg-green-700 transition text-white py-2 rounded text-sm font-semibold"
+      onClick={(e) => {
+        e.preventDefault();
+
+        localStorage.setItem('futbol-configuracion-partido', JSON.stringify({
+          duracion,
+          penalties,
+          prorroga,
+          montoAmarilla,
+          montoRoja,
+          amonestaciones,
+          nombreA,
+          nombreB,
+        }));
+
+        handleRedirect();
+      }}
+    >
+      Empezar partido
+    </button>
+  </div>
+</div>
+
   );
 }
 

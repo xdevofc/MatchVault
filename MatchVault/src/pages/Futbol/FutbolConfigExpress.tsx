@@ -37,25 +37,24 @@ function FutbolConfigExpress(): React.JSX.Element {
   }, [equipoA, equipoB]);
 
   return (
-  <>
-  {/* Mostrando el pop up para definir el nombre de los equipo */}
-  {mostrarDefinirNombres && (
-       <DefinirNombres
+   <>
+    {mostrarDefinirNombres && (
+      <DefinirNombres
         mostrarDefinirNombres={mostrarDefinirNombres}
         setMostrarDefinirNombres={setMostrarDefinirNombres}
-       /> 
-      )}
+      />
+    )}
 
-    <div className="h-screen bg-purple-200 flex items-center justify-center overflow-hidden">
-      <div className="grid grid-cols-2 grid-rows-[auto,auto,auto] gap-4 p-4 bg-white rounded-xl shadow-lg w-full max-w-[95%]">
+    <div className="h-screen bg-[#121212] flex items-center justify-center overflow-hidden">
+      <div className="grid grid-cols-2 grid-rows-[auto,auto,auto] gap-4 p-4 bg-[#1F1F1F] rounded-xl shadow-lg w-full max-w-[95%]">
         {/* Header */}
-        <header className="col-span-2 bg-purple-500 text-white px-4 py-2 rounded-lg shadow">
+        <header className="col-span-2 bg-[#D4AF37] text-[#121212] px-4 py-2 rounded-lg shadow">
           <h1 className="text-xl font-bold leading-tight">Fútbol Configuración Express</h1>
           <p className="text-sm leading-snug">Elige la configuración que deseas</p>
         </header>
 
-        {/* elementos del team#1 */}
-        <div className="bg-white px-3 py-2 rounded-lg shadow border border-purple-300">
+        {/* Team 1 */}
+        <div className="bg-[#1F1F1F] px-3 py-2 rounded-lg shadow border border-[#333]">
           <RegisterPlayers
             nombreEquipo={nombreA}
             onSubmit={AgregarEquipoA}
@@ -64,8 +63,8 @@ function FutbolConfigExpress(): React.JSX.Element {
           />
         </div>
 
-        {/* elementos del team#2 */}
-        <div className="bg-white px-3 py-2 rounded-lg shadow border border-purple-300">
+        {/* Team 2 */}
+        <div className="bg-[#1F1F1F] px-3 py-2 rounded-lg shadow border border-[#333]">
           <RegisterPlayers
             nombreEquipo={nombreB}
             onSubmit={AgregarEquipoB}
@@ -75,9 +74,8 @@ function FutbolConfigExpress(): React.JSX.Element {
         </div>
 
         {/* Footer */}
-        <footer className="col-span-2 bg-purple-700 text-white px-4 py-2 rounded-lg shadow">
-                <ConfiguracionPartido />
-                
+        <footer className="col-span-2 bg-[#BFA434] text-[#121212] px-4 py-2 rounded-lg shadow">
+          <ConfiguracionPartido />
         </footer>
       </div>
     </div>

@@ -26,9 +26,16 @@ const ContextWrapper: React.FC<{ children: React.ReactNode }> = ({children})=> {
     const [montoRoja, setMontoRoja] = useState<number>(20000);
     const [penalties, setPenalties] = useState(false);
     const [prorroga, setProrroga] = useState(false);
+
         // agarrar el input de los usuarios
-    const [nombreA,setNombreA] = useState<string>("EquipoA")
-    const [nombreB, setNombreB] = useState<string>("EquipoA")
+    const [nombreA,setNombreA] = useState<string>(() =>{
+      const data = localStorage.getItem('futbol-configuracion-partido')
+      return data ? JSON.parse(data).nombreA : "EquipoA"
+    })
+    const [nombreB, setNombreB] = useState<string>(() =>{
+      const data = localStorage.getItem('futbol-configuracion-partido')
+      return data ? JSON.parse(data).nombreB : "EquipoB"
+    })
         
     
   
