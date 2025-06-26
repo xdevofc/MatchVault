@@ -94,7 +94,7 @@ import { guardarEventos } from "../FutbolExpress/guardarPilaEventos";
     // extraemos data del json
     const {equipoA, 
       equipoB, 
-      duracionInicial, 
+      duracion, 
       penalties, 
       prorroga, 
       montoAmarilla, 
@@ -111,13 +111,19 @@ import { guardarEventos } from "../FutbolExpress/guardarPilaEventos";
 
     if ( equipoA === undefined ||
         equipoB === undefined ||
-        duracionInicial === undefined ||
+        duracion === undefined ||
         penalties === undefined || 
         prorroga === undefined || 
         montoAmarilla === undefined || 
         montoRoja === undefined || 
         amonestaciones === undefined||
-        eventos === undefined
+        eventos === undefined ||
+        minutosJugados === undefined || 
+        segundosJugados === undefined ||
+        nombreEquipoA === undefined || 
+        nombreEquipoB === undefined || 
+        scoreA === undefined || 
+        scoreB === undefined 
     ){
         throw new Error("Formato no adecuado")
     }
@@ -134,7 +140,7 @@ import { guardarEventos } from "../FutbolExpress/guardarPilaEventos";
     guardarEventos(eventos)
     setScoreA(scoreA)
     setScoreB(scoreB)
-    setDuracion(duracionInicial)
+    setDuracion(duracion)
 
     // guardando en el local storage los datos del partido TRANSCURRIDO
     localStorage.setItem('futbol-datos-partido',JSON.stringify(

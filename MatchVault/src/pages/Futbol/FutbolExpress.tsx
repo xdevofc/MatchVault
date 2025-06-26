@@ -27,8 +27,8 @@ const FutbolExpress: React.FC = () => {
   const {
     montoAmarilla,
     montoRoja,
-    nombreEquipoA,
-    nombreEquipoB,
+    nombreA,
+    nombreB,
     scoreA,
     scoreB,
     eventos,
@@ -102,18 +102,18 @@ const FutbolExpress: React.FC = () => {
     // traemos los datos del LS si los hay 
 
     if (isPastFirstRender.current){
-      isPastFirstRender.current = true
       console.log("GUARDAMOS FUTBOL-DATOS-PARTIDO AL TRANSCURRIR TIEMPO ")
-
-
-          localStorage.setItem('futbol-datos-partido', JSON.stringify({
-              minutosJugados: tableroMinutos,
-              segundosJugados: tableroSegundos,
-              scoreA,
-              scoreB,
-          }))
+      
+      
+      localStorage.setItem('futbol-datos-partido', JSON.stringify({
+        minutosJugados: tableroMinutos,
+        segundosJugados: tableroSegundos,
+        scoreA,
+        scoreB,
+      }))
     }
- 
+    
+    isPastFirstRender.current = true
 
     
   }, [tableroSegundos, tableroMinutos, scoreA, scoreB])
@@ -141,7 +141,7 @@ const FutbolExpress: React.FC = () => {
 
 
   // extrayendo formateando el tablero
-  const formatTime = `${String(tableroMinutos).padStart(2,"0")}:${String(tableroSegundos).padStart(2, "0")}`
+  const formatTime = `${String(tableroMinutos-1).padStart(2,"0")}:${String(tableroSegundos).padStart(2, "0")}`
 
 
   // guardando los cambios de equipos al cambiar de titular a suplente
@@ -193,7 +193,7 @@ const FutbolExpress: React.FC = () => {
       )}
       {/* IZQUIERDA ARRIBA: Marcador equipo A */}
       <ScoreTracker
-        titulo={nombreEquipoA}
+        titulo={nombreA}
         score={scoreA}
         setScore={setScoreA}
       />
@@ -206,7 +206,7 @@ const FutbolExpress: React.FC = () => {
 
       {/* DERECHA ARRIBA: Marcador equipo B */}
       <ScoreTracker
-        titulo={nombreEquipoB}
+        titulo={nombreB}
         score={scoreB}
         setScore={setScoreB}
       />

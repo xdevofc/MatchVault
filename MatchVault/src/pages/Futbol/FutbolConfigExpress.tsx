@@ -18,7 +18,7 @@ function FutbolConfigExpress(): React.JSX.Element {
   const {setEquipoA, setEquipoB, equipoA, equipoB} = useJugadoresContext()
 
   //extrayendo el nombre de los equipos
-  const {nombreEquipoA, nombreEquipoB} = useDatosDelPartidoContext()
+  const {nombreA, nombreB} = useDatosDelPartidoContext()
 
   // guardando a los jugadores en las listas (solo listas no LS)
     function AgregarEquipoA(jugadorNuevo: jugador): void {
@@ -57,7 +57,7 @@ function FutbolConfigExpress(): React.JSX.Element {
         {/* elementos del team#1 */}
         <div className="bg-white px-3 py-2 rounded-lg shadow border border-purple-300">
           <RegisterPlayers
-            nombreEquipo={nombreEquipoA}
+            nombreEquipo={nombreA}
             onSubmit={AgregarEquipoA}
             jugadores={equipoA}
             setJugadores={setEquipoA}
@@ -67,7 +67,7 @@ function FutbolConfigExpress(): React.JSX.Element {
         {/* elementos del team#2 */}
         <div className="bg-white px-3 py-2 rounded-lg shadow border border-purple-300">
           <RegisterPlayers
-            nombreEquipo={nombreEquipoB}
+            nombreEquipo={nombreB}
             onSubmit={AgregarEquipoB}
             jugadores={equipoB}
             setJugadores={setEquipoB}

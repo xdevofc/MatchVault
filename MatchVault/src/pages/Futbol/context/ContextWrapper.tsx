@@ -26,8 +26,11 @@ const ContextWrapper: React.FC<{ children: React.ReactNode }> = ({children})=> {
     const [montoRoja, setMontoRoja] = useState<number>(20000);
     const [penalties, setPenalties] = useState(false);
     const [prorroga, setProrroga] = useState(false);
-    const [nombreEquipoA, setNombreEquipoA] = useState("EquipoA");
-    const [nombreEquipoB, setNombreEquipoB] = useState("EquipoB");
+        // agarrar el input de los usuarios
+    const [nombreA,setNombreA] = useState<string>("EquipoA")
+    const [nombreB, setNombreB] = useState<string>("EquipoA")
+        
+    
   
     const [eventos, setEventos] = useState<EventoFutbol[]>([]);
 
@@ -61,10 +64,10 @@ const ContextWrapper: React.FC<{ children: React.ReactNode }> = ({children})=> {
             setProrroga,
             setEventos,
             eventos,
-            nombreEquipoA,
-            setNombreEquipoA,
-            nombreEquipoB,
-            setNombreEquipoB,
+            nombreA,
+            setNombreA,
+            nombreB,
+            setNombreB,
             scoreA,
             setScoreA,
             scoreB,

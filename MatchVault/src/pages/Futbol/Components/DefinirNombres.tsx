@@ -1,6 +1,6 @@
 import type React from "react";
 import { useDatosDelPartidoContext } from "../context/DatosDelPartidoContext";
-import { useState, type Dispatch} from 'react';
+import { type Dispatch} from 'react';
 
 interface definirNombresProprs {
     mostrarDefinirNombres: boolean,
@@ -12,18 +12,13 @@ const DefinirNombres: React.FC<definirNombresProprs> = ({
         setMostrarDefinirNombres
     })=>{
 
-    // agarrar el input de los usuarios
-    const [nombreA,setNombreA] = useState<string>("EquipoA")
-    const [nombreB, setNombreB] = useState<string>("EquipoA")
-    
 
-
-    const {setNombreEquipoA, setNombreEquipoB} = useDatosDelPartidoContext()
+    const {setNombreA, setNombreB, nombreA,nombreB} = useDatosDelPartidoContext()
 
 
     function guardarNombreEquipos(){
-        setNombreEquipoA(nombreA)
-        setNombreEquipoB(nombreB)
+        setNombreA(nombreA)
+        setNombreB(nombreB)
         setMostrarDefinirNombres(false)
     }
 

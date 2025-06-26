@@ -24,6 +24,8 @@ function ConfiguracionPartido(): React.JSX.Element {
     setMontoRoja,
     setPenalties,
     setProrroga,
+    nombreA,
+    nombreB
 
   } = useDatosDelPartidoContext()
 
@@ -179,6 +181,8 @@ function ConfiguracionPartido(): React.JSX.Element {
               montoAmarilla,
               montoRoja,
               amonestaciones,
+              nombreA,
+              nombreB
             }))
 
             handleRedirect()

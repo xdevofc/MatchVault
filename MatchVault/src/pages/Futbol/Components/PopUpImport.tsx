@@ -22,8 +22,8 @@ export default function PopUpImport({ mostrarPopUp, setMostrarPopUp }: PopUpProp
         setMontoRoja,
         setPenalties,
         setProrroga,
-        setNombreEquipoA,
-        setNombreEquipoB,
+        setNombreA,
+        setNombreB,
         setScoreA,
         setScoreB,
       } = useDatosDelPartidoContext()
@@ -54,8 +54,8 @@ export default function PopUpImport({ mostrarPopUp, setMostrarPopUp }: PopUpProp
                 setProrroga,
                 setEquipoA,
                 setEquipoB,
-                setNombreEquipoA,
-                setNombreEquipoB,
+                setNombreA,
+                setNombreB,
                 setScoreA,
                 setScoreB,
             );

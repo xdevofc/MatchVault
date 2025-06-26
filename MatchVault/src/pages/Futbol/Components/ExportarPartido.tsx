@@ -15,18 +15,23 @@ const ExportarPartido:React.FC<exportProps> = (
 
         // descargar los elementos del local storage
         const dataEventos = localStorage.getItem('futbol-eventos')
-        const dataDatosPartido = localStorage.getItem('futbol-configuracion-partido')
+        const dataFCP = localStorage.getItem('futbol-configuracion-partido')
+        const dataFDP= localStorage.getItem('futbol-datos-partido')
         const dataJugadores = localStorage.getItem('Lista-jugadores')
 
-        console.log("DATOS DEL PARTIDO DESCARGAR ", dataDatosPartido)
+        console.log("DATOS DEL PARTIDO DESCARGAR ", dataFCP)
+        console.log("DATOS DEL PARTIDO TRANSUCRRIDO: ", dataFDP)
         console.log("EVENTOS DESCARGAR ", dataEventos)
         // verificar que no esten vacios
-        if (!dataEventos || !dataDatosPartido || !dataJugadores ){
+        if (!dataEventos || !dataFCP || !dataJugadores || !dataFDP){
             throw new Error("No existen los datos solicitados en el LS")
         }
 
         // extraer los equipos 
         const {equipoA, equipoB } = JSON.parse(dataJugadores)
+        
+        //extraer los minutos jugados
+        const {minutosJugados, segundosJugados,scoreA,scoreB} = JSON.parse(dataFDP)
 
         // extraer la cfg del partido
         const {penalties,
@@ -34,12 +39,10 @@ const ExportarPartido:React.FC<exportProps> = (
             amonestaciones,
             montoAmarilla,
             montoRoja,
-            duracion, 
-            nombreEquipoA, 
-            nombreEquipoB,
-            scoreA,
-            scoreB
-        } = JSON.parse(dataDatosPartido) 
+            duracion,
+            nombreA,
+            nombreB,
+        } = JSON.parse(dataFCP) 
 
         
         if (equipoA === null || equipoB === null){
@@ -47,7 +50,7 @@ const ExportarPartido:React.FC<exportProps> = (
         }
 
 
-        if (dataEventos === null || dataDatosPartido === null || dataJugadores === null){
+        if (dataEventos === null || dataFCP === null || dataJugadores === null){
             throw new Error("No existen datos del partido")
         }
 
@@ -62,8 +65,10 @@ const ExportarPartido:React.FC<exportProps> = (
                     "prorroga":prorroga,
                     "amonestaciones":amonestaciones,
                     "eventos":JSON.parse(dataEventos),
-                    "nombreEquipoA": nombreEquipoA,
-                    "nombreEquipoB": nombreEquipoB,
+                    "minutosJugados":minutosJugados,
+                    "segundosJugados":segundosJugados,
+                    "nombreEquipoA": nombreA,
+                    "nombreEquipoB": nombreB,
                     "scoreA":scoreA,
                     "scoreB":scoreB,
                 }
