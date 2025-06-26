@@ -2,71 +2,28 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import SelectSportMenu from "./pages/SelectSportMenu"
 import FutbolExpress from "./pages/Futbol/FutbolExpress"
 import FutbolConfigExpress from "./pages/Futbol/FutbolConfigExpress"
-import { JugadoresContext } from "./pages/Futbol/context/JugadoresContext"
-import { useState } from "react"
-import type { EventoFutbol, jugador } from "./types/types"
-import { DatosPartidoContext } from './pages/Futbol/context/DatosDelPartidoContext';
+import ContextWrapper from "./pages/Futbol/context/ContextWrapper"
 function App() {
 
-  // definiendo los equipos
-  const [equipoA, setEquipoA] = useState<jugador[]>(() => {
-    const data = localStorage.getItem("Lista-jugadores");
-    return data ? JSON.parse(data).equipoA || [] : [];
-  });
-
-  const [equipoB, setEquipoB] = useState<jugador[]>(() => {
-    const data = localStorage.getItem("Lista-jugadores");
-    return data ? JSON.parse(data).equipoB || [] : [];
-  });
-
-  const [eventos, setEventos] = useState<EventoFutbol[]>(() => {
-    const data = localStorage.getItem("futbol-eventos");
-    return data ? JSON.parse(data) : [];
-  });
-
-
-
-  const [duracion, setDuracion] = useState<number>(30)
-  const [amonestaciones, setAmonestaciones] = useState(false);
-  const [montoAmarilla, setMontoAmarilla] = useState<number>(10000)
-  const [montoRoja, setMontoRoja] = useState<number>(20000)
-  const [penalties, setPenalties] = useState(false)
-  const [prorroga, setProrroga] = useState(false)
-
-
-
-
+ 
   return (
     <>
-      <JugadoresContext.Provider value={{ setEquipoA, setEquipoB, equipoA, equipoB}}>
-        <DatosPartidoContext.Provider value={
-          {
-            duracion,
-            amonestaciones,
-            montoAmarilla,
-            montoRoja,
-            penalties,
-            prorroga,
-            setDuracion,
-            setAmonestaciones,
-            setMontoAmarilla,
-            setMontoRoja,
-            setPenalties,
-            setProrroga,
-            setEventos,
-            eventos
-          }}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<SelectSportMenu />} />
+          <Route path="/futbol-config-express" element={
+              <ContextWrapper>
+                <FutbolConfigExpress />
+              </ContextWrapper>
+            } />
+          <Route path="/futbol-express" element={
+              <ContextWrapper>
+                <FutbolExpress />
+              </ContextWrapper>
+            } />
 
-          <Router>
-            <Routes>
-              <Route path="/" element={<SelectSportMenu />} />
-              <Route path="/express-futbol-config" element={<FutbolConfigExpress />} />
-              <Route path="/futbol-express" element={<FutbolExpress />} />
-
-            </Routes>
-          </Router>
-        </DatosPartidoContext.Provider>
-      </JugadoresContext.Provider>
+        </Routes>
+      </Router> 
     </>
   )
 }

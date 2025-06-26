@@ -1,16 +1,26 @@
 import type React from "react";
 import RegisterPlayers from "./RegisterPlayers";
 import ConfiguracionPartido from "./ConfiguracionPartido";
-import { useEffect,} from "react";
+import { useEffect, useState,} from "react";
 import { type jugador } from '../../types/types';
 import { useJugadoresContext } from "./context/JugadoresContext";
+import { useDatosDelPartidoContext } from "./context/DatosDelPartidoContext";
+import DefinirNombres from "./Components/DefinirNombres";
 
 
 function FutbolConfigExpress(): React.JSX.Element {
 
-    // usando el provider 
-    const {setEquipoA, setEquipoB, equipoA, equipoB} = useJugadoresContext()
+  // pop up para elegir los nombres de los equipos
+  const [mostrarDefinirNombres, setMostrarDefinirNombres] = useState<boolean>(true);
 
+
+  // usando el provider para definir la lista de los equipos con sus jugadores
+  const {setEquipoA, setEquipoB, equipoA, equipoB} = useJugadoresContext()
+
+  //extrayendo el nombre de los equipos
+  const {nombreEquipoA, nombreEquipoB} = useDatosDelPartidoContext()
+
+  // guardando a los jugadores en las listas (solo listas no LS)
     function AgregarEquipoA(jugadorNuevo: jugador): void {
     setEquipoA(prev => [...prev, jugadorNuevo]);
     console.log("Agregando al equipo A");
@@ -21,11 +31,21 @@ function FutbolConfigExpress(): React.JSX.Element {
     console.log("Agregando al Equipo B");
   }
 
+  // guardando las listas en el LS cada vez que se agrega un jugador
   useEffect(() => {
     localStorage.setItem("Lista-jugadores", JSON.stringify({ equipoA, equipoB }));
   }, [equipoA, equipoB]);
 
   return (
+  <>
+  {/* Mostrando el pop up para definir el nombre de los equipo */}
+  {mostrarDefinirNombres && (
+       <DefinirNombres
+        mostrarDefinirNombres={mostrarDefinirNombres}
+        setMostrarDefinirNombres={setMostrarDefinirNombres}
+       /> 
+      )}
+
     <div className="h-screen bg-purple-200 flex items-center justify-center overflow-hidden">
       <div className="grid grid-cols-2 grid-rows-[auto,auto,auto] gap-4 p-4 bg-white rounded-xl shadow-lg w-full max-w-[95%]">
         {/* Header */}
@@ -37,7 +57,7 @@ function FutbolConfigExpress(): React.JSX.Element {
         {/* elementos del team#1 */}
         <div className="bg-white px-3 py-2 rounded-lg shadow border border-purple-300">
           <RegisterPlayers
-            nombreEquipo="Equipo A"
+            nombreEquipo={nombreEquipoA}
             onSubmit={AgregarEquipoA}
             jugadores={equipoA}
             setJugadores={setEquipoA}
@@ -47,7 +67,7 @@ function FutbolConfigExpress(): React.JSX.Element {
         {/* elementos del team#2 */}
         <div className="bg-white px-3 py-2 rounded-lg shadow border border-purple-300">
           <RegisterPlayers
-            nombreEquipo="Equipo B"
+            nombreEquipo={nombreEquipoB}
             onSubmit={AgregarEquipoB}
             jugadores={equipoB}
             setJugadores={setEquipoB}
@@ -61,6 +81,7 @@ function FutbolConfigExpress(): React.JSX.Element {
         </footer>
       </div>
     </div>
+  </>
   );
 }
 

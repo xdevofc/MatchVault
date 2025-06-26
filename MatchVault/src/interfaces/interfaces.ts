@@ -1,5 +1,5 @@
 import type { Dispatch } from "react";
-import type { EventoFutbol, HandlerAmarilla, HandlerGol, HandlerRoja, HandlerTitular, jugador } from "../types/types";
+import type { EventoFutbol,jugador } from "../types/types";
 
 export interface PropsScoreTracker {
     titulo: string,
@@ -9,23 +9,6 @@ export interface PropsScoreTracker {
 }
 
 
-export interface PropsShowPlayers {
-    titulo: string,
-    jugadores: jugador[],
-    equipo:jugador[],
-    setEquipo: Dispatch<React.SetStateAction<jugador[]>>,
-    setScore: Dispatch<React.SetStateAction<number>>,
-    handleTitular: HandlerTitular,
-    handleAmarilla: HandlerAmarilla,
-    handleRoja: HandlerRoja,
-    handleGol: HandlerGol,
-    montoAmarilla:number,
-    montoRoja:number,
-    setEventos:Dispatch<React.SetStateAction<EventoFutbol[]>>
-    minuto: number
-
-}
-
 
 export interface PropsShowPlayers {
     titulo: string,
@@ -33,10 +16,6 @@ export interface PropsShowPlayers {
     equipo:jugador[],
     setEquipo: Dispatch<React.SetStateAction<jugador[]>>,
     setScore: Dispatch<React.SetStateAction<number>>,
-    handleTitular: HandlerTitular,
-    handleAmarilla: HandlerAmarilla,
-    handleRoja: HandlerRoja,
-    handleGol: HandlerGol,
     montoAmarilla:number,
     montoRoja:number,
     setEventos:Dispatch<React.SetStateAction<EventoFutbol[]>>

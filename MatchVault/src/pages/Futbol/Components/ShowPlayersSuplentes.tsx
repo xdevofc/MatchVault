@@ -1,5 +1,9 @@
 import type { PropsShowPlayers } from "../../../interfaces/interfaces"
 import type { jugador } from "../../../types/types"
+import { handleAmarilla } from "../handlers/FutbolExpress/handleAmarilla"
+import { handleGol } from "../handlers/FutbolExpress/handleGol"
+import { handleRoja } from "../handlers/FutbolExpress/handleRoja"
+import { handleTitular } from "../handlers/FutbolExpress/handleTitular"
 
 
 
@@ -11,11 +15,7 @@ const ShowPlayersSuplentes : React.FC<PropsShowPlayers> = ({
     jugadores,
     equipo,
     setEquipo,
-    setScore,
-    handleTitular,
-    handleAmarilla,
-    handleRoja,
-    handleGol,
+    setScore, 
     montoAmarilla,
     montoRoja,
     setEventos,

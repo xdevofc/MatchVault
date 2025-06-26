@@ -1,33 +1,8 @@
-import type { Dispatch, ChangeEvent } from "react";
+import type { ChangeEvent, Dispatch } from "react";
 import type { jugador } from "../../../../types/types";
-import { guardarEventos } from "../FutbolExpress/FutbolExpress";
+import { guardarEventos } from "../FutbolExpress/guardarPilaEventos";
 
-
-
-  
-  export function handleAmonestaciones(
-    amonestaciones: boolean,
-    setAmonestaciones: Dispatch<React.SetStateAction<boolean>>
-  ) : void{
-    setAmonestaciones(!amonestaciones)
-  }
-
-  export function handlePenalties(
-    penalties: boolean,
-    setPenalties: Dispatch<React.SetStateAction<boolean>>
-  ) : void {
-    setPenalties(!penalties)
-  }
-
-  export function handleProrroga(
-    prorroga: boolean,
-    setProrroga: Dispatch<React.SetStateAction<boolean>>
-  ) : void{
-    setProrroga(!prorroga)
-  }
-
-
-  export function handleImportar(
+ export function handleImportar(
     event: ChangeEvent<HTMLInputElement>,
     setMostrarPopUp: Dispatch<React.SetStateAction<boolean>>,
     setDuracion: Dispatch<React.SetStateAction<number>>,
@@ -38,6 +13,10 @@ import { guardarEventos } from "../FutbolExpress/FutbolExpress";
     setProrroga: Dispatch<React.SetStateAction<boolean>>,
     setEquipoA: Dispatch<React.SetStateAction<jugador[]>>,
     setEquipoB: Dispatch<React.SetStateAction<jugador[]>>,
+    setNombreEquipoA: Dispatch<React.SetStateAction<string>>,
+    setNombreEquipoB: Dispatch<React.SetStateAction<string>>,
+    setScoreA: Dispatch<React.SetStateAction<number>>,
+    setScoreB: Dispatch<React.SetStateAction<number>>,
     
   
 ){
@@ -72,7 +51,11 @@ import { guardarEventos } from "../FutbolExpress/FutbolExpress";
                     setPenalties, 
                     setProrroga, 
                     setEquipoA, 
-                    setEquipoB, 
+                    setEquipoB,
+                    setNombreEquipoA,
+                    setNombreEquipoB,
+                    setScoreA,
+                    setScoreB,
                 )
             }catch(error){
                 console.error("no se pudo convertir en json: ",error)
@@ -90,7 +73,7 @@ import { guardarEventos } from "../FutbolExpress/FutbolExpress";
   }
 
 
-  function handleImportedData(
+   function handleImportedData(
     text : string,
     setDuracion: Dispatch<React.SetStateAction<number>>,
     setAmonestaciones: Dispatch<React.SetStateAction<boolean>>,
@@ -100,15 +83,35 @@ import { guardarEventos } from "../FutbolExpress/FutbolExpress";
     setProrroga: Dispatch<React.SetStateAction<boolean>>,
     setEquipoA: Dispatch<React.SetStateAction<jugador[]>>,
     setEquipoB: Dispatch<React.SetStateAction<jugador[]>>,
+    setNombreEquipoA: Dispatch<React.SetStateAction<string>>,
+    setNombreEquipoB: Dispatch<React.SetStateAction<string>>,
+    setScoreA: Dispatch<React.SetStateAction<number>>,
+    setScoreB: Dispatch<React.SetStateAction<number>>,
+
     ){
     const jsonText = JSON.parse(text)
 
     // extraemos data del json
-    const {equipoA, equipoB, duracion, penalties, prorroga, montoAmarilla, montoRoja, amonestaciones,eventos} = jsonText
+    const {equipoA, 
+      equipoB, 
+      duracionInicial, 
+      penalties, 
+      prorroga, 
+      montoAmarilla, 
+      montoRoja, 
+      amonestaciones,
+      eventos,
+      nombreEquipoA,
+      nombreEquipoB,
+      minutosJugados,
+      segundosJugados,
+      scoreA,
+      scoreB
+    } = jsonText
 
     if ( equipoA === undefined ||
         equipoB === undefined ||
-        duracion === undefined ||
+        duracionInicial === undefined ||
         penalties === undefined || 
         prorroga === undefined || 
         montoAmarilla === undefined || 
@@ -119,15 +122,29 @@ import { guardarEventos } from "../FutbolExpress/FutbolExpress";
         throw new Error("Formato no adecuado")
     }
 
-    setDuracion(duracion)
     setAmonestaciones(amonestaciones)
     setMontoAmarilla(montoAmarilla)
     setMontoRoja(montoRoja)
     setPenalties(penalties)
     setProrroga(prorroga)
     setEquipoA(equipoA)
-    setEquipoB(equipoB)    
-    
+    setEquipoB(equipoB)   
+    setNombreEquipoA(nombreEquipoA) 
+    setNombreEquipoB(nombreEquipoB) 
     guardarEventos(eventos)
+    setScoreA(scoreA)
+    setScoreB(scoreB)
+    setDuracion(duracionInicial)
+
+    // guardando en el local storage los datos del partido TRANSCURRIDO
+    localStorage.setItem('futbol-datos-partido',JSON.stringify(
+      {
+      minutosJugados: minutosJugados,
+      segundosJugados: segundosJugados,
+      scoreA,
+      scoreB
+    }))
+
+      
     
   }

@@ -1,7 +1,7 @@
 import type { Dispatch } from "react";
-import { handleImportar } from "../handlers/ConfiguracioPartido/ConfiguracionPartido";
 import { useJugadoresContext } from "../context/JugadoresContext";
 import { useDatosDelPartidoContext } from "../context/DatosDelPartidoContext";
+import { handleImportar } from "../handlers/ConfiguracioPartido/handleImportar";
 
 interface PopUpProps {
   mostrarPopUp: boolean;
@@ -21,7 +21,12 @@ export default function PopUpImport({ mostrarPopUp, setMostrarPopUp }: PopUpProp
         setMontoAmarilla,
         setMontoRoja,
         setPenalties,
-        setProrroga } = useDatosDelPartidoContext()
+        setProrroga,
+        setNombreEquipoA,
+        setNombreEquipoB,
+        setScoreA,
+        setScoreB,
+      } = useDatosDelPartidoContext()
      
 
   return (
@@ -49,12 +54,19 @@ export default function PopUpImport({ mostrarPopUp, setMostrarPopUp }: PopUpProp
                 setProrroga,
                 setEquipoA,
                 setEquipoB,
+                setNombreEquipoA,
+                setNombreEquipoB,
+                setScoreA,
+                setScoreB,
             );
           }}
         />
 
         <button
-          onClick={() => setMostrarPopUp(false)}
+          onClick={(e) => {
+            e.preventDefault()
+            setMostrarPopUp(false)
+          }}
           className="bg-red-500 hover:bg-red-600 text-white py-2 px-6 rounded mt-4"
         >
           Cerrar

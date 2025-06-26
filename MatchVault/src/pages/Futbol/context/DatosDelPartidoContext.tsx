@@ -20,6 +20,15 @@ interface DatosDelPartido {
     setProrroga: Dispatch<SetStateAction<boolean>>,
     setEventos: Dispatch<SetStateAction<EventoFutbol[]>>,
     eventos: EventoFutbol[],
+    nombreEquipoA: string,
+    setNombreEquipoA: Dispatch<SetStateAction<string>>,
+    nombreEquipoB: string,
+    setNombreEquipoB: Dispatch<SetStateAction<string>>,
+    scoreA: number,
+    setScoreA: Dispatch<SetStateAction<number>>,
+    scoreB: number,
+    setScoreB: Dispatch<SetStateAction<number>>,
+    
 }
 
 

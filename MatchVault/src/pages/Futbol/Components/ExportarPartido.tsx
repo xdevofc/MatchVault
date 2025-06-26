@@ -18,6 +18,8 @@ const ExportarPartido:React.FC<exportProps> = (
         const dataDatosPartido = localStorage.getItem('futbol-configuracion-partido')
         const dataJugadores = localStorage.getItem('Lista-jugadores')
 
+        console.log("DATOS DEL PARTIDO DESCARGAR ", dataDatosPartido)
+        console.log("EVENTOS DESCARGAR ", dataEventos)
         // verificar que no esten vacios
         if (!dataEventos || !dataDatosPartido || !dataJugadores ){
             throw new Error("No existen los datos solicitados en el LS")
@@ -27,7 +29,17 @@ const ExportarPartido:React.FC<exportProps> = (
         const {equipoA, equipoB } = JSON.parse(dataJugadores)
 
         // extraer la cfg del partido
-        const {penalties,prorroga,amonestaciones,montoAmarilla,montoRoja,duracion} = JSON.parse(dataDatosPartido) 
+        const {penalties,
+            prorroga,
+            amonestaciones,
+            montoAmarilla,
+            montoRoja,
+            duracion, 
+            nombreEquipoA, 
+            nombreEquipoB,
+            scoreA,
+            scoreB
+        } = JSON.parse(dataDatosPartido) 
 
         
         if (equipoA === null || equipoB === null){
@@ -49,8 +61,11 @@ const ExportarPartido:React.FC<exportProps> = (
                     "penalties":penalties,
                     "prorroga":prorroga,
                     "amonestaciones":amonestaciones,
-                    "eventos":JSON.parse(dataEventos)
-
+                    "eventos":JSON.parse(dataEventos),
+                    "nombreEquipoA": nombreEquipoA,
+                    "nombreEquipoB": nombreEquipoB,
+                    "scoreA":scoreA,
+                    "scoreB":scoreB,
                 }
         
         // convertimos el json a string
