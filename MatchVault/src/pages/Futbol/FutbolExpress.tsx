@@ -10,6 +10,7 @@ import ExportarPartido from "./Components/ExportarPartido";
 import { guardarJugadoresLS } from "./handlers/FutbolExpress/guardarJugadoresLS";
 import { guardarEventos } from "./handlers/FutbolExpress/guardarPilaEventos";
 import { finalizarPartido } from "./handlers/FutbolExpress/finalizarPartdio";
+import TandaPenalties from "./Components/TandaPenalties";
 //import type { EventoFutbol } from "../../types/types";
 
 const FutbolExpress: React.FC = () => {
@@ -154,6 +155,7 @@ const FutbolExpress: React.FC = () => {
 
     if (tableroMinutos === 0 && tableroSegundos){
       setIsPaused(true)
+      setShowPenalties(true)
       setShowExtraTime(true)
     }
 
@@ -213,6 +215,16 @@ const FutbolExpress: React.FC = () => {
       showExport={showExport}
     />
   )}
+
+{/* MOSTRAR TANDA DE PENALES */}
+  { (penalties && showPenalties) ? (
+    <TandaPenalties
+     onClose={() =>{
+      setShowPenalties(false)
+     } } 
+    />
+    
+  ) : null}
 
 
   {/* MENU OCULTO PARA LA PRORROGA */}
