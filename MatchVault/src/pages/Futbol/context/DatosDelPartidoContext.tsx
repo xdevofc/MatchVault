@@ -28,7 +28,9 @@ interface DatosDelPartido {
     setScoreA: Dispatch<SetStateAction<number>>,
     scoreB: number,
     setScoreB: Dispatch<SetStateAction<number>>,
-    
+    showPenalties: boolean,
+    setShowPenalties: Dispatch<SetStateAction<boolean>>,
+
 }
 
 
