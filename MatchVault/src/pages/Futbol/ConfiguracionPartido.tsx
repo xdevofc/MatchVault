@@ -42,8 +42,10 @@ function ConfiguracionPartido(): React.JSX.Element {
   }
 
 
-  return (
-<div className="grid grid-cols-3 gap-4 p-2 bg-[#121212]">
+  return(
+<>
+  
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-2 bg-[#121212] w-full max-w-6xl mx-auto">
   {mostrarPopup && (
     <PopUpImport
       mostrarPopUp={mostrarPopup}
@@ -197,7 +199,7 @@ function ConfiguracionPartido(): React.JSX.Element {
     </button>
   </div>
 </div>
-
+</>
   );
 }
 

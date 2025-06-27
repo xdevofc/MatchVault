@@ -19,14 +19,14 @@ const ShowPlayersTitulares: React.FC<PropsShowPlayers> = ({
   const { montoAmarilla, montoRoja } = useDatosDelPartidoContext()
 
   return (
-    <div className="p-4 bg-[#2A2A2A] text-[#EAEAEA] rounded shadow w-[22rem]">
+    <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl p-4 bg-[#2A2A2A] text-[#EAEAEA] rounded shadow mx-auto">
       <h4 className="font-bold mb-3">{titulo}</h4>
       {jugadores
         .filter(player => player.titular)
         .map(player => (
           <div key={player.cedula} className="mb-4 border-b border-[#444] pb-2">
-            <p className="font-medium">#{player.nroCamiseta} - {player.nombre} {player.apellido}</p>
-            <div className="flex flex-wrap gap-1 mt-2">
+            <p className="font-medium">#{player.nroCamiseta} - {player.apellido}</p>
+            <div className="flex flex-wrap gap-2 mt-2">
               <button
                 onClick={() => handleTitular(player, equipo, setEquipo)}
                 disabled={player.isEjected || !player.titular}
@@ -63,6 +63,7 @@ const ShowPlayersTitulares: React.FC<PropsShowPlayers> = ({
           </div>
         ))}
     </div>
+
 
 
   )

@@ -27,7 +27,7 @@ function RegisterPlayers({ nombreEquipo, onSubmit, jugadores, setJugadores }: de
   }, [jugadores]);
 
   return (
- <div className="grid grid-cols-2 gap-6 p-4 bg-[#121212] rounded-2xl shadow-inner text-[#EAEAEA]">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-[#121212] rounded-2xl shadow-inner text-[#EAEAEA] w-full max-w-6xl mx-auto">
   {/* Listado */}
   <div className="bg-[#1F1F1F] p-4 rounded-lg shadow border border-[#333]">
     <h2 className="text-lg font-bold mb-2">Titulares</h2>
@@ -36,7 +36,7 @@ function RegisterPlayers({ nombreEquipo, onSubmit, jugadores, setJugadores }: de
         {jugadores.filter(p => p.titular).map(player => (
           <div key={player.cedula} className="flex justify-between items-center bg-[#2A2A2A] rounded p-2">
             <span className="text-sm">#{player.nroCamiseta} - {player.nombre} {player.apellido}</span>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap justify-end">
               <button
                 className="bg-[#D4AF37] hover:bg-[#BFA434] text-[#121212] text-xs px-2 py-1 rounded"
                 onClick={() => handleEditarJugador(player.cedula, isEditing, jugadores, setIsEditing, setNombreJugador, setApellido, setNroCamiseta, setCarrera, setCedula, setTitular)}
@@ -59,7 +59,7 @@ function RegisterPlayers({ nombreEquipo, onSubmit, jugadores, setJugadores }: de
         {jugadores.filter(p => !p.titular).map(player => (
           <div key={player.cedula} className="flex justify-between items-center bg-[#1F1F1F] rounded p-2">
             <span className="text-sm">#{player.nroCamiseta} - {player.nombre} {player.apellido}</span>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap justify-end">
               <button
                 className="bg-[#D4AF37] hover:bg-[#BFA434] text-[#121212] text-xs px-2 py-1 rounded"
                 onClick={() => handleEditarJugador(player.cedula, isEditing, jugadores, setIsEditing, setNombreJugador, setApellido, setNroCamiseta, setCarrera, setCedula, setTitular)}
@@ -170,6 +170,7 @@ function RegisterPlayers({ nombreEquipo, onSubmit, jugadores, setJugadores }: de
     </form>
   </div>
 </div>
+
 
   );
 }

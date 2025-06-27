@@ -34,8 +34,6 @@ const FutbolExpress: React.FC = () => {
 
   // consumiendo el context con los datos del partido
   const {
-    montoAmarilla,
-    montoRoja,
     nombreA,
     nombreB,
     scoreA,
@@ -238,170 +236,159 @@ const FutbolExpress: React.FC = () => {
 
   return (
 
-    <div className="w-full h-screen bg-[#121212] overflow-hidden grid grid-cols-3 grid-rows-3 gap-6 px-6 py-4 text-[#EAEAEA]">
-      {/* MOSTRAR EL WINNER*/}
 
-      {
-        showWinner && (
-          <Winner
-            setShowWinner={setShowWinner}
-            showWinner={showWinner}
-          />
-        )
-      }
-
-
-
-
-      {showExport && (
-        <ExportarPartido
-          setShowExport={setShowExport}
-          showExport={showExport}
-        />
-      )}
-
-      {/* MOSTRAR TANDA DE PENALES */}
-      {(showPenalties) ? (
-        <TandaPenalties
-          onClose={() => {
-            setShowPenalties(false)
-          }}
-          setShowWinner={setShowWinner}
-        />
-
-      ) : null}
-
-
-      {/* MENU OCULTO PARA LA PRORROGA */}
-
-      {(showExtraTime && isTie) ? (
-        <div className="fixed inset-0 flex items-center justify-center z-50 p-6">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md text-center space-y-6 p-6">
-            <h2 className="text-xl text-black font-semibold">Ingresa el tiempo extra!</h2>
-
-            <label htmlFor="nombre" className="block text-lg font-medium text-black">Minutos</label>
-            <input
-              name="nombre"
-              type="number"
-              className="border border-gray-300 rounded px-2 py-1 w-full text-black"
-              value={cantTiempoAgg}
-              onChange={e => setCantidadTiempoAgg(Number(e.target.value))}
+    <div className="min-h-screen bg-[#121212] text-[#EAEAEA] overflow-x-hidden">
+      <div className="container mx-auto p-4 sm:p-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* MOSTRAR EL WINNER */}
+          {showWinner && (
+            <Winner
+              setShowWinner={setShowWinner}
+              showWinner={showWinner}
             />
+          )}
+
+          {showExport && (
+            <ExportarPartido
+              setShowExport={setShowExport}
+              showExport={showExport}
+            />
+          )}
+
+          {/* MOSTRAR TANDA DE PENALES */}
+          {showPenalties && (
+            <TandaPenalties
+              onClose={() => setShowPenalties(false)}
+              setShowWinner={setShowWinner}
+            />
+          )}
+
+          {/* MENU OCULTO PARA LA PRORROGA */}
+          {(showExtraTime && isTie) && (
+            <div className="fixed inset-0 flex items-center justify-center z-50 p-6">
+              <div className="bg-white rounded-lg shadow-lg w-full max-w-md text-center space-y-6 p-6">
+                <h2 className="text-xl text-black font-semibold">Ingresa el tiempo extra!</h2>
+                <label htmlFor="nombre" className="block text-lg font-medium text-black">Minutos</label>
+                <input
+                  name="nombre"
+                  type="number"
+                  className="border border-gray-300 rounded px-2 py-1 w-full text-black"
+                  value={cantTiempoAgg}
+                  onChange={e => setCantidadTiempoAgg(Number(e.target.value))}
+                />
+                <button
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setTableroMinutos(cantTiempoAgg)
+                    setShowExtraTime(false)
+                  }}
+                  className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded mt-4"
+                >
+                  Ir a la prorroga
+                </button>
+              </div>
+            </div>
+          )}
+
+          <ScoreTracker titulo={nombreA} score={scoreA} setScore={setScoreA} />
+
+          <div className="flex items-center justify-center">
+            <h1 className="text-5xl font-bold">{formatTime}</h1>
+          </div>
+
+          <ScoreTracker titulo={nombreB} score={scoreB} setScore={setScoreB} />
+
+          {/* LISTANDO GENTE A */}
+          <div className="flex flex-col items-center justify-center">
+            <h3 className="text-lg font-semibold">Jugadores</h3>
+            <div className="flex gap-6 mt-4 overflow-auto">
+              <ShowPlayersTitulares
+                titulo="Titulares"
+                jugadores={ListaJugadoresA}
+                equipo={equipoA}
+                setEquipo={setEquipoA}
+                setScore={setScoreA}
+                setEventos={setEventos}
+                minuto={tableroMinutos}
+              />
+              <ShowPlayersSuplentes
+                titulo="Suplentes"
+                jugadores={ListaJugadoresA}
+                equipo={equipoA}
+                setEquipo={setEquipoA}
+                setScore={setScoreA}
+                setEventos={setEventos}
+                minuto={tableroMinutos}
+              />
+            </div>
+          </div>
+
+          <TimerButtons
+            isPaused={isPaused}
+            setMinutos={setTableroMinutos}
+            setIsPaused={setIsPaused}
+            eventos={eventos}
+            setSeconds={setTableroSegundos}
+          />
+
+          {/* LISTANDO GENTE B */}
+          <div className="flex flex-col items-center justify-center">
+            <h3 className="text-lg font-semibold">Jugadores</h3>
+            <div className="flex gap-6 mt-4 overflow-auto">
+              <ShowPlayersTitulares
+                titulo="Titulares"
+                jugadores={ListaJugadoresB}
+                equipo={equipoB}
+                setEquipo={setEquipoB}
+                setScore={setScoreB}
+                setEventos={setEventos}
+                minuto={tableroMinutos}
+              />
+              <ShowPlayersSuplentes
+                titulo="Suplentes"
+                jugadores={ListaJugadoresB}
+                equipo={equipoB}
+                setEquipo={setEquipoB}
+                setScore={setScoreB}
+                setEventos={setEventos}
+                minuto={tableroMinutos}
+              />
+            </div>
+          </div>
+
+          <div></div>
+
+          {/* BOTONES DE TERMINADO */}
+          <div className="flex flex-col items-center justify-center gap-4">
+            <button
+              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded shadow"
+              onClick={(e) => {
+                e.preventDefault();
+                const allowDelete = confirm("Desea terminar el partido ? su progreso NO se guardara");
+                finalizarPartido(allowDelete);
+                if (allowDelete) navigate('/');
+              }}
+            >
+              Finalizar Partido
+            </button>
 
             <button
               onClick={(e) => {
-                e.preventDefault()
-                setTableroMinutos(cantTiempoAgg)
-                setShowExtraTime(false)
-              }
-              }
-              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded mt-4"
+                e.preventDefault();
+                setShowExport(true);
+              }}
+              className="px-4 py-2 bg-[#D4AF37] hover:bg-[#BFA434] text-[#121212] rounded shadow"
             >
-              Ir a la prorroga
+              Exportar Partido
             </button>
           </div>
-        </div>
 
-      )
-        :
-        null
 
-      }
-
-      <ScoreTracker titulo={nombreA} score={scoreA} setScore={setScoreA} />
-
-      <div className="flex items-center justify-center">
-        <h1 className="text-5xl font-bold">{formatTime}</h1>
-      </div>
-
-      <ScoreTracker titulo={nombreB} score={scoreB} setScore={setScoreB} />
-
-      {/* LISTANDO GENTE A */}
-      <div className="flex flex-col items-center justify-center">
-        <h3 className="text-lg font-semibold">Jugadores</h3>
-        <div className="flex gap-6 mt-4">
-          <ShowPlayersTitulares
-            titulo={"titulares"}
-            jugadores={ListaJugadoresA}
-            equipo={equipoA}
-            setEquipo={setEquipoA}
-            setScore={setScoreA}
-            setEventos={setEventos}
-            minuto={tableroMinutos}
-          />
-          <ShowPlayersSuplentes
-            titulo={"Suplentes"}
-            jugadores={ListaJugadoresA}
-            equipo={equipoA}
-            setEquipo={setEquipoA}
-            setScore={setScoreA}
-            setEventos={setEventos}
-            minuto={tableroMinutos}
-          />
         </div>
       </div>
-
-      <TimerButtons
-        isPaused={isPaused}
-        setMinutos={setTableroMinutos}
-        setIsPaused={setIsPaused}
-        eventos={eventos}
-        setSeconds={setTableroSegundos}
-      />
-      {/* LISTANDO GENTE B */}
-      <div className="flex flex-col items-center justify-center">
-        <h3 className="text-lg font-semibold">Jugadores</h3>
-        <div className="flex gap-6 mt-4">
-          <ShowPlayersTitulares
-            titulo={"titulares"}
-            jugadores={ListaJugadoresB}
-            equipo={equipoB}
-            setEquipo={setEquipoB}
-            setScore={setScoreB}
-            setEventos={setEventos}
-            minuto={tableroMinutos}
-          />
-          <ShowPlayersSuplentes
-            titulo={"Suplentes"}
-            jugadores={ListaJugadoresB}
-            equipo={equipoB}
-            setEquipo={setEquipoB}
-            setScore={setScoreB}
-            setEventos={setEventos}
-            minuto={tableroMinutos}
-          />
-        </div>
-      </div>
-
-      <div></div>
-      {/* BOTONES DE TERMINADO */}
-      <div className="flex flex-col items-center justify-center gap-4">
-        <button
-          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded shadow"
-          onClick={(e) => {
-            e.preventDefault();
-            const allowDelete = confirm("Desea terminar el partido ? su progreso NO se guardara");
-            finalizarPartido(allowDelete);
-            if (allowDelete) navigate('/');
-          }}
-        >
-          Finalizar Partido
-        </button>
-
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            setShowExport(true);
-          }}
-          className="px-4 py-2 bg-[#D4AF37] hover:bg-[#BFA434] text-[#121212] rounded shadow"
-        >
-          Exportar Partido
-        </button>
-      </div>
-
-      <div></div>
     </div>
   );
+
 };
 
 export default FutbolExpress;
