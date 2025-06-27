@@ -326,8 +326,6 @@ const FutbolExpress: React.FC = () => {
             equipo={equipoA}
             setEquipo={setEquipoA}
             setScore={setScoreA}
-            montoAmarilla={montoAmarilla}
-            montoRoja={montoRoja}
             setEventos={setEventos}
             minuto={tableroMinutos}
           />
@@ -337,8 +335,6 @@ const FutbolExpress: React.FC = () => {
             equipo={equipoA}
             setEquipo={setEquipoA}
             setScore={setScoreA}
-            montoAmarilla={montoAmarilla}
-            montoRoja={montoRoja}
             setEventos={setEventos}
             minuto={tableroMinutos}
           />
@@ -362,8 +358,6 @@ const FutbolExpress: React.FC = () => {
             equipo={equipoB}
             setEquipo={setEquipoB}
             setScore={setScoreB}
-            montoAmarilla={montoAmarilla}
-            montoRoja={montoRoja}
             setEventos={setEventos}
             minuto={tableroMinutos}
           />
@@ -373,8 +367,6 @@ const FutbolExpress: React.FC = () => {
             equipo={equipoB}
             setEquipo={setEquipoB}
             setScore={setScoreB}
-            montoAmarilla={montoAmarilla}
-            montoRoja={montoRoja}
             setEventos={setEventos}
             minuto={tableroMinutos}
           />

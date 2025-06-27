@@ -3,6 +3,7 @@ import { handleTitular } from "../handlers/FutbolExpress/handleTitular"
 import { handleAmarilla } from "../handlers/FutbolExpress/handleAmarilla"
 import { handleRoja } from "../handlers/FutbolExpress/handleRoja"
 import { handleGol } from "../handlers/FutbolExpress/handleGol"
+import { useDatosDelPartidoContext } from "../context/DatosDelPartidoContext"
 
 
 const ShowPlayersTitulares: React.FC<PropsShowPlayers> = ({
@@ -11,11 +12,12 @@ const ShowPlayersTitulares: React.FC<PropsShowPlayers> = ({
   equipo,
   setEquipo,
   setScore,
-  montoAmarilla,
-  montoRoja,
   setEventos,
   minuto,
 }) => {
+
+  const { montoAmarilla, montoRoja } = useDatosDelPartidoContext()
+
   return (
     <div className="p-4 bg-[#2A2A2A] text-[#EAEAEA] rounded shadow w-[22rem]">
       <h4 className="font-bold mb-3">{titulo}</h4>
@@ -45,7 +47,7 @@ const ShowPlayersTitulares: React.FC<PropsShowPlayers> = ({
                   handleRoja(player, equipo, setEquipo, montoRoja);
                   setEventos(prev => [...prev, { minuto, tipo: "roja", jugador: `#${player.nroCamiseta}-${player.nombre}` }]);
                 }}
-                disabled={player.roja === 1 ||(player.amarilla ?? 0) > 2}
+                disabled={player.roja === 1 || (player.amarilla ?? 0) > 2}
                 className={`bg-red-500 text-white px-2 py-1 rounded text-xs ${player.isEjected ? "bg-red-300 opacity-60 cursor-not-allowed" : "hover:bg-red-700"}`}
               >Roja</button>
 
@@ -54,7 +56,7 @@ const ShowPlayersTitulares: React.FC<PropsShowPlayers> = ({
                   handleGol(player, equipo, setEquipo, setScore);
                   setEventos(prev => [...prev, { minuto, tipo: "gol", jugador: `#${player.nroCamiseta}-${player.nombre}` }]);
                 }}
-                disabled={player.isEjected || !player.titular ||(player.amarilla ?? 0) > 2 || player.roja === 1}
+                disabled={player.isEjected || !player.titular || (player.amarilla ?? 0) > 2 || player.roja === 1}
                 className={`bg-green-500 text-white px-2 py-1 rounded text-xs ${(player.isEjected || !player.titular) ? "bg-green-300 opacity-60 cursor-not-allowed" : "hover:bg-green-600"}`}
               >Gol</button>
             </div>

@@ -1,4 +1,5 @@
 import type { PropsShowPlayers } from "../../../interfaces/interfaces"
+import { useDatosDelPartidoContext } from "../context/DatosDelPartidoContext"
 import { handleAmarilla } from "../handlers/FutbolExpress/handleAmarilla"
 import { handleGol } from "../handlers/FutbolExpress/handleGol"
 import { handleRoja } from "../handlers/FutbolExpress/handleRoja"
@@ -15,11 +16,12 @@ const ShowPlayersSuplentes: React.FC<PropsShowPlayers> = ({
   equipo,
   setEquipo,
   setScore,
-  montoAmarilla,
-  montoRoja,
   setEventos,
   minuto,
 }) => {
+
+  const { montoAmarilla, montoRoja } = useDatosDelPartidoContext()
+
   return (
     <div className="p-4 bg-[#1F1F1F] text-[#EAEAEA] rounded shadow w-[22rem]">
       <h4 className="font-bold mb-3">{titulo}</h4>
@@ -58,7 +60,7 @@ const ShowPlayersSuplentes: React.FC<PropsShowPlayers> = ({
                   handleGol(player, equipo, setEquipo, setScore);
                   setEventos(prev => [...prev, { minuto, tipo: "gol", jugador: `#${player.nroCamiseta}-${player.nombre}` }]);
                 }}
-                disabled={player.isEjected || !player.titular || (player.amarilla ?? 0) > 2|| player.roja === 1}
+                disabled={player.isEjected || !player.titular || (player.amarilla ?? 0) > 2 || player.roja === 1}
                 className={`bg-green-500 text-white px-2 py-1 rounded text-xs ${(player.isEjected || !player.titular) ? "bg-green-300 opacity-60 cursor-not-allowed" : "hover:bg-green-600"}`}
               >Gol</button>
             </div>
