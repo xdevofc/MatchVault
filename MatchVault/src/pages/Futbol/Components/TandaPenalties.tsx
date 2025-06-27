@@ -1,10 +1,8 @@
 import { useDatosDelPartidoContext } from "../context/DatosDelPartidoContext";
-import React, { useEffect, useState, type Dispatch, type SetStateAction } from 'react';
+import React, { useEffect, useState, } from 'react';
+import type { PenalesPopupProps } from "./interfaces/penalesPopUp";
 
-interface PenalesPopupProps {
-  onClose: () => void;
-  setShowWinner: Dispatch<SetStateAction<boolean>>;
-}
+
 
 const TandaPenalties: React.FC<PenalesPopupProps> = ({ onClose, setShowWinner }) => {
   const { nombreA, nombreB, setNombreA, setNombreB, setScoreA, setScoreB } = useDatosDelPartidoContext();

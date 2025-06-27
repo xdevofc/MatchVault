@@ -1,5 +1,6 @@
-import type { PropsScoreTracker } from "../../../interfaces/interfaces"
 //import type { EventoFutbol } from "../../../types/types"
+
+import type { PropsScoreTracker } from "./interfaces/scoreTracker"
 
 
 

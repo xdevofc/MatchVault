@@ -1,10 +1,6 @@
-import type { Dispatch } from "react"
+import type { exportProps } from "./interfaces/exportImport"
 
-interface exportProps {
-    setShowExport: Dispatch<React.SetStateAction<boolean>>
-    showExport: boolean
 
-}
 
 
 const ExportarPartido: React.FC<exportProps> = (

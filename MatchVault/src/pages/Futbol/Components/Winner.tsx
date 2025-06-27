@@ -1,10 +1,6 @@
-import type { Dispatch, SetStateAction } from "react";
 import { useDatosDelPartidoContext } from "../context/DatosDelPartidoContext";
+import type { winnerProps } from "./interfaces/winnerPopUp";
 
-interface winnerProps {
-  showWinner: boolean;
-  setShowWinner: Dispatch<SetStateAction<boolean>>;
-}
 
 const Winner: React.FC<winnerProps> = ({ showWinner, setShowWinner }) => {
   const { scoreA, scoreB, nombreA, nombreB } = useDatosDelPartidoContext();

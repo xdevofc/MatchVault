@@ -12,25 +12,14 @@ import { guardarEventos } from "./handlers/FutbolExpress/guardarPilaEventos";
 import { finalizarPartido } from "./handlers/FutbolExpress/finalizarPartdio";
 import TandaPenalties from "./Components/TandaPenalties";
 import Winner from "./Components/Winner";
+import { useGuardarConfigPartido} from "./hooks/useGuardarConfigPartido";
+import { useGuardarDatosPartido } from "./hooks/useGuardarDatosPartido";
+import { useFlujoPartido } from "./hooks/useFlujoPartido";
 //import type { EventoFutbol } from "../../types/types";
 
 const FutbolExpress: React.FC = () => {
-  // usar el useRef's para indicar el primer render
-  const isPastFirstRender = useRef(false);
-  const isFirstRender2 = useRef(true);
-  const isFirstRender3 = useRef(true);
 
-
-  // Para mantener oculto la prorroga y penalties
-  const [showExtraTime, setShowExtraTime] = useState(false)
-  const [cantTiempoAgg, setCantidadTiempoAgg] = useState(0)
-  const [isTie, setIsTie] = useState(false)
-  const [showWinner, setShowWinner] = useState(false)
-
-
-  // consumiendo los providers 
-  // consumiendo los setState para cambiar a suplente
-  const { setEquipoA, setEquipoB, equipoA, equipoB, } = useJugadoresContext()
+// =====> CONSUMIENDO DATOS DEL PROVIDER <======
 
   // consumiendo el context con los datos del partido
   const {
@@ -50,25 +39,51 @@ const FutbolExpress: React.FC = () => {
     showPenalties
   } = useDatosDelPartidoContext()
 
+  // consumiendo los setState para cambiar a suplente
+  const { setEquipoA, setEquipoB, equipoA, equipoB, } = useJugadoresContext()
 
 
-  // indicamos los datos para el tablero
+
+  // usar el useRef's para indicar el primer render
+  const isPastFirstRender = useRef(false);
+  const isFirstRender2 = useRef(true);
+  const isFirstRender3 = useRef(true);
+
+  // ===> DECLARACION DE SETS <===
+    // indicamos los datos para el tablero
   const [tableroMinutos, setTableroMinutos] = useState<number>(duracion)
   const [tableroSegundos, setTableroSegundos] = useState<number>(0)
+    // Para mantener oculto la prorroga y penalties
+  const [showExtraTime, setShowExtraTime] = useState(false)
+  const [cantTiempoAgg, setCantidadTiempoAgg] = useState(0)
+  const [isTie, setIsTie] = useState(false)
+    // mostrarPopUPs
+  const [showWinner, setShowWinner] = useState(false)
+  const [showExport, setShowExport] = useState<boolean>(false)
+    // indicar si el tablero esta parado o no
+  const [isPaused, setIsPaused] = useState<boolean>(true);
+  const [afterExtraTime, setAfterExtraTime] = useState<boolean>(false)
 
+
+  // ===> CUSTOM HOOKS <====
+
+    //hook para guardar 'futbol-configuracion-partido'
+  
+  useGuardarConfigPartido({setTableroMinutos,setTableroSegundos,isFirstRender3,duracion})
+  
+    // hook para 'futbol-datos-partido'
+  useGuardarDatosPartido({isPastFirstRender,tableroMinutos,tableroSegundos,scoreA,scoreB,setIsTie})
+ 
+    // hook para flujo partido (decidir si es prorroga o penalties o termino)
+  useFlujoPartido({isPaused,tableroSegundos,tableroMinutos,setTableroSegundos,setTableroMinutos,
+    setIsPaused,setShowExtraTime,prorroga,setProrroga,isTie,penalties,
+    setShowPenalties,afterExtraTime,setAfterExtraTime
+  })
 
   // usar navigate para volver al inicio despues de finalizar el partido
   const navigate = useNavigate()
 
   // mostrar el pop up exportacion
-
-  const [showExport, setShowExport] = useState<boolean>(false)
-
-  // indicar si el tablero esta parado o no
-  const [isPaused, setIsPaused] = useState<boolean>(true);
-
-  const [afterExtraTime, setAfterExtraTime] = useState<boolean>(false)
-
 
 
   // TODO: REVISAR QUE KRAJOS HACE ESTO???? ME MAME LGMT
@@ -77,119 +92,7 @@ const FutbolExpress: React.FC = () => {
 
 
 
-  useEffect(() => {
 
-    if (isFirstRender3.current) {
-
-      const dataPartidoTranscurrido = localStorage.getItem('futbol-datos-partido')
-
-
-      if (dataPartidoTranscurrido) {
-        console.log("DATOS DEL PARTIDO IMPORTADO", dataPartidoTranscurrido)
-
-
-
-        //verificamos las propiedades de futbol-config-partido
-        if (!JSON.parse(dataPartidoTranscurrido).minutosJugados || !JSON.parse(dataPartidoTranscurrido).segundosJugados ||
-          !JSON.parse(dataPartidoTranscurrido).scoreA || !JSON.parse(dataPartidoTranscurrido).scoreB) {
-          setTableroMinutos(duracion)
-        }
-        else {
-          const { minutosJugados, segundosJugados } = JSON.parse(dataPartidoTranscurrido)
-          setTableroMinutos(minutosJugados)
-          setTableroSegundos(segundosJugados)
-        }
-      }
-
-    } else {
-      return
-    }
-
-  }, [])
-
-
-
-
-  // guardar los datos del partido
-  useEffect(() => {
-
-    // traemos los datos del LS si los hay 
-
-    if (isPastFirstRender.current) {
-      console.log("GUARDAMOS FUTBOL-DATOS-PARTIDO AL TRANSCURRIR TIEMPO ")
-
-
-      localStorage.setItem('futbol-datos-partido', JSON.stringify({
-        minutosJugados: tableroMinutos,
-        segundosJugados: tableroSegundos,
-        scoreA,
-        scoreB,
-      }))
-    }
-
-    if (scoreA === scoreB) {
-      setIsTie(true)
-    } else {
-      setIsTie(false)
-    }
-
-
-    isPastFirstRender.current = true
-
-
-  }, [tableroSegundos, tableroMinutos, scoreA, scoreB])
-
-
-  // actualizar los segundos del minutero
-  useEffect(() => {
-    let interval: number | undefined;
-
-    if (!isPaused && (tableroMinutos > 0 || tableroSegundos > 0)) {
-      interval = window.setInterval(() => {
-        setTableroSegundos((prevSegundos) => {
-          if (prevSegundos > 0) {
-            return prevSegundos - 1;
-          } else {
-            return 59;
-          }
-        });
-
-        setTableroMinutos((prevMinutos) => {
-          if (tableroSegundos === 0) {
-            return prevMinutos > 0 ? prevMinutos - 1 : 0;
-          }
-          return prevMinutos;
-        });
-      }, 1000);
-    }
-
-    if (!isPaused && tableroMinutos === 0 && tableroSegundos === 0) {
-      // Evitamos que se ejecute múltiples veces
-      clearInterval(interval);
-      setIsPaused(true);
-
-      if (prorroga && !afterExtraTime && isTie) {
-        // Se activa la prórroga
-        setShowExtraTime(true);
-        setProrroga(false);
-        setAfterExtraTime(true); // Marcamos que ya se usó la prórroga
-        return;
-      }
-
-      if (penalties && (afterExtraTime || !prorroga) && isTie) {
-        setShowPenalties(true);
-        return;
-      }
-
-
-      // ✅ Solo se muestra el mensaje si NO hay prórroga ni penales pendientes
-      if (!prorroga && !penalties && !afterExtraTime) {
-        console.log("⏱ Se alcanzó 00:00, pausando reloj");
-      }
-    }
-
-    return () => clearInterval(interval);
-  }, [isPaused, tableroMinutos, tableroSegundos, prorroga, afterExtraTime, penalties]);
 
 
   // extrayendo formateando el tablero

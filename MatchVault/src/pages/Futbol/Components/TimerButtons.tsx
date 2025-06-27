@@ -1,6 +1,6 @@
-import type { PropsTimerButtons } from "../../../interfaces/interfaces";
 import { iconoEvento } from "../../../types/types";
 import { useDatosDelPartidoContext } from "../context/DatosDelPartidoContext";
+import type { PropsTimerButtons } from "./interfaces/timerButton";
 
 
 

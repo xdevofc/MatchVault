@@ -1,11 +1,11 @@
 import type React from "react";
 import { useEffect, useState } from "react";
-import type { definirEquipos} from '../../types/types';
-import { handleEditarJugador } from "./handlers/RegisterPlayers/handleEditarJugador";
-import { handleEliminarJugador } from "./handlers/RegisterPlayers/handleEliminarJugador";
-import { handleSuplente } from "./handlers/RegisterPlayers/handleSuplente";
-import { handleAgregarJugador } from "./handlers/RegisterPlayers/handleAgregarJugador";
-import { handleGuardarEdicion } from "./handlers/RegisterPlayers/handleGuardarEdicion";
+import type { definirEquipos} from '../../../types/types';
+import { handleEditarJugador } from "../handlers/RegisterPlayers/handleEditarJugador";
+import { handleEliminarJugador } from "../handlers/RegisterPlayers/handleEliminarJugador";
+import { handleSuplente } from "../handlers/RegisterPlayers/handleSuplente";
+import { handleAgregarJugador } from "../handlers/RegisterPlayers/handleAgregarJugador";
+import { handleGuardarEdicion } from "../handlers/RegisterPlayers/handleGuardarEdicion";
 
 
 

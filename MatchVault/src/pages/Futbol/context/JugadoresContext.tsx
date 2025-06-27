@@ -1,15 +1,9 @@
-import { createContext, useContext, type Dispatch ,type SetStateAction } from "react";
-import type {  jugador } from "../../../types/types";
+import { createContext, useContext} from "react";
+import type { JugadoresContextType } from "./interfaces/jugadoresContext";
 
 // creamos una interface para las funciones que debemos pasar 
 
-interface JugadoresContextType {
-    setEquipoA: Dispatch<SetStateAction<jugador[]>>;
-    setEquipoB: Dispatch<SetStateAction<jugador[]>>;
-    equipoA: jugador[];
-    equipoB: jugador[];
-    
-}
+
 
 export const JugadoresContext = createContext<JugadoresContextType | undefined>(undefined);
 

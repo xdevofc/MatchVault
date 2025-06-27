@@ -1,12 +1,12 @@
 import type React from "react";
 import { useNavigate } from "react-router-dom";
-import { useDatosDelPartidoContext } from "./context/DatosDelPartidoContext";
-import { useJugadoresContext } from "./context/JugadoresContext";
+import { useDatosDelPartidoContext } from "../context/DatosDelPartidoContext";
+import { useJugadoresContext } from "../context/JugadoresContext";
 import { useState } from "react";
-import PopUpImport from "./Components/PopUpImport";
-import { handleAmonestaciones } from "./handlers/ConfiguracioPartido/handleAmonestaciones";
-import { handlePenalties } from "./handlers/ConfiguracioPartido/handlePenalties";
-import { handleProrroga } from "./handlers/ConfiguracioPartido/handleProrroga";
+import PopUpImport from "./PopUpImport";
+import { handleAmonestaciones } from "../handlers/ConfiguracioPartido/handleAmonestaciones";
+import { handlePenalties } from "../handlers/ConfiguracioPartido/handlePenalties";
+import { handleProrroga } from "../handlers/ConfiguracioPartido/handleProrroga";
 
 function ConfiguracionPartido(): React.JSX.Element {
 

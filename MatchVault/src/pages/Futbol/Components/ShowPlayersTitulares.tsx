@@ -1,9 +1,9 @@
-import type { PropsShowPlayers } from "../../../interfaces/interfaces"
 import { handleTitular } from "../handlers/FutbolExpress/handleTitular"
 import { handleAmarilla } from "../handlers/FutbolExpress/handleAmarilla"
 import { handleRoja } from "../handlers/FutbolExpress/handleRoja"
 import { handleGol } from "../handlers/FutbolExpress/handleGol"
 import { useDatosDelPartidoContext } from "../context/DatosDelPartidoContext"
+import type { PropsShowPlayers } from "./interfaces/showPlayers"
 
 
 const ShowPlayersTitulares: React.FC<PropsShowPlayers> = ({

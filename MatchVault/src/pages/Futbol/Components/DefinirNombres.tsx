@@ -1,11 +1,8 @@
 import type React from "react";
 import { useDatosDelPartidoContext } from "../context/DatosDelPartidoContext";
-import { type Dispatch } from 'react';
+import type { definirNombresProprs } from "./interfaces/definirNombres";
 
-interface definirNombresProprs {
-    mostrarDefinirNombres: boolean,
-    setMostrarDefinirNombres: Dispatch<React.SetStateAction<boolean>>
-}
+
 
 const DefinirNombres: React.FC<definirNombresProprs> = ({
     mostrarDefinirNombres,

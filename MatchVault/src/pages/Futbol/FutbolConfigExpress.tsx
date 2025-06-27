@@ -1,6 +1,6 @@
 import type React from "react";
-import RegisterPlayers from "./RegisterPlayers";
-import ConfiguracionPartido from "./ConfiguracionPartido";
+import RegisterPlayers from "./Components/RegisterPlayers";
+import ConfiguracionPartido from "./Components/ConfiguracionPartido";
 import { useEffect, useState,} from "react";
 import { type jugador } from '../../types/types';
 import { useJugadoresContext } from "./context/JugadoresContext";

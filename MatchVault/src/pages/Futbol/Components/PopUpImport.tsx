@@ -1,12 +1,9 @@
-import type { Dispatch } from "react";
 import { useJugadoresContext } from "../context/JugadoresContext";
 import { useDatosDelPartidoContext } from "../context/DatosDelPartidoContext";
 import { handleImportar } from "../handlers/ConfiguracioPartido/handleImportar";
+import type { PopUpProps } from "./interfaces/importPopUp";
 
-interface PopUpProps {
-  mostrarPopUp: boolean;
-  setMostrarPopUp: Dispatch<React.SetStateAction<boolean>>;
-}
+
 
 export default function PopUpImport({ mostrarPopUp, setMostrarPopUp }: PopUpProps) {
 
