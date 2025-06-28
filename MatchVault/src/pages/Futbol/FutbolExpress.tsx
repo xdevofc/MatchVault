@@ -2,19 +2,19 @@ import React, { useState, useEffect, useRef, } from "react";
 import { useJugadoresContext } from "./context/JugadoresContext";
 import { useDatosDelPartidoContext } from "./context/DatosDelPartidoContext";
 import ShowPlayersTitulares from "./Components/ShowPlayersTitulares";
-import ShowPlayersSuplentes from "./Components/ShowPlayersSuplentes";
 import ScoreTracker from "./Components/ScoreTracker";
 import TimerButtons from "./Components/TimerButtons";
 import { useNavigate } from "react-router-dom";
 import ExportarPartido from "./Components/ExportarPartido";
 import { guardarJugadoresLS } from "./handlers/FutbolExpress/guardarJugadoresLS";
-import { guardarEventos } from "./handlers/FutbolExpress/guardarPilaEventos";
-import { finalizarPartido } from "./handlers/FutbolExpress/finalizarPartdio";
 import TandaPenalties from "./Components/TandaPenalties";
 import Winner from "./Components/Winner";
 import { useGuardarConfigPartido} from "./hooks/useGuardarConfigPartido";
 import { useGuardarDatosPartido } from "./hooks/useGuardarDatosPartido";
 import { useFlujoPartido } from "./hooks/useFlujoPartido";
+import { useGuardarEventos } from "./hooks/useGuardarEventos";
+import Prorroga from "./Components/Prorroga";
+import BotonesFinalizacion from "./Components/btnFinalizacion";
 //import type { EventoFutbol } from "../../types/types";
 
 const FutbolExpress: React.FC = () => {
@@ -41,8 +41,6 @@ const FutbolExpress: React.FC = () => {
 
   // consumiendo los setState para cambiar a suplente
   const { setEquipoA, setEquipoB, equipoA, equipoB, } = useJugadoresContext()
-
-
 
   // usar el useRef's para indicar el primer render
   const isPastFirstRender = useRef(false);
@@ -72,6 +70,7 @@ const FutbolExpress: React.FC = () => {
   useGuardarConfigPartido({setTableroMinutos,setTableroSegundos,isFirstRender3,duracion})
   
     // hook para 'futbol-datos-partido'
+
   useGuardarDatosPartido({isPastFirstRender,tableroMinutos,tableroSegundos,scoreA,scoreB,setIsTie})
  
     // hook para flujo partido (decidir si es prorroga o penalties o termino)
@@ -79,6 +78,8 @@ const FutbolExpress: React.FC = () => {
     setIsPaused,setShowExtraTime,prorroga,setProrroga,isTie,penalties,
     setShowPenalties,afterExtraTime,setAfterExtraTime
   })
+  // hook para guardar eventos 
+  useGuardarEventos({isFirstRender2,eventos,setEventos,equipoA,equipoB})
 
   // usar navigate para volver al inicio despues de finalizar el partido
   const navigate = useNavigate()
@@ -91,10 +92,6 @@ const FutbolExpress: React.FC = () => {
   const ListaJugadoresB = equipoB;
 
 
-
-
-
-
   // extrayendo formateando el tablero
   const formatTime = `${String(tableroMinutos).padStart(2, "0")}:${String(tableroSegundos).padStart(2, "0")}`
 
@@ -104,36 +101,6 @@ const FutbolExpress: React.FC = () => {
     guardarJugadoresLS(equipoA, equipoB)
   }, [equipoA, equipoB])
 
-
-  //    guardando los eventos 
-  useEffect(() => {
-
-
-    if (isFirstRender2.current) {
-
-      isFirstRender2.current = false
-      const dataListaJugadores = localStorage.getItem("Lista-jugadores")
-      const data = localStorage.getItem('futbol-eventos')
-
-      // verificamos las propiedades de jugadores
-
-
-
-      if (data !== null && dataListaJugadores) {
-        console.log("DATA LISTA JUGADORES: ", dataListaJugadores)
-        guardarJugadoresLS(JSON.parse(dataListaJugadores).equipoA, JSON.parse(dataListaJugadores).equipoB)
-        setEventos(JSON.parse(data))
-      }
-      console.log("SE LLAMAN LOS DATOS DE LA COLA DE EVENTOS DEL IMPORT", data)
-      return
-    }
-
-    guardarJugadoresLS(equipoA, equipoB)
-    guardarEventos(eventos)
-
-
-
-  }, [eventos, equipoA, equipoB])
 
 
 
@@ -168,29 +135,12 @@ const FutbolExpress: React.FC = () => {
 
           {/* MENU OCULTO PARA LA PRORROGA */}
           {(showExtraTime && isTie) && (
-            <div className="fixed inset-0 flex items-center justify-center z-50 p-6">
-              <div className="bg-white rounded-lg shadow-lg w-full max-w-md text-center space-y-6 p-6">
-                <h2 className="text-xl text-black font-semibold">Ingresa el tiempo extra!</h2>
-                <label htmlFor="nombre" className="block text-lg font-medium text-black">Minutos</label>
-                <input
-                  name="nombre"
-                  type="number"
-                  className="border border-gray-300 rounded px-2 py-1 w-full text-black"
-                  value={cantTiempoAgg}
-                  onChange={e => setCantidadTiempoAgg(Number(e.target.value))}
-                />
-                <button
-                  onClick={(e) => {
-                    e.preventDefault()
-                    setTableroMinutos(cantTiempoAgg)
-                    setShowExtraTime(false)
-                  }}
-                  className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded mt-4"
-                >
-                  Ir a la prorroga
-                </button>
-              </div>
-            </div>
+            <Prorroga
+              cantTiempoAgg={cantTiempoAgg}
+              setCantidadTiempoAgg={setCantidadTiempoAgg}
+              setTableroMinutos={setTableroMinutos}
+              setShowExtraTime={setShowExtraTime}
+            />
           )}
 
           <ScoreTracker titulo={nombreA} score={scoreA} setScore={setScoreA} />
@@ -214,15 +164,7 @@ const FutbolExpress: React.FC = () => {
                 setEventos={setEventos}
                 minuto={tableroMinutos}
               />
-              <ShowPlayersSuplentes
-                titulo="Suplentes"
-                jugadores={ListaJugadoresA}
-                equipo={equipoA}
-                setEquipo={setEquipoA}
-                setScore={setScoreA}
-                setEventos={setEventos}
-                minuto={tableroMinutos}
-              />
+             
             </div>
           </div>
 
@@ -247,44 +189,17 @@ const FutbolExpress: React.FC = () => {
                 setEventos={setEventos}
                 minuto={tableroMinutos}
               />
-              <ShowPlayersSuplentes
-                titulo="Suplentes"
-                jugadores={ListaJugadoresB}
-                equipo={equipoB}
-                setEquipo={setEquipoB}
-                setScore={setScoreB}
-                setEventos={setEventos}
-                minuto={tableroMinutos}
-              />
+              
             </div>
           </div>
 
           <div></div>
 
           {/* BOTONES DE TERMINADO */}
-          <div className="flex flex-col items-center justify-center gap-4">
-            <button
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded shadow"
-              onClick={(e) => {
-                e.preventDefault();
-                const allowDelete = confirm("Desea terminar el partido ? su progreso NO se guardara");
-                finalizarPartido(allowDelete);
-                if (allowDelete) navigate('/');
-              }}
-            >
-              Finalizar Partido
-            </button>
-
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                setShowExport(true);
-              }}
-              className="px-4 py-2 bg-[#D4AF37] hover:bg-[#BFA434] text-[#121212] rounded shadow"
-            >
-              Exportar Partido
-            </button>
-          </div>
+          <BotonesFinalizacion
+            navigate={navigate}
+            setShowExport={setShowExport}
+          />
 
 
         </div>

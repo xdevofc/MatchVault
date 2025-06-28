@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import type { GuardarPartidosProps } from "./interface/useGuardarDatosPartido"
+import type { GuardarPartidosProps } from "./interface/useGuardarConfiguracionPartido"
 
 export function useGuardarConfigPartido({setTableroMinutos, setTableroSegundos, isFirstRender3, duracion} : GuardarPartidosProps) {
 
