@@ -29,10 +29,12 @@ const ShowPlayersTitulares: React.FC<PropsShowPlayers> = ({
             <p className="font-medium">#{player.nroCamiseta} - {player.apellido}</p>
             <div className="flex flex-wrap gap-2 mt-2">
               <button
-                onClick={() => handleTitular(player, equipo, setEquipo)}
+                onClick={() => {
+                  handleTitular(player, equipo, setEquipo)
+                }}
                 disabled={player.isEjected || !player.titular}
                 className={`text-black px-2 py-1 rounded text-xs ${player.isEjected || !player.titular ? "bg-yellow-300 opacity-60 cursor-not-allowed" : "bg-yellow-500 hover:bg-yellow-600"}`}
-              >{`<->`}</button>
+              >🔄</button>
 
               <button
                 onClick={() => {
@@ -41,7 +43,7 @@ const ShowPlayersTitulares: React.FC<PropsShowPlayers> = ({
                 }}
                 disabled={player.isEjected || (player.amarilla ?? 0) > 2 || player.roja === 1}
                 className={`px-2 py-1 rounded text-xs text-black ${player.isEjected ? "bg-yellow-200 opacity-60 cursor-not-allowed" : "bg-yellow-300 hover:bg-yellow-400"}`}
-              >Amarilla</button>
+              >🟨</button>
 
               <button
                 onClick={() => {
@@ -50,7 +52,7 @@ const ShowPlayersTitulares: React.FC<PropsShowPlayers> = ({
                 }}
                 disabled={player.roja === 1 || (player.amarilla ?? 0) > 2}
                 className={`bg-red-500 text-white px-2 py-1 rounded text-xs ${player.isEjected ? "bg-red-300 opacity-60 cursor-not-allowed" : "hover:bg-red-700"}`}
-              >Roja</button>
+              >🟥</button>
 
               <button
                 onClick={() => {
@@ -59,7 +61,7 @@ const ShowPlayersTitulares: React.FC<PropsShowPlayers> = ({
                 }}
                 disabled={player.isEjected || !player.titular || (player.amarilla ?? 0) > 2 || player.roja === 1}
                 className={`bg-green-500 text-white px-2 py-1 rounded text-xs ${(player.isEjected || !player.titular) ? "bg-green-300 opacity-60 cursor-not-allowed" : "hover:bg-green-600"}`}
-              >Gol</button>
+              >⚽</button>
             </div>
           </div>
         ))}
@@ -74,10 +76,12 @@ const ShowPlayersTitulares: React.FC<PropsShowPlayers> = ({
             <p className="font-medium">#{player.nroCamiseta} - {player.apellido}</p>
             <div className="flex flex-wrap gap-2 mt-2">
               <button
-                onClick={() => handleTitular(player, equipo, setEquipo)}
+                onClick={() => {
+                  handleTitular(player, equipo, setEquipo)
+                }}
                 className={`text-black px-2 py-1 rounded text-xs ${player.isEjected ? "bg-yellow-300 opacity-60 cursor-not-allowed" : "bg-yellow-500 hover:bg-yellow-600"}`}
                 disabled={player.isEjected}
-              >{`<->`}</button>
+              >🔄</button>
 
               <button
                 onClick={() => {
@@ -86,7 +90,7 @@ const ShowPlayersTitulares: React.FC<PropsShowPlayers> = ({
                 }}
                 className={`px-2 py-1 rounded text-xs text-black ${player.isEjected ? "bg-yellow-200 opacity-60 cursor-not-allowed" : "bg-yellow-300 hover:bg-yellow-400"}`}
                 disabled={player.isEjected}
-              >Amarilla</button>
+              >🟨</button>
 
               <button
                 onClick={() => {
@@ -95,7 +99,7 @@ const ShowPlayersTitulares: React.FC<PropsShowPlayers> = ({
                 }}
                 className={`bg-red-500 text-white px-2 py-1 rounded text-xs ${player.isEjected ? "bg-red-300 opacity-60 cursor-not-allowed" : "hover:bg-red-800"}`}
                 disabled={player.isEjected}
-              >Roja</button>
+              >🟥</button>
 
               <button
                 onClick={() => {
@@ -104,7 +108,7 @@ const ShowPlayersTitulares: React.FC<PropsShowPlayers> = ({
                 }}
                 disabled={player.isEjected || !player.titular || (player.amarilla ?? 0) > 2 || player.roja === 1}
                 className={`bg-green-500 text-white px-2 py-1 rounded text-xs ${(player.isEjected || !player.titular) ? "bg-green-300 opacity-60 cursor-not-allowed" : "hover:bg-green-600"}`}
-              >Gol</button>
+              >⚽</button>
             </div>
           </div>
         ))}

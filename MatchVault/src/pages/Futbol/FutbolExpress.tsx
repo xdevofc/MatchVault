@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, } from "react";
+import React, { useState, useRef, } from "react";
 import { useJugadoresContext } from "./context/JugadoresContext";
 import { useDatosDelPartidoContext } from "./context/DatosDelPartidoContext";
 import ShowPlayersTitulares from "./Components/ShowPlayersTitulares";
@@ -6,7 +6,6 @@ import ScoreTracker from "./Components/ScoreTracker";
 import TimerButtons from "./Components/TimerButtons";
 import { useNavigate } from "react-router-dom";
 import ExportarPartido from "./Components/ExportarPartido";
-import { guardarJugadoresLS } from "./handlers/FutbolExpress/guardarJugadoresLS";
 import TandaPenalties from "./Components/TandaPenalties";
 import Winner from "./Components/Winner";
 import { useGuardarConfigPartido} from "./hooks/useGuardarConfigPartido";
@@ -15,6 +14,7 @@ import { useFlujoPartido } from "./hooks/useFlujoPartido";
 import { useGuardarEventos } from "./hooks/useGuardarEventos";
 import Prorroga from "./Components/Prorroga";
 import BotonesFinalizacion from "./Components/btnFinalizacion";
+import useGuardarCambiosSuplente from "./hooks/useGuardarCambiosSuplente";
 //import type { EventoFutbol } from "../../types/types";
 
 const FutbolExpress: React.FC = () => {
@@ -78,8 +78,10 @@ const FutbolExpress: React.FC = () => {
     setIsPaused,setShowExtraTime,prorroga,setProrroga,isTie,penalties,
     setShowPenalties,afterExtraTime,setAfterExtraTime
   })
-  // hook para guardar eventos 
+    // hook para guardar eventos 
   useGuardarEventos({isFirstRender2,eventos,setEventos,equipoA,equipoB})
+    // guardando los cambios de equipos al cambiar de titular a suplente
+  useGuardarCambiosSuplente({equipoA,equipoB})
 
   // usar navigate para volver al inicio despues de finalizar el partido
   const navigate = useNavigate()
@@ -94,14 +96,6 @@ const FutbolExpress: React.FC = () => {
 
   // extrayendo formateando el tablero
   const formatTime = `${String(tableroMinutos).padStart(2, "0")}:${String(tableroSegundos).padStart(2, "0")}`
-
-
-  // guardando los cambios de equipos al cambiar de titular a suplente
-  useEffect(() => {
-    guardarJugadoresLS(equipoA, equipoB)
-  }, [equipoA, equipoB])
-
-
 
 
   return (
@@ -192,8 +186,7 @@ const FutbolExpress: React.FC = () => {
               
             </div>
           </div>
-
-          <div></div>
+ 
 
           {/* BOTONES DE TERMINADO */}
           <BotonesFinalizacion

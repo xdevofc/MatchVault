@@ -17,7 +17,7 @@ const ContextWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
   const [equipoB, setEquipoB] = useState<jugador[]>(() => {
     const data = localStorage.getItem('Lista-jugadores')
-    return data ? JSON.parse(data).equipoA : []
+    return data ? JSON.parse(data).equipoB : []
   });
 
   const [duracion, setDuracion] = useState<number>(30);
