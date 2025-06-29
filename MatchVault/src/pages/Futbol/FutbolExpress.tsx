@@ -15,12 +15,9 @@ import { useGuardarEventos } from "./hooks/useGuardarEventos";
 import Prorroga from "./Components/Prorroga";
 import BotonesFinalizacion from "./Components/btnFinalizacion";
 import useGuardarCambiosSuplente from "./hooks/useGuardarCambiosSuplente";
-//import type { EventoFutbol } from "../../types/types";
 
 const FutbolExpress: React.FC = () => {
-
 // =====> CONSUMIENDO DATOS DEL PROVIDER <======
-
   // consumiendo el context con los datos del partido
   const {
     nombreA,
@@ -62,9 +59,7 @@ const FutbolExpress: React.FC = () => {
   const [isPaused, setIsPaused] = useState<boolean>(true);
   const [afterExtraTime, setAfterExtraTime] = useState<boolean>(false)
 
-
   // ===> CUSTOM HOOKS <====
-
     //hook para guardar 'futbol-configuracion-partido'
   
   useGuardarConfigPartido({setTableroMinutos,setTableroSegundos,isFirstRender3,duracion})
@@ -93,13 +88,11 @@ const FutbolExpress: React.FC = () => {
   const ListaJugadoresA = equipoA;
   const ListaJugadoresB = equipoB;
 
-
   // extrayendo formateando el tablero
   const formatTime = `${String(tableroMinutos).padStart(2, "0")}:${String(tableroSegundos).padStart(2, "0")}`
 
 
   return (
-
 
     <div className="min-h-screen bg-[#121212] text-[#EAEAEA] overflow-x-hidden">
       <div className="container mx-auto p-4 sm:p-6">
@@ -186,14 +179,12 @@ const FutbolExpress: React.FC = () => {
               
             </div>
           </div>
- 
 
           {/* BOTONES DE TERMINADO */}
           <BotonesFinalizacion
             navigate={navigate}
             setShowExport={setShowExport}
           />
-
 
         </div>
       </div>

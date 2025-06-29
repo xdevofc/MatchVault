@@ -2,16 +2,38 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function SelectSportMenu(): React.JSX.Element {
-  const [modalidad, setModalidad] = useState("Express");
-  const [deporte, setDeporte] = useState("Futbol");
+  const [modalidad, setModalidad] = useState("express");
+  const [deporte, setDeporte] = useState("futbol");
 
   // instanciando navigate para moverme de ruta 
     const navigate = useNavigate()
 
   // usamos navigate para ir a la ruta deseada 
   function handleGoRoute(){
-      navigate(`${deporte}-config-${modalidad}`)
+
+
+
+    console.log(`DATOS DE ENVIO: ${deporte} ${modalidad}`)
+      switch (deporte) {
+      case "futbol":
+        if(modalidad == 'express'){
+          navigate(`${deporte}-config-${modalidad}`)
+        }else{
+          navigate(`${deporte}-${modalidad}`)
+        }
+        break;
+      case "basketball":
+        navigate(`${deporte}-${modalidad}`)
+        break;
+      case "ping-pong":
+        navigate(`${deporte}-${modalidad}`)
+        break 
+      default:
+        break;
+    }
   }
+
+ 
   
 
 
@@ -33,10 +55,10 @@ function SelectSportMenu(): React.JSX.Element {
             onChange={e => setDeporte(e.target.value)}
             className="w-full border border-[#333] bg-[#1F1F1F] text-[#EAEAEA] rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
           >
-            <option value="Futbol">Futbol</option>
-            <option value="Basketball">Basketball</option>
-            <option value="Ping-Pong">Ping Pong</option>
-            <option value="Volleyball">Volleyball</option>
+            <option value="futbol">Futbol</option>
+            <option value="basketball">Basketball</option>
+            <option value="ping-pong">Ping Pong</option>
+            <option value="volleyball">Volleyball</option>
           </select>
         </div>
 
@@ -49,8 +71,8 @@ function SelectSportMenu(): React.JSX.Element {
             onChange={e => setModalidad(e.target.value)}
             className="w-full border border-[#333] bg-[#1F1F1F] text-[#EAEAEA] rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
           >
-            <option value="Express">Express</option>
-            <option value="Torneo">Torneo</option>
+            <option value="express">Express</option>
+            <option value="torneo">Torneo</option>
           </select>
         </div>
 

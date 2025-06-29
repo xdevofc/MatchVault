@@ -3,6 +3,9 @@ import SelectSportMenu from "./pages/SelectSportMenu"
 import FutbolExpress from "./pages/Futbol/FutbolExpress"
 import FutbolConfigExpress from "./pages/Futbol/FutbolConfigExpress"
 import ContextWrapper from "./pages/Futbol/context/ContextWrapper"
+import FutbolTorneo from "./pages/Futbol/FutbolTorneo"
+import BasketBallExpress from "./pages/Basketball/BasketBallExpress"
+import PingPongExpress from "./pages/PingPong/PingPongExpress"
 function App() {
 
  
@@ -21,7 +24,9 @@ function App() {
                 <FutbolExpress />
               </ContextWrapper>
             } />
-
+          <Route path="/futbol-torneo" element={<FutbolTorneo/>} /> 
+          <Route path="/basketball-express" element={<BasketBallExpress/>} />
+          <Route path="/ping-pong-express" element={<PingPongExpress/>} />
         </Routes>
       </Router> 
     </>
