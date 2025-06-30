@@ -58,7 +58,6 @@ function SelectSportMenu(): React.JSX.Element {
             <option value="futbol">Futbol</option>
             <option value="basketball">Basketball</option>
             <option value="ping-pong">Ping Pong</option>
-            <option value="volleyball">Volleyball</option>
           </select>
         </div>
 
