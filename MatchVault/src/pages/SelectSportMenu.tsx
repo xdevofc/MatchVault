@@ -71,7 +71,6 @@ function SelectSportMenu(): React.JSX.Element {
             className="w-full border border-[#333] bg-[#1F1F1F] text-[#EAEAEA] rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
           >
             <option value="express">Express</option>
-            <option value="torneo">Torneo</option>
           </select>
         </div>
 

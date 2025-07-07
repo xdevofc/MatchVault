@@ -10,7 +10,7 @@ interface ShowTeamsProps {
 
 const ShowTeams = ({
     score, isFinished, setScore 
-}: showTeamsProps) =>{
+}: ShowTeamsProps) =>{
     return(
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
         {["teamA", "teamB"].map((team) => (
